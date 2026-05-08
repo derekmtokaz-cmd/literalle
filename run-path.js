@@ -367,6 +367,7 @@ function startNextFloor() {
   let buildAttempts = 0;
 
   gameState.currentFloor += 1;
+  syncMusicToCurrentFloor();
   gameState.currentRewardOffers = [];
   gameState.rewardTilePurchased = false;
   gameState.currentPuzzle = null;

@@ -98,6 +98,7 @@ function restartGame() {
     developerModeToggle.checked = keepDeveloperMode;
   }
 
+  syncMusicToCurrentFloor();
   buildRunPath();
 
   if (keepDeveloperMode) {

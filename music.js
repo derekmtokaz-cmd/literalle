@@ -1,8 +1,17 @@
 /* ---------------- MUSIC CONTROLS ---------------- */
 
-const musicPlaylist = [
+const musicTracks = [
   {
+    floor: 1,
     src: "music/Sovereign Quarter.mp3",
+    attribution:
+      "\"Sovereign Quarter\" Kevin MacLeod (incompetech.com)\n" +
+      "Licensed under Creative Commons: By Attribution 4.0 License\n" +
+      "http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    floor: 2,
+    src: "music/Blue Feather.mp3",
     attribution:
       "\"Blue Feather\" Kevin MacLeod (incompetech.com)\n" +
       "Licensed under Creative Commons: By Attribution 4.0 License\n" +
@@ -10,7 +19,7 @@ const musicPlaylist = [
   }
 ];
 
-let currentMusicTrackIndex = 0;
+let currentMusicTrack = null;
 
 function initializeMusicControls() {
   if (
@@ -22,7 +31,7 @@ function initializeMusicControls() {
     return;
   }
 
-  loadCurrentMusicTrack();
+  syncMusicToCurrentFloor();
   backgroundMusic.volume = Number(musicVolumeControl.value) / 100;
   updateMusicToggleButton();
 
@@ -30,14 +39,41 @@ function initializeMusicControls() {
   musicVolumeControl.addEventListener("input", updateMusicVolume);
   backgroundMusic.addEventListener("play", updateMusicToggleButton);
   backgroundMusic.addEventListener("pause", updateMusicToggleButton);
-  backgroundMusic.addEventListener("ended", playNextMusicTrack);
+  backgroundMusic.addEventListener("ended", restartCurrentMusicTrack);
 }
 
-function loadCurrentMusicTrack() {
-  const currentTrack = musicPlaylist[currentMusicTrackIndex];
+function getMusicTrackForCurrentFloor() {
+  const exactTrack = musicTracks.find((track) => {
+    return track.floor === gameState.currentFloor;
+  });
 
-  backgroundMusic.src = currentTrack.src;
-  musicInfoButton.dataset.attribution = currentTrack.attribution;
+  if (exactTrack) {
+    return exactTrack;
+  }
+
+  return musicTracks[musicTracks.length - 1] || null;
+}
+
+function syncMusicToCurrentFloor() {
+  if (!backgroundMusic || !musicInfoButton) {
+    return;
+  }
+
+  const nextTrack = getMusicTrackForCurrentFloor();
+
+  if (!nextTrack || currentMusicTrack?.src === nextTrack.src) {
+    return;
+  }
+
+  const shouldKeepPlaying = !backgroundMusic.paused;
+
+  currentMusicTrack = nextTrack;
+  backgroundMusic.src = nextTrack.src;
+  musicInfoButton.dataset.attribution = nextTrack.attribution;
+
+  if (shouldKeepPlaying) {
+    tryPlayBackgroundMusic();
+  }
 }
 
 function tryPlayBackgroundMusic() {
@@ -50,9 +86,9 @@ function tryPlayBackgroundMusic() {
   }
 }
 
-function playNextMusicTrack() {
-  currentMusicTrackIndex = (currentMusicTrackIndex + 1) % musicPlaylist.length;
-  loadCurrentMusicTrack();
+function restartCurrentMusicTrack() {
+  syncMusicToCurrentFloor();
+  backgroundMusic.currentTime = 0;
   tryPlayBackgroundMusic();
 }
 
