@@ -498,14 +498,19 @@ h2 {
 /* Messages and controls */
 
 .event-message {
-  min-height: 28px;
-  margin-top: 18px;
+  min-height: 22px;
+  margin-top: 10px;
   font-size: 1.1rem;
   color: #f2c46d;
 }
 
+.event-message:empty {
+  min-height: 0;
+  margin-top: 8px;
+}
+
 .controls {
-  margin-top: 22px;
+  margin-top: 10px;
   text-align: center;
 }
 
