@@ -249,12 +249,11 @@ function submitDetectiveAttempt() {
   takePuzzleDamage(4);
   renderStats();
 
+  if (handlePlayerDeath()) {
+    return;
+  }
+
   detectiveMessage.textContent = "";
 
   renderDetectiveEvent();
-
-  if (gameState.hp <= 0) {
-    detectiveMessage.textContent = "You have run out of HP.";
-    submitDetectiveButton.disabled = true;
-  }
 }

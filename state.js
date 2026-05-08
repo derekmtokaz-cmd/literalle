@@ -139,3 +139,18 @@ const floorStartPuzzleData = {
     ]
   }
 };
+
+const deathPuzzleData = {
+  title: "Death",
+  author: "Emily Dickinson",
+  work: "479 (Franklin edition), 712 (Johnson edition)",
+  lines: [
+    "Because I could not stop for Death –",
+    "He kindly stopped for me –",
+    "The Carriage held but just Ourselves –",
+    "And Immortality."
+  ],
+  missingWords: [
+    { lineIndex: 0, wordIndex: 6 }
+  ]
+};

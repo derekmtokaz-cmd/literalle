@@ -225,12 +225,11 @@ function submitAuthorDateAttempt() {
   takePuzzleDamage(4);
   renderStats();
 
+  if (handlePlayerDeath()) {
+    return;
+  }
+
   authorDateMessage.textContent = "";
 
   renderAuthorDateEvent();
-
-  if (gameState.hp <= 0) {
-    authorDateMessage.textContent = "You have run out of HP.";
-    submitAuthorDateButton.disabled = true;
-  }
 }

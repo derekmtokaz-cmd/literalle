@@ -163,12 +163,11 @@ function submitPhoneticAttempt() {
   takePuzzleDamage(3);
   renderStats();
 
-  phoneticMessage.textContent = "";
-
-  if (gameState.hp <= 0) {
-    phoneticMessage.textContent = "You have run out of HP.";
-    submitPhoneticButton.disabled = true;
+  if (handlePlayerDeath()) {
+    return;
   }
+
+  phoneticMessage.textContent = "";
 
   return;
 }

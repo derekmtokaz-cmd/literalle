@@ -32,6 +32,36 @@ function completeOpeningPuzzle() {
   showSection("board");
 }
 
+function startDeathPuzzle() {
+  const deathPuzzle = buildPuzzle(deathPuzzleData);
+
+  gameState.currentPuzzle = deathPuzzle;
+  gameState.currentPuzzleMode = "death";
+  gameState.firstDraftUsedThisPuzzle = false;
+  gameState.echoTileUsedThisPuzzle = false;
+  gameState.penNibUsedThisPuzzle = false;
+
+  showDialog({
+    dialog: [
+      "Alas, poor Yorick! I knew him, Horatio."
+    ],
+    dialogImage: "images/libskull.png"
+  });
+  startTitle.textContent = deathPuzzleData.work;
+  startMeta.textContent = deathPuzzleData.author;
+  startMessage.textContent = "";
+  submitStartButton.disabled = false;
+
+  renderPuzzle(deathPuzzle, startPoemContainer);
+  showSection("start");
+
+  focusFirstOpenSlot();
+}
+
+function completeDeathPuzzle() {
+  restartGame();
+}
+
 
 function preparePoemEvent(poemData, missingWordCount) {
   const missingWords = chooseMissingWords(poemData.lines, missingWordCount);
@@ -308,7 +338,10 @@ function handleSlotKeydown(event) {
 }
 
 function getActivePuzzleContainer() {
-  if (gameState.currentPuzzleMode === "start") {
+  if (
+    gameState.currentPuzzleMode === "start" ||
+    gameState.currentPuzzleMode === "death"
+  ) {
     return startPoemContainer;
   }
 
@@ -455,12 +488,18 @@ function submitCurrentPuzzleAttempt() {
     return;
   }
 
-  if (gameState.currentPuzzleMode !== "start") {
+  if (
+    gameState.currentPuzzleMode !== "start" &&
+    gameState.currentPuzzleMode !== "death"
+  ) {
     const incorrectOrBlankCount = countIncorrectOrBlankLetters(gameState.currentPuzzle);
     const damage = Math.ceil(incorrectOrBlankCount / 2);
 
     takePuzzleDamage(damage);
     renderStats();
+    if (handlePlayerDeath()) {
+      return;
+    }
     showPuzzleMessage("");
   } else {
     showPuzzleMessage("Not quite. Try again.");
@@ -469,10 +508,7 @@ function submitCurrentPuzzleAttempt() {
   rerenderCurrentPuzzle();
   focusFirstOpenSlot();
 
-  if (gameState.hp <= 0 && gameState.currentPuzzleMode !== "start") {
-    showPuzzleMessage("You have run out of HP.");
-    disableCurrentSubmitButton();
-  }
+  handlePlayerDeath();
 }
 
 function submitRestPuzzleAttempt() {
@@ -519,6 +555,12 @@ function handlePuzzleSuccess() {
     return;
   }
 
+  if (gameState.currentPuzzleMode === "death") {
+    showPuzzleMessage("Correct.");
+    completeDeathPuzzle();
+    return;
+  }
+
   if (gameState.currentPuzzleMode === "event") {
     showPuzzleMessage("Correct.");
     startRewardPhase();
@@ -526,7 +568,10 @@ function handlePuzzleSuccess() {
 }
 
 function showPuzzleMessage(message) {
-  if (gameState.currentPuzzleMode === "start") {
+  if (
+    gameState.currentPuzzleMode === "start" ||
+    gameState.currentPuzzleMode === "death"
+  ) {
     startMessage.textContent = message;
   }
 

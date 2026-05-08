@@ -18,6 +18,16 @@ function renderHpDisplay() {
   animateHpDisplay(gameState.hp);
 }
 
+function resetDisplayedHp() {
+  if (hpAnimationFrame !== null) {
+    cancelAnimationFrame(hpAnimationFrame);
+    hpAnimationFrame = null;
+  }
+
+  displayedHp = gameState.hp;
+  updateHpDisplay();
+}
+
 function updateHpDisplay() {
   hpDisplay.textContent = `${displayedHp} / ${gameState.maxHp}`;
 }

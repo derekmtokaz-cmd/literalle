@@ -231,12 +231,11 @@ function submitFanficAttempt() {
   takePuzzleDamage(4);
   renderStats();
 
+  if (handlePlayerDeath()) {
+    return;
+  }
+
   fanficMessage.textContent = "";
 
   renderFanficEvent();
-
-  if (gameState.hp <= 0) {
-    fanficMessage.textContent = "You have run out of HP.";
-    submitFanficButton.disabled = true;
-  }
 }

@@ -47,6 +47,70 @@ developerModeToggle.addEventListener("change", () => {
 
 initializeGame();
 
+function handlePlayerDeath() {
+  if (gameState.hp > 0 || gameState.currentPuzzleMode === "death") {
+    return false;
+  }
+
+  startDeathPuzzle();
+  return true;
+}
+
+function restartGame() {
+  const keepDeveloperMode =
+    isDeveloperToolsEnabled() &&
+    developerModeToggle &&
+    developerModeToggle.checked;
+
+  Object.assign(gameState, {
+    currentFloor: 1,
+    hp: 100,
+    maxHp: 100,
+    gold: 2,
+    inventory: [],
+    currentNodeId: "start",
+    completedNodeIds: [],
+    availableNodeIds: [],
+    runPath: [],
+    currentFloorSeedSignature: "",
+    floorPoemSeedIdsByFloor: {},
+    currentPuzzle: null,
+    currentPuzzleMode: null,
+    lastEventType: null,
+    echoTileUsedThisPuzzle: false,
+    penNibUsedThisPuzzle: false,
+    currentAuthorDateEvent: null,
+    currentDetectiveEvent: null,
+    currentFanficEvent: null,
+    currentPhoneticQuote: null,
+    currentKjvEncounter: null,
+    currentKjvDifficulty: null,
+    currentRewardOffers: [],
+    prophecyUsedThisFloor: false,
+    firstDraftUsedThisPuzzle: false,
+    pendingReplyReward: false,
+    usedPoemIds: [],
+    usedPhoneticQuoteIds: [],
+    developerMode: keepDeveloperMode
+  });
+
+  if (developerModeToggle) {
+    developerModeToggle.checked = keepDeveloperMode;
+  }
+
+  buildRunPath();
+
+  if (keepDeveloperMode) {
+    addDeveloperRelics();
+  }
+
+  resetDisplayedHp();
+  renderStats();
+  renderInventory();
+  renderBoard();
+  startOpeningPuzzle();
+}
+
 function initializeDeveloperTools() {
   gameState.developerMode = false;
 
