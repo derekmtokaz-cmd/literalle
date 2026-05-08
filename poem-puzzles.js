@@ -41,12 +41,6 @@ function startDeathPuzzle() {
   gameState.echoTileUsedThisPuzzle = false;
   gameState.penNibUsedThisPuzzle = false;
 
-  showDialog({
-    dialog: [
-      "Alas, poor Yorick! I knew him, Horatio."
-    ],
-    dialogImage: "images/libskull.png"
-  });
   startTitle.textContent = deathPuzzleData.work;
   startMeta.textContent = deathPuzzleData.author;
   startMessage.textContent = "";
@@ -54,6 +48,12 @@ function startDeathPuzzle() {
 
   renderPuzzle(deathPuzzle, startPoemContainer);
   showSection("start");
+  showDialog({
+    dialog: [
+      "Alas, poor Yorick! I knew him, Horatio."
+    ],
+    dialogImage: "images/libskull.png"
+  });
 
   focusFirstOpenSlot();
 }

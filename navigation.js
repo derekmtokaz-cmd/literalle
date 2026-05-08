@@ -46,7 +46,10 @@ function showSection(sectionName) {
     phoneticSection.classList.remove("hidden");
   }
 
-  if (sectionName === "board" || sectionName === "start") {
+  if (
+    sectionName === "board" ||
+    (sectionName === "start" && gameState.currentPuzzleMode !== "death")
+  ) {
     hideDialog();
   }
 
