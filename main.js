@@ -27,9 +27,11 @@ submitFanficButton.addEventListener("click", submitFanficAttempt);
 submitPhoneticButton.addEventListener("click", submitPhoneticAttempt);
 closeProphecyButton.addEventListener("click", closeProphecyModal);
 developerModeToggle.addEventListener("change", () => {
-  if (!isDeveloperToolsEnabled()) {
+  if (!developerModeToggle || !isDeveloperToolsEnabled()) {
     gameState.developerMode = false;
-    developerModeToggle.checked = false;
+    if (developerModeToggle) {
+      developerModeToggle.checked = false;
+    }
     return;
   }
 
@@ -46,13 +48,21 @@ developerModeToggle.addEventListener("change", () => {
 initializeGame();
 
 function initializeDeveloperTools() {
-  if (!isDeveloperToolsEnabled()) {
-    gameState.developerMode = false;
-    developerModeToggle.checked = false;
-    developerCard.classList.add("hidden");
+  gameState.developerMode = false;
+
+  if (!developerCard || !developerModeToggle) {
     return;
   }
 
+  developerModeToggle.checked = false;
+
+  if (!isDeveloperToolsEnabled()) {
+    developerModeToggle.disabled = true;
+    developerCard.remove();
+    return;
+  }
+
+  developerModeToggle.disabled = false;
   developerCard.classList.remove("hidden");
 }
 

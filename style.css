@@ -59,6 +59,10 @@ h2 {
   display: none;
 }
 
+.developer-card.hidden {
+  display: none !important;
+}
+
 /* Sidebar */
 
 .status-sidebar {
