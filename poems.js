@@ -1,0 +1,115 @@
+const poemDatabase = [
+  {
+    id: "sonnet18-opening",
+    title: "Sonnet 18",
+    author: "William Shakespeare",
+    difficulty: "easy",
+    lines: [
+      "Shall I compare thee to a summer’s day?",
+      "Thou art more lovely and more temperate:",
+      "Rough winds do shake the darling buds of May,",
+      "And summer’s lease hath all too short a date;",
+      "Sometime too hot the eye of heaven shines,",
+      "And often is his gold complexion dimm'd;",
+      "And every fair from fair sometime declines,",
+      "By chance or nature’s changing course untrimm'd;",
+      "But thy eternal summer shall not fade,",
+      "Nor lose possession of that fair thou ow’st;",
+      "Nor shall death brag thou wander’st in his shade,",
+      "When in eternal lines to time thou grow’st:",
+      "\u00A0\u00A0\u00A0So long as men can breathe or eyes can see,",
+      "\u00A0\u00A0\u00A0So long lives this, and this gives life to thee."
+    ],
+    dialog: [
+  "Shakespeare addressed this and many other sonnets to a man. I wonder what his wife thought about that.",
+  "Shakespeare published 154 sonnets in 1609. When you're done with this one, we'll start on the rest.",
+  "Personally, I find the final couplet a bit cheeky."
+]
+  },
+  {
+    id: "virgins-opening",
+    title: "To the Virgins, to Make Much of Time",
+    author: "Robert Herrick",
+    difficulty: "easy",
+    lines: [
+      "Gather ye rosebuds while ye may,",
+      "   Old Time is still a-flying;",
+      "And this same flower that smiles today",
+      "   Tomorrow will be dying.",
+      "",
+      "The glorious lamp of heaven, the sun,",
+      "   The higher he’s a-getting,",
+      "The sooner will his race be run,",
+      "   And nearer he’s to setting.",
+      "",
+      "That age is best which is the first,",
+      "   When youth and blood are warmer;",
+      "But being spent, the worse, and worst",
+      "   Times still succeed the former.",
+      "",
+      "Then be not coy, but use your time,",
+      "   And while ye may, go marry;",
+      "For having lost but once your prime,",
+      "   You may forever tarry."
+    ],
+    dialog: [
+      "Come out, Virginia, don't let me wait\nYou Catholic girls start much too late\nBut sooner or later it comes down to fate\nI might as well will be the one\nOnly the good die young",
+      "Herrick joined the 'Sons of Ben,' a Ben Jonson fan club, and wrote five poems addressed to Jonson. Nerd.",
+      "Herrick remained a bachelor all his life, leaving no evidence that he ever collected any rosebuds."
+    ],
+  },
+    {
+    id: "daffodils-opening",
+    title: "I Wandered Lonely as a Cloud",
+    author: "William Wordsworth",
+    difficulty: "easy",
+    lines: [
+      "I wandered lonely as a cloud",
+      "That floats on high o'er vales and hills,",
+      "When all at once I saw a crowd,",
+      "A host, of golden daffodils;",
+      "Beside the lake, beneath the trees,",
+      "Fluttering and dancing in the breeze.",
+      "[...]",
+      "For oft, when on my couch I lie",
+      "In vacant or in pensive mood,",
+      "They flash upon that inward eye",
+      "Which is the bliss of solitude;",
+      "And then my heart with pleasure fills,",
+      "And dances with the daffodils."
+    ],
+    dialog: [
+      "Lord Byron and Samuel Taylor Coleridge both offered harsh criticism of Wordsworth's poetry.",
+      "Romanticism is more about being receptive to strong emotions than the modern lovey-dovey meanince of romance. But I still like it when someone buys me flowers.",
+      "Wordsworth was born in the small Cumbrian town of Cockermouth. Population roughly 2,500.",
+    ],
+  },
+
+      {
+    id: "portuguese",
+    title: "Sonnets from the Portuguese 43",
+    author: "Elizabeth Barrett Browning",
+    difficulty: "elite",
+    lines: [
+      "How do I love thee? Let me count the ways.",
+      "I love thee to the depth and breadth and height",
+      "My soul can reach, when feeling out of sight",
+      "For the ends of being and ideal grace.",
+      "I love thee to the level of every day’s",
+      "Most quiet need, by sun and candle-light.",
+      "I love thee freely, as men strive for right;",
+      "I love thee purely, as they turn from praise.",
+      "I love thee with the passion put to use",
+      "In my old griefs, and with my childhood’s faith.",
+      "I love thee with a love I seemed to lose",
+      "With my lost saints. I love thee with the breath,",
+      "Smiles, tears, of all my life; and, if God choose,",
+      "I shall but love thee better after death."
+    ],
+    dialog: [
+  "Elizabeth's husband encouraged her to publish, saying they were the best sonnets since Shakespeare. This may have been around the time their son, Robert ('Pen'), was conceieved.",
+  "The collection was originally written in English, but titled to make it seem like they were translations.",
+  "Browning wrote that she wanted the souls of poets soaked with the blood of Christ. I'm probably leaving out some context.",
+],
+  },
+];

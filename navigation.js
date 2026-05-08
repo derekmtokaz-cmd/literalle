@@ -1,0 +1,54 @@
+/* ---------------- NAVIGATION ---------------- */
+
+function showSection(sectionName) {
+  if (sectionName !== "event") {
+    eventSection.classList.remove("rest-mode");
+  }
+
+  startSection.classList.add("hidden");
+  boardSection.classList.add("hidden");
+  eventSection.classList.add("hidden");
+  rewardSection.classList.add("hidden");
+  authorDateSection.classList.add("hidden");
+  detectiveSection.classList.add("hidden");
+  fanficSection.classList.add("hidden");
+  phoneticSection.classList.add("hidden");
+
+  if (sectionName === "start") {
+    startSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "board") {
+    boardSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "event") {
+    eventSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "reward") {
+    rewardSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "authorDate") {
+    authorDateSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "detective") {
+    detectiveSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "fanfic") {
+    fanficSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "phonetic") {
+    phoneticSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "board" || sectionName === "start") {
+    hideDialog();
+  }
+
+  renderInventory();
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Literalle</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="main-panel">
+      <header class="game-header">
+        <h1>Literalle</h1>
+      </header>
+
+      <section class="start-section" id="startSection">
+        <h2 id="startTitle">Opening Trial</h2>
+        <p id="startMeta" class="event-meta"></p>
+
+        <div id="startPoemContainer" class="poem-container"></div>
+
+        <div id="startMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitStartButton">Submit</button>
+        </div>
+      </section>
+
+      <section class="board-section hidden" id="boardSection">
+        <h2>Path</h2>
+        <div id="gameBoard" class="game-board"></div>
+      </section>
+
+      <section class="event-section hidden" id="eventSection">
+        <h2 id="eventTitle">Poem Event</h2>
+        <p id="eventMeta" class="event-meta"></p>
+
+        <div id="poemContainer" class="poem-container"></div>
+        <div id="stickyNoteDisplay" class="sticky-note-display hidden"></div>
+        <div id="eventMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitPoemButton">Submit</button>
+        </div>
+      </section>
+
+      <section class="author-date-section hidden" id="authorDateSection">
+        <h2>Author Dates</h2>
+        <p class="event-meta">Match each author with their birth and death dates.</p>
+
+        <div class="author-date-game">
+          <div id="authorMatchRows" class="author-match-rows"></div>
+
+          <div class="date-pool-wrapper">
+            <div id="datePool" class="date-pool"></div>
+          </div>
+        </div>
+
+        <div id="authorDateMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitAuthorDateButton">Submit</button>
+        </div>
+      </section>
+      <section class="detective-section hidden" id="detectiveSection">
+        <h2>Detectives and Novels</h2>
+        <p class="event-meta">Match each detective with the novel they appear in.</p>
+
+        <div class="detective-game">
+          <div id="detectiveMatchRows" class="detective-match-rows"></div>
+
+          <div class="detective-pool-wrapper">
+            <div id="detectivePool" class="detective-pool"></div>
+          </div>
+        </div>
+
+        <div id="detectiveMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitDetectiveButton">Submit</button>
+        </div>
+      </section>
+      <section class="fanfic-section hidden" id="fanficSection">
+        <h2>Fan Fiction Origins</h2>
+        <p class="event-meta">Match these fanfics to their original works. Then let's pretend we were never in this section of the library.</p>
+
+        <div class="fanfic-game">
+          <div id="fanficMatchRows" class="fanfic-match-rows"></div>
+
+          <div class="fanfic-pool-wrapper">
+            <div id="fanficPool" class="fanfic-pool"></div>
+          </div>
+        </div>
+
+        <div id="fanficMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitFanficButton">Submit</button>
+        </div>
+      </section>
+            <section class="phonetic-section hidden" id="phoneticSection">
+        <h2>Phonetic Quote</h2>
+        
+        <div id="phoneticClue" class="phonetic-clue poem-container"></div>
+
+        <div id="phoneticQuoteContainer" class="poem-container"></div>
+
+        <div id="phoneticMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitPhoneticButton">Submit</button>
+        </div>
+      </section>
+      <section class="reward-section hidden" id="rewardSection">
+        <h2>Reward</h2>
+
+        <p id="goldRewardMessage" class="reward-message"></p>
+
+        <div class="tile-offers">
+          <h3 id="tileOfferTitle">Optional Babel Tile Purchase</h3>
+          <p id="tileOfferInstruction" class="reward-instruction">You may buy one tile, or skip and save your gold.</p>
+
+          <div id="tileOfferContainer" class="tile-offer-container"></div>
+        </div>
+
+        <div id="rewardMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="skipRewardButton">Return to Map</button>
+        </div>
+      </section>
+    </section>
+
+    <aside class="status-sidebar">
+      <section class="sidebar-card">
+        <h2>Status</h2>
+
+        <div class="stat-row">
+          <span>HP</span>
+          <strong id="hpDisplay">100 / 100</strong>
+        </div>
+
+        <div class="stat-row">
+          <span>Gold</span>
+          <strong id="goldDisplay">10</strong>
+        </div>
+      </section>
+
+      <section class="sidebar-card">
+        <h2>Inventory</h2>
+        <div id="inventoryDisplay" class="inventory-display">
+          <span class="empty-inventory">No Babel Tiles</span>
+        </div>
+      </section>
+
+      <section class="sidebar-card music-card">
+        <div class="music-heading">
+          <h2>Music</h2>
+          <button id="musicInfoButton" class="music-info-button" type="button" aria-label="Music attribution">i</button>
+        </div>
+        <audio id="backgroundMusic" preload="auto"></audio>
+        <div class="music-controls">
+          <button id="musicToggleButton" type="button">Play</button>
+          <input id="musicVolumeControl" class="volume-control" type="range" min="0" max="100" value="45" aria-label="Music volume" />
+        </div>
+      </section>
+
+      <section class="sidebar-card developer-card">
+        <h2>Developer</h2>
+        <label class="developer-toggle">
+          <input type="checkbox" id="developerModeToggle" />
+          <span>Developer Mode</span>
+        </label>
+      </section>
+
+      <section class="sidebar-card dialog-card" id="dialogCard">
+        <div id="dialogBox" class="dialog-box">
+          <p id="dialogText" class="dialog-text"></p>
+          <img id="dialogImage" class="dialog-image hidden" src="" alt="" />
+        </div>
+      </section>
+    </aside>
+  </main>
+
+    <div id="inventoryTooltip" class="inventory-tooltip hidden"></div>
+
+    <div id="prophecyModal" class="prophecy-modal hidden">
+      <div class="prophecy-modal-panel">
+        <button id="closeProphecyButton" class="prophecy-close-button" type="button">Close</button>
+        <h2 id="prophecyTitle"></h2>
+        <p id="prophecyMeta" class="event-meta"></p>
+        <div id="prophecyPoemText" class="prophecy-poem-text"></div>
+      </div>
+    </div>
+
+<script src="poems.js"></script>
+<script src="rest-poems.js"></script>
+<script src="authors.js"></script>
+<script src="detectives.js"></script>
+<script src="fanfic-pairings.js"></script>
+<script src="trinkets.js"></script>
+<script src="artifacts.js"></script>
+<script src="phonetics.js"></script>
+<script src="kjv-passages.js"></script>
+<script src="state.js"></script>
+<script src="dom.js"></script>
+<script src="utils.js"></script>
+<script src="dialog.js"></script>
+<script src="poem-puzzles.js"></script>
+<script src="inventory.js"></script>
+<script src="music.js"></script>
+<script src="rewards.js"></script>
+<script src="events-author-dates.js"></script>
+<script src="events-detectives.js"></script>
+<script src="events-fanfic.js"></script>
+<script src="events-phonetics.js"></script>
+<script src="events-kjv.js"></script>
+<script src="board.js"></script>
+<script src="navigation.js"></script>
+<script src="run-path.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
