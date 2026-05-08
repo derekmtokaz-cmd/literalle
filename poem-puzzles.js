@@ -117,7 +117,7 @@ function startPoemEvent(poemData) {
     eventTitle.textContent = poemData.title;
     eventMeta.textContent = poemData.author;
     eventMessage.textContent = "";
-    submitPoemButton.textContent = "Rest";
+    submitPoemButton.textContent = "Submit";
   } else {
     eventSection.classList.remove("rest-mode");
     eventTitle.textContent = poemData.title;
@@ -247,7 +247,10 @@ function createBlankWordElement(blankWord) {
     input.dataset.letterIndex = letterIndex;
     input.value = letter.value;
 
-    if (letter.locked) {
+    if (letter.revealedByGame) {
+      input.classList.add("revealed");
+      input.disabled = true;
+    } else if (letter.locked) {
       input.classList.add("locked");
       input.disabled = true;
     }
@@ -410,6 +413,11 @@ function countIncorrectOrBlankLetters(puzzle) {
 
 function submitCurrentPuzzleAttempt() {
   if (gameState.currentPuzzleMode === "rest") {
+    if (gameState.currentPuzzle.restRevealed) {
+      startRewardPhase();
+      return;
+    }
+
     submitRestPuzzleAttempt();
     return;
   }
@@ -465,14 +473,21 @@ function submitRestPuzzleAttempt() {
 
   gameState.currentPuzzle.selectedWords.forEach((blankWord) => {
     blankWord.letters.forEach((letter) => {
+      if (letter.locked) {
+        return;
+      }
+
       const expected = normalizeForComparison(letter.answerChar);
       const actual = normalizeForComparison(letter.value);
 
       if (actual === expected) {
         letter.locked = true;
+        letter.playerCorrect = true;
         correctLetters += 1;
       } else {
-        letter.value = "";
+        letter.value = letter.answerChar;
+        letter.locked = true;
+        letter.revealedByGame = true;
         allCorrect = false;
       }
     });
@@ -481,11 +496,12 @@ function submitRestPuzzleAttempt() {
   gameState.restHealAmount = correctLetters;
   gameState.pendingReplyReward =
     allCorrect && gameState.currentPuzzle.id === "this-is-just-to-say";
+  gameState.currentPuzzle.restRevealed = true;
 
   rerenderCurrentPuzzle();
-  disableCurrentSubmitButton();
-
-  startRewardPhase();
+  eventMessage.textContent = "";
+  submitPoemButton.textContent = "Rest";
+  submitPoemButton.disabled = false;
 }
 
 function handlePuzzleSuccess() {

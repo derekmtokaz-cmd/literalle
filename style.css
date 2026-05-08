@@ -203,6 +203,12 @@ h2 {
   background: rgba(47, 125, 50, 0.1);
 }
 
+.event-section.rest-mode .letter-slot.revealed {
+  border-bottom-color: #2a0f14;
+  color: #2a0f14;
+  background: transparent;
+}
+
 .event-section.rest-mode button {
   border-color: #7a1c26;
   background: #7a1c26;
@@ -459,6 +465,12 @@ h2 {
   color: #2f7d32;
   font-weight: bold;
   background: rgba(47, 125, 50, 0.08);
+}
+
+.letter-slot.revealed {
+  border-bottom-color: #2a1712;
+  color: #2a1712;
+  background: transparent;
 }
 
 /* Rewards */
