@@ -125,14 +125,14 @@ function startRewardPhase() {
   gameState.currentKjvDifficulty = null;
   gameState.currentRewardOffers =
     gameState.lastEventType === "boss"
-      ? generateFreeTileOffers()
+      ? generateFreeTileOffers(2)
       : generateTileOffers(tileOfferDiscount);
   gameState.rewardTilePurchased = false;
   tileOffersSection.classList.remove("hidden");
   setTileOfferCopy(gameState.lastEventType === "boss");
   goldRewardMessage.textContent = `You gained ${goldGain} gold.`;
 
-  if (gameState.lastEventType === "elite") {
+  if (gameState.lastEventType === "elite" || gameState.lastEventType === "boss") {
     const artifactReward = getRandomArtifactReward();
 
     if (artifactReward) {
@@ -142,7 +142,7 @@ function startRewardPhase() {
       });
 
       renderInventory();
-      rewardMessage.textContent = `You also found an artifact: ${artifactReward.name}.`;
+      rewardMessage.textContent = `You found an artifact: ${artifactReward.name}.`;
     } else {
       rewardMessage.textContent = "You found no new artifact.";
     }
@@ -174,13 +174,15 @@ function generateTileOffers(discount = 0) {
   }));
 }
 
-function generateFreeTileOffers() {
-  return generateTileOffers().map((offer) => ({
-    ...offer,
-    cost: 0,
-    free: true,
-    claimed: false
-  }));
+function generateFreeTileOffers(count = 3) {
+  return generateTileOffers()
+    .slice(0, count)
+    .map((offer) => ({
+      ...offer,
+      cost: 0,
+      free: true,
+      claimed: false
+    }));
 }
 
 function setTileOfferCopy(isBossReward) {
