@@ -113,6 +113,9 @@ function startPoemEvent(poemData) {
   }
 
   if (gameState.currentPuzzleMode === "rest") {
+    gameState.currentPuzzle.restRevealed = false;
+    gameState.restHealAmount = 0;
+    gameState.pendingReplyReward = false;
     eventSection.classList.add("rest-mode");
     eventTitle.textContent = poemData.title;
     eventMeta.textContent = poemData.author;
@@ -133,6 +136,11 @@ function startPoemEvent(poemData) {
 
   renderPuzzle(poemEvent, poemContainer);
   showSection("event");
+
+  if (gameState.currentPuzzleMode === "rest") {
+    submitPoemButton.textContent = "Submit";
+    submitPoemButton.disabled = false;
+  }
 
   focusFirstOpenSlot();
 }
