@@ -85,6 +85,95 @@ const poemDatabase = [
     ],
   },
 
+  {
+    id: "she-walks-in-beauty",
+    title: "She Walks in Beauty",
+    author: "George Gordon, Lord Byron",
+    difficulty: "easy",
+    lines: [
+      "She walks in beauty, like the night",
+      "Of cloudless climes and starry skies;",
+      "And all that’s best of dark and bright",
+      "Meet in her aspect and her eyes;",
+      "Thus mellowed to that tender light",
+      "Which heaven to gaudy day denies.",
+      "[...]",
+      "And on that cheek, and o’er that brow,",
+      "So soft, so calm, yet eloquent,",
+      "The smiles that win, the tints that glow,",
+      "But tell of days in goodness spent,",
+      "A mind at peace with all below,",
+      "A heart whose love is innocent!"
+    ],
+    dialog: [
+      "Though Byron was born in 1788, this poem actually dates back to before the destruction of the Second Temple in 70AD.",
+      "Byron fought against the Ottoman Empire in the Greek War of Independence. He died at age 36 and is considered a hero in Greece.",
+      "Byron's daughter Ada Lovelace is considered the mother of computer programming and the first tech nepobaby."
+    ],
+  },
+
+  {
+    id: "o-captain-my-captain",
+    title: "O Captain! My Captain!",
+    author: "Walt Whitman",
+    difficulty: "easy",
+    lines: [
+      "O Captain! my Captain! our fearful trip is done,",
+      "The ship has weather’d every rack, the prize we sought is won,",
+      "The port is near, the bells I hear, the people all exulting,",
+      "While follow eyes the steady keel, the vessel grim and daring;",
+      "But O heart! heart! heart!",
+      "O the bleeding drops of red,",
+      "Where on the deck my Captain lies,",
+      "Fallen cold and dead.",
+      "",
+      "O Captain! my Captain! rise up and hear the bells;",
+      "Rise up—for you the flag is flung—for you the bugle trills,",
+      "For you bouquets and ribbon’d wreaths—for you the shores a-crowding,",
+      "For you they call, the swaying mass, their eager faces turning;",
+      "Here Captain! dear father!",
+      "This arm beneath your head!",
+      "It is some dream that on the deck,",
+      "You’ve fallen cold and dead.",
+    ],
+    dialog: [
+      "Yawp!",
+      "So far, my research has not indicated that Abraham Lincoln was ever the captain of a ship.",
+      "During the Civil War, Whitman worked as a volunteer nurse. Unfortunately, there are no surviving photos of him in his candy striper outfit."
+    ],
+  },
+
+  {
+    id: "road-not-taken",
+    title: "The Road Not Taken",
+    author: "Robert Frost",
+    difficulty: "easy",
+    lines: [
+      "Two roads diverged in a yellow wood,",
+      "And sorry I could not travel both",
+      "And be one traveler, long I stood",
+      "And looked down one as far as I could",
+      "To where it bent in the undergrowth;",
+      "",
+      "Then took the other, as just as fair,",
+      "And having perhaps the better claim,",
+      "Because it was grassy and wanted wear;",
+      "Though as for that the passing there",
+      "Had worn them really about the same,",
+      "[...]",
+      "I shall be telling this with a sigh",
+      "Somewhere ages and ages hence:",
+      "Two roads diverged in a wood, and I—",
+      "I took the one less traveled by,",
+      "And that has made all the difference."
+    ],
+    dialog: [
+      "Most people don't realize that the final stanza is a joke.",
+      "This poem was based on a walk with Frost's friend, Edward Thomas. Its message inspired Thomas to enlist in WWI, where he was killed two years later.",
+      "The title has been used in hundreds of book and chapter titles, and almost none of those folks have understood what the poem is actually saying."
+    ],
+  },
+
       {
     id: "portuguese",
     title: "Sonnets from the Portuguese 43",

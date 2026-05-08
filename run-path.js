@@ -169,7 +169,16 @@ function buildPoemSeedPlan() {
     throw new Error(`Not enough poems. Need 3, but only found ${poemDatabase.length}.`);
   }
 
-  const openingPoems = shuffleArray([...poemDatabase]).slice(0, 3);
+  const previousFloorPoemIds = getPreviousFloorPoemSeedIds();
+  let eligiblePoems = poemDatabase.filter((poem) => {
+    return !previousFloorPoemIds.includes(poem.id);
+  });
+
+  if (eligiblePoems.length < 3) {
+    eligiblePoems = poemDatabase;
+  }
+
+  const openingPoems = shuffleArray([...eligiblePoems]).slice(0, 3);
   const laterPoems = shuffleArray([...openingPoems]).slice(0, 2);
   const bossPoem = getRandomItem(laterPoems);
 
@@ -178,6 +187,17 @@ function buildPoemSeedPlan() {
     laterPoems,
     bossPoem
   };
+}
+
+function getPreviousFloorPoemSeedIds() {
+  return Object.entries(gameState.floorPoemSeedIdsByFloor)
+    .filter(([floorNumber]) => Number(floorNumber) < gameState.currentFloor)
+    .flatMap(([, poemIds]) => poemIds);
+}
+
+function recordFloorPoemSeedPlan(poemSeedPlan) {
+  gameState.floorPoemSeedIdsByFloor[gameState.currentFloor] =
+    poemSeedPlan.openingPoems.map((poem) => poem.id);
 }
 
 function getSeededPoemForNode(nodeId, poemSeedPlan) {
@@ -215,6 +235,23 @@ function assignPoemEncounter(space, poem, blankCount) {
   };
 }
 
+function getPoemBlankCountForNode(space) {
+  const floorBlankCounts =
+    gameState.currentFloor >= 2
+      ? { easy: 3, mid: 6, boss: 9 }
+      : { easy: 2, mid: 4, boss: 8 };
+
+  if (space.type === "boss") {
+    return floorBlankCounts.boss;
+  }
+
+  if (space.id === "poem-4" || space.id === "poem-5") {
+    return floorBlankCounts.mid;
+  }
+
+  return floorBlankCounts.easy;
+}
+
 function buildRunPath() {
   gameState.runPath = currentPathSpaces.map((space) => ({
     ...space,
@@ -227,13 +264,14 @@ function buildRunPath() {
   gameState.prophecyUsedThisFloor = false;
   resolveOptionNodes();
   const poemSeedPlan = buildPoemSeedPlan();
+  recordFloorPoemSeedPlan(poemSeedPlan);
 
   gameState.runPath.forEach((space, index) => {
     if (space.type === "poem") {
       const poem = getSeededPoemForNode(space.id, poemSeedPlan);
 
       if (poem) {
-        const blankCount = space.id === "poem-4" || space.id === "poem-5" ? 4 : 2;
+        const blankCount = getPoemBlankCountForNode(space);
         assignPoemEncounter(space, poem, blankCount);
       }
     }
@@ -246,7 +284,7 @@ function buildRunPath() {
 
     if (space.type === "boss") {
       const poem = getSeededPoemForNode(space.id, poemSeedPlan);
-      assignPoemEncounter(space, poem, 8);
+      assignPoemEncounter(space, poem, getPoemBlankCountForNode(space));
     }
 
     if (space.type === "trivia") {

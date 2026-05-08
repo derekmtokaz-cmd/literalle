@@ -19,6 +19,7 @@ const gameState = {
   availableNodeIds: [],
   runPath: [],
   currentFloorSeedSignature: "",
+  floorPoemSeedIdsByFloor: {},
   currentPuzzle: null,
   currentPuzzleMode: null,
   lastEventType: null,
