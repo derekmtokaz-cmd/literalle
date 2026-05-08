@@ -2,6 +2,7 @@
 
 function initializeGame() {
   initializeMusicControls();
+  initializeDeveloperTools();
   buildRunPath();
   renderStats();
   renderInventory();
@@ -26,6 +27,12 @@ submitFanficButton.addEventListener("click", submitFanficAttempt);
 submitPhoneticButton.addEventListener("click", submitPhoneticAttempt);
 closeProphecyButton.addEventListener("click", closeProphecyModal);
 developerModeToggle.addEventListener("change", () => {
+  if (!isDeveloperToolsEnabled()) {
+    gameState.developerMode = false;
+    developerModeToggle.checked = false;
+    return;
+  }
+
   gameState.developerMode = developerModeToggle.checked;
 
   if (gameState.developerMode) {
@@ -37,6 +44,21 @@ developerModeToggle.addEventListener("change", () => {
 });
 
 initializeGame();
+
+function initializeDeveloperTools() {
+  if (!isDeveloperToolsEnabled()) {
+    gameState.developerMode = false;
+    developerModeToggle.checked = false;
+    developerCard.classList.add("hidden");
+    return;
+  }
+
+  developerCard.classList.remove("hidden");
+}
+
+function isDeveloperToolsEnabled() {
+  return new URLSearchParams(window.location.search).get("dev") === "1";
+}
 
 function addDeveloperRelics() {
   ARTIFACTS.forEach((artifact) => {

@@ -59,6 +59,7 @@ const rewardMessage = document.getElementById("rewardMessage");
 const dialogCard = document.getElementById("dialogCard");
 const dialogImage = document.getElementById("dialogImage");
 const dialogText = document.getElementById("dialogText");
+const developerCard = document.getElementById("developerCard");
 const developerModeToggle = document.getElementById("developerModeToggle");
 const prophecyModal = document.getElementById("prophecyModal");
 const closeProphecyButton = document.getElementById("closeProphecyButton");
