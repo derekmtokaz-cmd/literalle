@@ -13,6 +13,7 @@ function showSection(sectionName) {
   detectiveSection.classList.add("hidden");
   fanficSection.classList.add("hidden");
   phoneticSection.classList.add("hidden");
+  litcanonSection.classList.add("hidden");
 
   if (sectionName === "start") {
     startSection.classList.remove("hidden");
@@ -44,6 +45,10 @@ function showSection(sectionName) {
 
   if (sectionName === "phonetic") {
     phoneticSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "litcanon") {
+    litcanonSection.classList.remove("hidden");
   }
 
   if (

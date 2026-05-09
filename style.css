@@ -758,11 +758,59 @@ button:disabled {
 
 .author-date-section,
 .detective-section,
-.fanfic-section {
+.fanfic-section,
+.litcanon-section {
   padding: 24px;
   border: 2px solid #d4a94a;
   border-radius: 18px;
   background: #3a141b;
+}
+
+.litcanon-section > h2 {
+  display: none;
+}
+
+.litcanon-section .event-meta {
+  padding: 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 14px;
+  background: #f4dfb8;
+  color: #2a1712;
+  line-height: 1.45;
+}
+
+.litcanon-answer-area {
+  position: relative;
+  margin-top: 18px;
+}
+
+.litcanon-answer-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #d4a94a;
+  border-radius: 10px;
+  background: #f4dfb8;
+  color: #2a1712;
+  font-family: inherit;
+  font-size: 1.05rem;
+}
+
+.litcanon-suggestions {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.litcanon-suggestion {
+  width: 100%;
+  text-align: left;
+  background: #8e1f1f;
+}
+
+@media (max-width: 980px) {
+  .litcanon-suggestion {
+    font-size: 0.95rem;
+  }
 }
 
 .detective-game,

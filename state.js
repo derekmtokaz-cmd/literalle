@@ -29,6 +29,7 @@ const gameState = {
   currentDetectiveEvent: null,
   currentFanficEvent: null,
   currentPhoneticQuote: null,
+  currentLitcanonEvent: null,
   currentKjvEncounter: null,
   currentKjvDifficulty: null,
   currentRewardOffers: [],

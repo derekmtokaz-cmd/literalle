@@ -58,6 +58,11 @@ function startMapNode(nodeId) {
     return startPhoneticEvent(nextSpace.encounter);
   }
 
+  if (nextSpace.type === "litcanon") {
+    gameState.lastEventType = "litcanon";
+    return startLitcanonEvent(nextSpace.encounter);
+  }
+
   gameState.lastEventType = nextSpace.type;
 
   eventTitle.textContent = nextSpace.type.toUpperCase();
@@ -130,13 +135,22 @@ function resolveOptionNodes() {
     return;
   }
 
-  const option1Type = getRandomItem(["phonetic", "kjv"]);
+  const specialEventTypes = getSpecialEventTypesForCurrentFloor();
+  const option1Type = getRandomItem(specialEventTypes);
   const option2Type = getRandomItem(
-    ["phonetic", "kjv"].filter((type) => type !== option1Type)
+    specialEventTypes.filter((type) => type !== option1Type)
   );
 
   applyResolvedOptionType(option1Special, option1Type);
   applyResolvedOptionType(option2Special, option2Type);
+}
+
+function getSpecialEventTypesForCurrentFloor() {
+  if (gameState.currentFloor >= 2) {
+    return ["phonetic", "litcanon"];
+  }
+
+  return ["phonetic", "kjv"];
 }
 
 function applyResolvedOptionType(space, type) {
@@ -159,6 +173,10 @@ function getMapIconForType(type) {
 
   if (type === "kjv") {
     return "KJV";
+  }
+
+  if (type === "litcanon") {
+    return "Lit";
   }
 
   return "";
@@ -314,6 +332,10 @@ function buildRunPath() {
       space.encounter = buildPhoneticEncounter();
     }
 
+    if (space.type === "litcanon") {
+      space.encounter = buildLitcanonEncounter();
+    }
+
     if (space.type === "elite") {
       const previousPoemSpaces = gameState.runPath
         .slice(0, index)
@@ -344,7 +366,11 @@ function getRunPathSeedSignature() {
         space.encounter?.poemEvent?.id ||
         "";
       const triviaType = space.encounter?.triviaType || "";
-      const encounterId = space.encounter?.id || space.encounter?.passage?.id || "";
+      const encounterId =
+        space.encounter?.id ||
+        space.encounter?.passage?.id ||
+        space.encounter?.clue?.id ||
+        "";
       const missingWords = space.encounter?.poemEvent?.missingWords || [];
       const blankSignature = missingWords
         .map((word) => `${word.lineIndex}-${word.wordIndex}`)

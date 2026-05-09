@@ -49,6 +49,12 @@ const phoneticClue = document.getElementById("phoneticClue");
 const phoneticQuoteContainer = document.getElementById("phoneticQuoteContainer");
 const phoneticMessage = document.getElementById("phoneticMessage");
 const submitPhoneticButton = document.getElementById("submitPhoneticButton");
+const litcanonSection = document.getElementById("litcanonSection");
+const litcanonDescription = document.getElementById("litcanonDescription");
+const litcanonAnswerInput = document.getElementById("litcanonAnswerInput");
+const litcanonSuggestions = document.getElementById("litcanonSuggestions");
+const litcanonMessage = document.getElementById("litcanonMessage");
+const submitLitcanonButton = document.getElementById("submitLitcanonButton");
 
 const goldRewardMessage = document.getElementById("goldRewardMessage");
 const tileOfferTitle = document.getElementById("tileOfferTitle");

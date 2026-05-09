@@ -25,6 +25,20 @@ submitAuthorDateButton.addEventListener("click", submitAuthorDateAttempt);
 submitDetectiveButton.addEventListener("click", submitDetectiveAttempt);
 submitFanficButton.addEventListener("click", submitFanficAttempt);
 submitPhoneticButton.addEventListener("click", submitPhoneticAttempt);
+submitLitcanonButton.addEventListener("click", submitLitcanonGuess);
+litcanonAnswerInput.addEventListener("input", () => {
+  if (gameState.currentLitcanonEvent) {
+    gameState.currentLitcanonEvent.selectedNovelId = null;
+  }
+
+  renderLitcanonSuggestions();
+});
+litcanonAnswerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitLitcanonGuess();
+  }
+});
 closeProphecyButton.addEventListener("click", closeProphecyModal);
 developerModeToggle.addEventListener("change", () => {
   if (!developerModeToggle || !isDeveloperToolsEnabled()) {
@@ -83,6 +97,7 @@ function restartGame() {
     currentDetectiveEvent: null,
     currentFanficEvent: null,
     currentPhoneticQuote: null,
+    currentLitcanonEvent: null,
     currentKjvEncounter: null,
     currentKjvDifficulty: null,
     currentRewardOffers: [],

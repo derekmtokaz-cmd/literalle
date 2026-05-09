@@ -272,6 +272,23 @@ function endRewardPhase() {
   showSection("board");
 }
 
+function startEmptyRewardPhase() {
+  gameState.currentLitcanonEvent = null;
+  gameState.currentRewardOffers = [];
+  gameState.rewardTilePurchased = false;
+
+  tileOffersSection.classList.add("hidden");
+  tileOfferContainer.innerHTML = "";
+  goldRewardMessage.textContent = "";
+  rewardMessage.textContent = "";
+  skipRewardButton.classList.remove("hidden");
+
+  renderStats();
+  renderInventory();
+
+  showSection("reward");
+}
+
 function startMerchantEvent() {
   startRewardPhase();
 }

@@ -99,7 +99,7 @@
           <button id="submitFanficButton">Submit</button>
         </div>
       </section>
-            <section class="phonetic-section hidden" id="phoneticSection">
+      <section class="phonetic-section hidden" id="phoneticSection">
         <h2>Phonetic Quote</h2>
         
         <div id="phoneticClue" class="phonetic-clue poem-container"></div>
@@ -110,6 +110,28 @@
 
         <div class="controls">
           <button id="submitPhoneticButton">Submit</button>
+        </div>
+      </section>
+      <section class="litcanon-section hidden" id="litcanonSection">
+        <h2>Litcanon</h2>
+        <p id="litcanonDescription" class="event-meta"></p>
+
+        <div class="litcanon-answer-area">
+          <input
+            id="litcanonAnswerInput"
+            class="litcanon-answer-input"
+            type="text"
+            autocomplete="off"
+            placeholder="Type at least 3 letters..."
+            aria-label="Novel title"
+          />
+          <div id="litcanonSuggestions" class="litcanon-suggestions"></div>
+        </div>
+
+        <div id="litcanonMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitLitcanonButton" type="button">Submit</button>
         </div>
       </section>
       <section class="reward-section hidden" id="rewardSection">
@@ -203,6 +225,8 @@
 <script src="artifacts.js"></script>
 <script src="phonetics.js"></script>
 <script src="kjv-passages.js"></script>
+<script src="litcanon-novels.js"></script>
+<script src="litcanon-clues.js"></script>
 <script src="state.js"></script>
 <script src="dom.js"></script>
 <script src="utils.js"></script>
@@ -216,6 +240,7 @@
 <script src="events-fanfic.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
+<script src="events-litcanon.js"></script>
 <script src="board.js"></script>
 <script src="navigation.js"></script>
 <script src="run-path.js"></script>
