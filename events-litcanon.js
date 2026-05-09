@@ -109,7 +109,8 @@ function submitLitcanonGuess() {
   }
 
   if (selectedNovelId === encounter.clue.answerNovelId) {
-    startEmptyRewardPhase();
+    gameState.currentLitcanonEvent = null;
+    startTrinketRewardPhase();
     return;
   }
 
@@ -123,7 +124,7 @@ function submitLitcanonGuess() {
   }
 
   if (encounter.attemptsUsed >= encounter.maxAttempts) {
-    startEmptyRewardPhase();
+    startLitcanonFailureRewardPhase(encounter);
     return;
   }
 
@@ -147,6 +148,18 @@ function getLitcanonNovelById(novelId) {
   return LITCANON_NOVELS.find((novel) => {
     return novel.id === novelId;
   });
+}
+
+function startLitcanonFailureRewardPhase(encounter) {
+  const answerNovel = getLitcanonNovelById(encounter.clue.answerNovelId);
+  const answerText = answerNovel
+    ? `${answerNovel.title} - ${answerNovel.author}`
+    : "Correct answer unavailable.";
+
+  gameState.currentLitcanonEvent = null;
+  startTrinketRewardPhase();
+  goldRewardMessage.textContent = answerText;
+  rewardMessage.textContent = "Three attempts is enough. Let's move on.";
 }
 
 function normalizeLitcanonTitle(title) {

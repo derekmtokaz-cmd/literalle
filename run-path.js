@@ -176,7 +176,7 @@ function getMapIconForType(type) {
   }
 
   if (type === "litcanon") {
-    return "Lit";
+    return "🎓";
   }
 
   return "";
