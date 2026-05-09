@@ -602,18 +602,22 @@ function useBabelTile(tileIndex, options = {}) {
   }
 
   const tile = gameState.inventory[tileIndex];
-hideInventoryTooltip();
-  if (!tile || tile.type !== "babelTile") {
+  hideInventoryTooltip();
+
+  if (!isBabelTile(tile)) {
     return;
   }
 
   let applied = false;
+  const tileLetters = getBabelTileLetters(tile).map((letter) => {
+    return letter.toLowerCase();
+  });
 
   gameState.currentPuzzle.selectedWords.forEach((word) => {
     word.letters.forEach((letter) => {
       if (
         !letter.locked &&
-        letter.answerChar.toLowerCase() === tile.letter.toLowerCase()
+        tileLetters.includes(letter.answerChar.toLowerCase())
       ) {
         letter.value = letter.answerChar;
         letter.locked = true;
@@ -623,24 +627,24 @@ hideInventoryTooltip();
   });
 
   if (consume) {
-  gameState.inventory.splice(tileIndex, 1);
-}
+    gameState.inventory.splice(tileIndex, 1);
+  }
 
   renderInventory();
   rerenderCurrentPuzzle();
   focusFirstOpenSlot();
 
   if (applied) {
-    showPuzzleMessage(`Used ${tile.letter} Babel Tile.`);
+    showPuzzleMessage(`Used ${getBabelTileLabel(tile)} Babel Tile.`);
   } else {
-    showPuzzleMessage(`Used ${tile.letter} Babel Tile, but no matching letters were hidden.`);
+    showPuzzleMessage(`Used ${getBabelTileLabel(tile)} Babel Tile, but no matching letters were hidden.`);
   }
 }
 
 function useEchoTile() {
   const babelTileIndexes = gameState.inventory
     .map((item, index) => ({ item, index }))
-    .filter((entry) => entry.item.type === "babelTile")
+    .filter((entry) => isBabelTile(entry.item))
     .map((entry) => entry.index);
 
   if (babelTileIndexes.length === 0) {
@@ -650,11 +654,11 @@ function useEchoTile() {
   const randomIndex =
     babelTileIndexes[Math.floor(Math.random() * babelTileIndexes.length)];
 
-gameState.echoTileUsedThisPuzzle = true;
+  gameState.echoTileUsedThisPuzzle = true;
 
-useBabelTile(randomIndex, { consume: false });
+  useBabelTile(randomIndex, { consume: false });
 
-renderInventory();
+  renderInventory();
 }
 
 function usePenNib() {

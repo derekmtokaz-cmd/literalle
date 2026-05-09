@@ -80,7 +80,7 @@ function restartGame() {
     currentFloor: 1,
     hp: 100,
     maxHp: 100,
-    gold: 2,
+    gold: 3,
     inventory: [],
     currentNodeId: "start",
     completedNodeIds: [],

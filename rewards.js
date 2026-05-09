@@ -4,6 +4,10 @@ function startRewardPhase() {
   gameState.firstDraftUsedThisPuzzle = false;
   skipRewardButton.classList.remove("hidden");
 
+  if (isCompletedPoemPuzzleReward()) {
+    incrementBabelBagsForCompletedPoemPuzzle();
+  }
+
   if (gameState.lastEventType === "merchant") {
     gameState.currentPuzzle = null;
     gameState.currentPuzzleMode = null;
@@ -125,8 +129,8 @@ function startRewardPhase() {
   gameState.currentKjvDifficulty = null;
   gameState.currentRewardOffers =
     gameState.lastEventType === "boss"
-      ? generateFreeTileOffers(2)
-      : generateTileOffers(tileOfferDiscount);
+      ? generateFreeTileOffers(4)
+      : generateRewardTileOffers(tileOfferDiscount);
   gameState.rewardTilePurchased = false;
   tileOffersSection.classList.remove("hidden");
   setTileOfferCopy(gameState.lastEventType === "boss");
@@ -157,10 +161,46 @@ function startRewardPhase() {
   showSection("reward");
 }
 
+function generateRewardTileOffers(discount = 0) {
+  if (isPoemReward()) {
+    return generatePoemTileOffers(discount);
+  }
+
+  return generateTileOffers(discount);
+}
+
+function isPoemReward() {
+  return (
+    gameState.lastEventType === "poem" ||
+    gameState.lastEventType === "midPoem" ||
+    gameState.lastEventType === "elite"
+  );
+}
+
+function isCompletedPoemPuzzleReward() {
+  return (
+    gameState.lastEventType === "poem" ||
+    gameState.lastEventType === "midPoem" ||
+    gameState.lastEventType === "elite" ||
+    gameState.lastEventType === "boss"
+  );
+}
+
+function generatePoemTileOffers(discount = 0) {
+  return [
+    ...generateSingleLetterTileOffers(2, discount),
+    ...generateDoubleLetterTileOffers(2, discount)
+  ];
+}
+
 function generateTileOffers(discount = 0) {
+  return generateSingleLetterTileOffers(3, discount);
+}
+
+function generateSingleLetterTileOffers(count = 3, discount = 0) {
   const offers = [];
 
-  while (offers.length < 3) {
+  while (offers.length < count) {
     const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
 
     if (!offers.includes(randomLetter)) {
@@ -169,13 +209,50 @@ function generateTileOffers(discount = 0) {
   }
 
   return offers.map((letter) => ({
+    letters: [letter],
     letter,
-    cost: Math.max(0, letterCostMap[letter] - discount)
+    tier: 1,
+    cost: getBabelTileCost([letter], discount)
   }));
 }
 
+function generateDoubleLetterTileOffers(count = 2, discount = 0) {
+  const offers = [];
+  const seenPairKeys = new Set();
+
+  while (offers.length < count) {
+    const letters = getRandomTileLetterPair();
+    const pairKey = [...letters].sort().join("|");
+
+    if (seenPairKeys.has(pairKey)) {
+      continue;
+    }
+
+    seenPairKeys.add(pairKey);
+    offers.push({
+      letters,
+      letter: letters[0],
+      tier: 2,
+      cost: getBabelTileCost(letters, discount)
+    });
+  }
+
+  return offers;
+}
+
+function getRandomTileLetterPair() {
+  const firstLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+  let secondLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+
+  while (secondLetter === firstLetter) {
+    secondLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+
+  return [firstLetter, secondLetter];
+}
+
 function generateFreeTileOffers(count = 3) {
-  return generateTileOffers()
+  return generateSingleLetterTileOffers(count)
     .slice(0, count)
     .map((offer) => ({
       ...offer,
@@ -203,9 +280,10 @@ function renderTileOffers() {
   gameState.currentRewardOffers.forEach((offer) => {
     const offerButton = document.createElement("button");
     offerButton.classList.add("tile-offer");
+    const offerLabel = offer.letters ? offer.letters.join("|") : offer.letter;
     offerButton.textContent = offer.free
-      ? offer.letter
-      : `${offer.letter} — ${offer.cost} gold`;
+      ? offerLabel
+      : `${offerLabel} — ${offer.cost} gold`;
 
     if (offer.claimed) {
       offerButton.disabled = true;
@@ -237,10 +315,9 @@ function buyRewardTile(offer) {
     gameState.gold -= offer.cost;
   }
 
-  gameState.inventory.push({
-    type: "babelTile",
-    letter: offer.letter
-  });
+  const rewardTile = createBabelTile(offer.letters || offer.letter);
+
+  gameState.inventory.push(rewardTile);
 
   if (offer.free) {
     offer.claimed = true;
@@ -249,8 +326,8 @@ function buyRewardTile(offer) {
   }
 
   rewardMessage.textContent = offer.free
-    ? `You claimed a ${offer.letter} Babel Tile.`
-    : `You bought a ${offer.letter} Babel Tile.`;
+    ? `You claimed a ${getBabelTileLabel(rewardTile)} Babel Tile.`
+    : `You bought a ${getBabelTileLabel(rewardTile)} Babel Tile.`;
 
   renderStats();
   renderInventory();
@@ -292,4 +369,5 @@ function startEmptyRewardPhase() {
 function startMerchantEvent() {
   startRewardPhase();
 }
+
 

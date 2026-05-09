@@ -26,5 +26,12 @@ const TRINKETS = [
     icon: "📄",
     description: "Read Floss's reply.",
     usableDuring: ["any"]
+  },
+  {
+    id: "babelBag",
+    name: "Babel Bag",
+    icon: "👜",
+    description: "Gains one hidden Babel Tile after each completed poem puzzle. Use to empty the bag.",
+    usableDuring: ["any"]
   }
 ];

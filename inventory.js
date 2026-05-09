@@ -100,8 +100,8 @@ function renderInventoryItem(item, index) {
   const itemButton = document.createElement("button");
   itemButton.classList.add("inventory-tile");
 
-  if (item.type === "babelTile") {
-    itemButton.textContent = item.letter;
+  if (isBabelTile(item)) {
+    itemButton.textContent = getBabelTileLabel(item);
     itemButton.disabled = gameState.currentPuzzleMode !== "event";
 
     itemButton.addEventListener("click", () => {
@@ -112,7 +112,10 @@ function renderInventoryItem(item, index) {
   if (item.type === "trinket") {
     const trinket = getTrinketById(item.trinketId);
 
-    itemButton.textContent = trinket ? trinket.icon : "?";
+    itemButton.textContent =
+      item.trinketId === "babelBag"
+        ? `${trinket ? trinket.icon : "?"}${getBabelBagTileCount(item)}`
+        : trinket ? trinket.icon : "?";
     itemButton.disabled = !canUseTrinket(item);
 
     itemButton.addEventListener("click", () => {
@@ -133,7 +136,7 @@ function renderInventoryItem(item, index) {
 
     if (isEchoTile) {
       const hasBabelTiles = gameState.inventory.some((inventoryItem) => {
-        return inventoryItem.type === "babelTile";
+        return isBabelTile(inventoryItem);
       });
 
       const inPoemPuzzle = gameState.currentPuzzle !== null;
@@ -200,19 +203,23 @@ function renderInventoryItem(item, index) {
 }
 
 function showInventoryTooltip(event, item) {
-  if (item.type === "babelTile") {
+  if (isBabelTile(item)) {
     inventoryTooltip.innerHTML = `
-      <strong>Babel Tile: ${item.letter}</strong><br>
-      Spend this Babel Tile to reveal all ${item.letter}s in the current poem puzzle.
+      <strong>Babel Tile: ${getBabelTileLabel(item)}</strong><br>
+      Spend this Babel Tile to reveal all matching ${getBabelTileLetterList(item)} letters in the current poem puzzle.
     `;
   }
 
   if (item.type === "trinket") {
     const trinket = getTrinketById(item.trinketId);
+    const extraDescription =
+      item.trinketId === "babelBag"
+        ? `<br>Currently holds ${getBabelBagTileCount(item)} hidden Babel Tile${getBabelBagTileCount(item) === 1 ? "" : "s"}.`
+        : "";
 
     inventoryTooltip.innerHTML = `
       <strong>${trinket.icon} ${trinket.name}</strong><br>
-      ${trinket.description}
+      ${trinket.description}${extraDescription}
     `;
   }
 
@@ -289,6 +296,10 @@ function canUseTrinket(item) {
     return true;
   }
 
+  if (item.trinketId === "babelBag") {
+    return getBabelBagTileCount(item) > 0;
+  }
+
   return false;
 }
 
@@ -313,6 +324,10 @@ function useTrinket(itemIndex) {
 
   if (item.trinketId === "reply") {
     useReply(itemIndex);
+  }
+
+  if (item.trinketId === "babelBag") {
+    useBabelBag(itemIndex);
   }
 }
 
@@ -533,6 +548,41 @@ function useReply(itemIndex) {
   renderInventory();
 }
 
+function getBabelBagTileCount(item) {
+  return item && Number.isInteger(item.babelTileCount)
+    ? item.babelTileCount
+    : 0;
+}
+
+function incrementBabelBagsForCompletedPoemPuzzle() {
+  gameState.inventory.forEach((item) => {
+    if (item.type === "trinket" && item.trinketId === "babelBag") {
+      item.babelTileCount = getBabelBagTileCount(item) + 1;
+    }
+  });
+}
+
+function useBabelBag(itemIndex) {
+  const item = gameState.inventory[itemIndex];
+  const tileCount = getBabelBagTileCount(item);
+
+  if (!item || item.trinketId !== "babelBag" || tileCount <= 0) {
+    return;
+  }
+
+  hideInventoryTooltip();
+
+  const newTiles = [];
+
+  for (let i = 0; i < tileCount; i += 1) {
+    const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+    newTiles.push(createBabelTile(randomLetter));
+  }
+
+  gameState.inventory.splice(itemIndex, 1, ...newTiles);
+  renderInventory();
+}
+
 function startTrinketRewardPhase(trinket = getRandomTrinket()) {
 
   gameState.currentPuzzle = null;
@@ -543,7 +593,8 @@ function startTrinketRewardPhase(trinket = getRandomTrinket()) {
 
   gameState.inventory.push({
     type: "trinket",
-    trinketId: trinket.id
+    trinketId: trinket.id,
+    ...(trinket.id === "babelBag" ? { babelTileCount: 0 } : {})
   });
 
   goldRewardMessage.textContent = `You found ${trinket.icon} ${trinket.name}.`;
