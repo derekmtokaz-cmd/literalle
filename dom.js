@@ -44,6 +44,13 @@ const fanficPool = document.getElementById("fanficPool");
 const fanficMessage = document.getElementById("fanficMessage");
 const submitFanficButton = document.getElementById("submitFanficButton");
 
+const shakespeareSection = document.getElementById("shakespeareSection");
+const shakespeareRoundLabel = document.getElementById("shakespeareRoundLabel");
+const shakespeareMatchRows = document.getElementById("shakespeareMatchRows");
+const shakespearePool = document.getElementById("shakespearePool");
+const shakespeareMessage = document.getElementById("shakespeareMessage");
+const submitShakespeareButton = document.getElementById("submitShakespeareButton");
+
 const phoneticSection = document.getElementById("phoneticSection");
 const phoneticClue = document.getElementById("phoneticClue");
 const phoneticQuoteContainer = document.getElementById("phoneticQuoteContainer");

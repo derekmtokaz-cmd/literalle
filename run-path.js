@@ -25,6 +25,7 @@ function startMapNode(nodeId) {
     if (type === "authorDate") return startAuthorDateEvent(nextSpace.encounter);
     if (type === "detective") return startDetectiveEvent(nextSpace.encounter);
     if (type === "fanfic") return startFanficEvent(nextSpace.encounter);
+    if (type === "shakespeare") return startShakespeareEvent(nextSpace.encounter);
 
     return startFanficEvent(nextSpace.encounter);
   }
@@ -306,7 +307,7 @@ function buildRunPath() {
     }
 
     if (space.type === "trivia") {
-      const triviaTypes = ["authorDate", "detective", "fanfic"];
+      const triviaTypes = ["authorDate", "detective", "fanfic", "shakespeare"];
       const randomTriviaType =
         triviaTypes[Math.floor(Math.random() * triviaTypes.length)];
 
@@ -320,6 +321,10 @@ function buildRunPath() {
 
       if (randomTriviaType === "fanfic") {
         space.encounter = buildFanficEncounter();
+      }
+
+      if (randomTriviaType === "shakespeare") {
+        space.encounter = buildShakespeareEncounter();
       }
 
     }

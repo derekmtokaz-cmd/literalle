@@ -12,6 +12,7 @@ function showSection(sectionName) {
   authorDateSection.classList.add("hidden");
   detectiveSection.classList.add("hidden");
   fanficSection.classList.add("hidden");
+  shakespeareSection.classList.add("hidden");
   phoneticSection.classList.add("hidden");
   litcanonSection.classList.add("hidden");
 
@@ -41,6 +42,10 @@ function showSection(sectionName) {
 
   if (sectionName === "fanfic") {
     fanficSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "shakespeare") {
+    shakespeareSection.classList.remove("hidden");
   }
 
   if (sectionName === "phonetic") {

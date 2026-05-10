@@ -24,6 +24,7 @@ skipRewardButton.addEventListener("click", endRewardPhase);
 submitAuthorDateButton.addEventListener("click", submitAuthorDateAttempt);
 submitDetectiveButton.addEventListener("click", submitDetectiveAttempt);
 submitFanficButton.addEventListener("click", submitFanficAttempt);
+submitShakespeareButton.addEventListener("click", submitShakespeareAttempt);
 submitPhoneticButton.addEventListener("click", submitPhoneticAttempt);
 submitLitcanonButton.addEventListener("click", submitLitcanonGuess);
 litcanonAnswerInput.addEventListener("input", () => {
@@ -96,6 +97,7 @@ function restartGame() {
     currentAuthorDateEvent: null,
     currentDetectiveEvent: null,
     currentFanficEvent: null,
+    currentShakespeareEvent: null,
     currentPhoneticQuote: null,
     currentLitcanonEvent: null,
     currentKjvEncounter: null,

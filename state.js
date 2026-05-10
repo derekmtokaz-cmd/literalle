@@ -28,6 +28,7 @@ const gameState = {
   currentAuthorDateEvent: null,
   currentDetectiveEvent: null,
   currentFanficEvent: null,
+  currentShakespeareEvent: null,
   currentPhoneticQuote: null,
   currentLitcanonEvent: null,
   currentKjvEncounter: null,

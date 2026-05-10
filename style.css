@@ -51,6 +51,7 @@ h2 {
 .author-date-section > h2,
 .detective-section > h2,
 .fanfic-section > h2,
+.shakespeare-section > h2,
 .phonetic-section > h2 {
   display: none;
 }
@@ -759,6 +760,7 @@ button:disabled {
 .author-date-section,
 .detective-section,
 .fanfic-section,
+.shakespeare-section,
 .litcanon-section {
   padding: 24px;
   border: 2px solid #d4a94a;
@@ -814,7 +816,8 @@ button:disabled {
 }
 
 .detective-game,
-.fanfic-game {
+.fanfic-game,
+.shakespeare-game {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 260px;
   gap: 22px;
@@ -822,14 +825,16 @@ button:disabled {
 }
 
 .detective-match-rows,
-.fanfic-match-rows {
+.fanfic-match-rows,
+.shakespeare-match-rows {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
 .detective-match-row,
-.fanfic-match-row {
+.fanfic-match-row,
+.shakespeare-match-row {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(220px, 1fr);
   gap: 14px;
@@ -837,7 +842,8 @@ button:disabled {
 }
 
 .detective-novel-card,
-.fanfic-original-card {
+.fanfic-original-card,
+.shakespeare-play-card {
   padding: 12px 14px;
   border: 2px solid #d4a94a;
   border-radius: 12px;
@@ -856,7 +862,8 @@ button:disabled {
 }
 
 .detective-dropzone,
-.fanfic-dropzone {
+.fanfic-dropzone,
+.shakespeare-dropzone {
   min-height: 52px;
   padding: 8px;
   border: 2px dashed #d4a94a;
@@ -868,13 +875,15 @@ button:disabled {
 }
 
 .detective-dropzone.locked,
-.fanfic-dropzone.locked {
+.fanfic-dropzone.locked,
+.shakespeare-dropzone.locked {
   border-style: solid;
   background: rgba(47, 125, 50, 0.18);
 }
 
 .detective-pool-wrapper,
-.fanfic-pool-wrapper {
+.fanfic-pool-wrapper,
+.shakespeare-pool-wrapper {
   padding: 16px;
   border: 2px solid #d4a94a;
   border-radius: 14px;
@@ -882,7 +891,8 @@ button:disabled {
 }
 
 .detective-pool,
-.fanfic-pool {
+.fanfic-pool,
+.shakespeare-pool {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -890,7 +900,8 @@ button:disabled {
 }
 
 .detective-card,
-.fanfic-card {
+.fanfic-card,
+.shakespeare-card {
   padding: 10px 12px;
   border: 2px solid #f2c46d;
   border-radius: 10px;
@@ -903,12 +914,14 @@ button:disabled {
 }
 
 .detective-card:active,
-.fanfic-card:active {
+.fanfic-card:active,
+.shakespeare-card:active {
   cursor: grabbing;
 }
 
 .detective-card.locked,
-.fanfic-card.locked {
+.fanfic-card.locked,
+.shakespeare-card.locked {
   background: #2f7d32;
   cursor: default;
 }
@@ -919,17 +932,20 @@ button:disabled {
   }
 
   .detective-game,
-  .fanfic-game {
+  .fanfic-game,
+  .shakespeare-game {
     grid-template-columns: 1fr;
   }
 
   .detective-match-row,
-  .fanfic-match-row {
+  .fanfic-match-row,
+  .shakespeare-match-row {
     grid-template-columns: 1fr;
   }
 
   .detective-pool,
-  .fanfic-pool {
+  .fanfic-pool,
+  .shakespeare-pool {
     min-height: auto;
   }
 }
