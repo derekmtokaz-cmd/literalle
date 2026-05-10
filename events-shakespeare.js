@@ -59,7 +59,7 @@ function prepareShakespeareRound() {
 function renderShakespeareEvent() {
   const eventData = gameState.currentShakespeareEvent;
 
-  shakespeareRoundLabel.textContent = `Round ${eventData.round} of 2`;
+  shakespeareRoundLabel.textContent = "Match the character to their play.";
   shakespeareMatchRows.innerHTML = "";
   shakespearePool.innerHTML = "";
 
