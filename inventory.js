@@ -206,7 +206,7 @@ function showInventoryTooltip(event, item) {
   if (isBabelTile(item)) {
     inventoryTooltip.innerHTML = `
       <strong>Babel Tile: ${getBabelTileLabel(item)}</strong><br>
-      Spend this Babel Tile to reveal all matching ${getBabelTileLetterList(item)} letters in the current poem puzzle.
+      Spend this Babel Tile to reveal all matching ${getBabelTileLetterList(item)} in the current poem puzzle.
     `;
   }
 
