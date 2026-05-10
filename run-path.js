@@ -125,25 +125,34 @@ function getRandomRestPoem() {
 
 /* ---------------- START ---------------- */
 function resolveOptionNodes() {
-  const option1Special = gameState.runPath.find((space) => {
-    return space.type === "option1Special";
+  const option1Slots = gameState.runPath.filter((space) => {
+    return space.type === "option1Slot";
   });
   const option2Special = gameState.runPath.find((space) => {
-    return space.type === "option2Special";
+    return space.type === "option2Slot";
   });
 
-  if (!option1Special || !option2Special) {
+  if (option1Slots.length !== 2 || !option2Special) {
     return;
   }
 
-  const specialEventTypes = getSpecialEventTypesForCurrentFloor();
-  const option1Type = getRandomItem(specialEventTypes);
-  const option2Type = getRandomItem(
-    specialEventTypes.filter((type) => type !== option1Type)
-  );
+  const shuffledSpecialEventTypes = shuffleArray(getSpecialEventTypesForCurrentFloor());
+  const questionInFirstBranch = Math.random() < 0.5;
 
-  applyResolvedOptionType(option1Special, option1Type);
-  applyResolvedOptionType(option2Special, option2Type);
+  if (questionInFirstBranch) {
+    const shuffledOption1Types = shuffleArray(["trivia", shuffledSpecialEventTypes[0]]);
+
+    applyResolvedOptionType(option1Slots[0], shuffledOption1Types[0]);
+    applyResolvedOptionType(option1Slots[1], shuffledOption1Types[1]);
+    applyResolvedOptionType(option2Special, shuffledSpecialEventTypes[1]);
+    return;
+  }
+
+  const shuffledOption1Types = shuffleArray(shuffledSpecialEventTypes);
+
+  applyResolvedOptionType(option1Slots[0], shuffledOption1Types[0]);
+  applyResolvedOptionType(option1Slots[1], shuffledOption1Types[1]);
+  applyResolvedOptionType(option2Special, "trivia");
 }
 
 function getSpecialEventTypesForCurrentFloor() {

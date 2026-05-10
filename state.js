@@ -93,15 +93,15 @@ const currentPathSpaces = [
 
   { id: "poem-1", column: 1, lane: 1, type: "poem", icon: "📖", connections: ["poem-2"] },
   { id: "poem-2", column: 2, lane: 1, type: "poem", icon: "📖", connections: ["poem-3"] },
-  { id: "poem-3", column: 3, lane: 1, type: "poem", icon: "📖", connections: ["option-1-trivia", "option-1-special"] },
+  { id: "poem-3", column: 3, lane: 1, type: "poem", icon: "📖", connections: ["option-1-a", "option-1-b"] },
 
-  { id: "option-1-trivia", column: 4, lane: 0, type: "trivia", icon: "?", connections: ["poem-4"] },
-  { id: "option-1-special", column: 4, lane: 2, type: "option1Special", icon: "", connections: ["poem-4"] },
+  { id: "option-1-a", column: 4, lane: 0, type: "option1Slot", icon: "", connections: ["poem-4"] },
+  { id: "option-1-b", column: 4, lane: 2, type: "option1Slot", icon: "", connections: ["poem-4"] },
 
   { id: "poem-4", column: 5, lane: 1, type: "poem", icon: "📖", connections: ["poem-5"] },
-  { id: "poem-5", column: 6, lane: 1, type: "poem", icon: "📖", connections: ["option-2-special", "option-2-rest"] },
+  { id: "poem-5", column: 6, lane: 1, type: "poem", icon: "📖", connections: ["option-2-a", "option-2-rest"] },
 
-  { id: "option-2-special", column: 7, lane: 0, type: "option2Special", icon: "", connections: ["boss"] },
+  { id: "option-2-a", column: 7, lane: 0, type: "option2Slot", icon: "", connections: ["boss"] },
   { id: "option-2-rest", column: 7, lane: 2, type: "rest", icon: "❤️", connections: ["boss"] },
 
   { id: "boss", column: 8, lane: 1, type: "boss", icon: "📖", connections: [] }
