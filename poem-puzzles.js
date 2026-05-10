@@ -668,23 +668,15 @@ function usePenNib() {
 
   hideInventoryTooltip();
 
-  const slots = getAllSlots();
+  const targetLetter = findFirstUnsolvedPuzzleLetter();
 
-  const firstBlankSlot = slots.find((slot) => {
-    return !slot.disabled && slot.value.trim() === "";
-  });
-
-  if (!firstBlankSlot) {
+  if (!targetLetter) {
     showPuzzleMessage("There are no blank letters for the Pen Nib to fill.");
     return;
   }
 
-  const blankIndex = Number(firstBlankSlot.dataset.blankIndex);
-  const letterIndex = Number(firstBlankSlot.dataset.letterIndex);
-  const letter = gameState.currentPuzzle.selectedWords[blankIndex].letters[letterIndex];
-
-  letter.value = letter.answerChar;
-  letter.locked = true;
+  targetLetter.value = targetLetter.answerChar;
+  targetLetter.locked = true;
   gameState.penNibUsedThisPuzzle = true;
 
   renderInventory();
@@ -692,5 +684,19 @@ function usePenNib() {
   focusFirstOpenSlot();
 
   showPuzzleMessage("The Pen Nib filled in the first blank letter.");
+}
+
+function findFirstUnsolvedPuzzleLetter() {
+  for (const word of gameState.currentPuzzle.selectedWords) {
+    const letter = word.letters.find((candidate) => {
+      return !candidate.locked;
+    });
+
+    if (letter) {
+      return letter;
+    }
+  }
+
+  return null;
 }
 
