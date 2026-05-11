@@ -35,7 +35,7 @@ function startTimedShakespeareEvent(encounter = buildTimedShakespeareEncounter()
   completeTimedShakespeareButton.disabled = false;
 
   showDialog({
-    dialog: ["They were written by Christopher Marlow and Sir Francis Bacon is not the correct answer."],
+    dialog: ['"They were written by Christopher Marlow and Sir Francis Bacon" is not the correct answer.'],
     dialogImage: "images/libskull.png"
   });
 
