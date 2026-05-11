@@ -210,9 +210,12 @@ function submitTimedShakespeareAnswer() {
     return;
   }
 
-  if (eventData.highlightedSuggestionIndex >= 0) {
-    const highlightedNovel =
-      eventData.suggestionMatches[eventData.highlightedSuggestionIndex];
+  if (eventData.suggestionMatches.length > 0) {
+    const suggestionIndex =
+      eventData.highlightedSuggestionIndex >= 0
+        ? eventData.highlightedSuggestionIndex
+        : 0;
+    const highlightedNovel = eventData.suggestionMatches[suggestionIndex];
 
     if (highlightedNovel) {
       submitTimedShakespeareNovel(highlightedNovel);

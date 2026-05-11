@@ -156,9 +156,12 @@ function submitLitcanonGuess() {
     return;
   }
 
-  if (encounter.highlightedSuggestionIndex >= 0) {
-    const highlightedNovel =
-      encounter.suggestionMatches[encounter.highlightedSuggestionIndex];
+  if (encounter.suggestionMatches.length > 0) {
+    const suggestionIndex =
+      encounter.highlightedSuggestionIndex >= 0
+        ? encounter.highlightedSuggestionIndex
+        : 0;
+    const highlightedNovel = encounter.suggestionMatches[suggestionIndex];
 
     if (highlightedNovel) {
       selectLitcanonSuggestion(highlightedNovel);
