@@ -15,6 +15,8 @@ function startTimedShakespeareEvent(encounter = buildTimedShakespeareEncounter()
   gameState.currentTimedShakespeareEvent = {
     encounter,
     correctNovelIds: [],
+    suggestionMatches: [],
+    highlightedSuggestionIndex: -1,
     remainingSeconds: TIMED_SHAKESPEARE_VISIBLE_SECONDS,
     taskActive: false
   };
@@ -33,8 +35,8 @@ function startTimedShakespeareEvent(encounter = buildTimedShakespeareEncounter()
   completeTimedShakespeareButton.disabled = false;
 
   showDialog({
-    dialog: ["dialog goes here."],
-    dialogImage: "images/lib.png"
+    dialog: ["They were written by Christopher Marlow and Sir Francis Bacon is not the correct answer."],
+    dialogImage: "images/libskull.png"
   });
 
   showSection("timedShakespeare");
@@ -130,6 +132,8 @@ function renderTimedShakespeareSuggestions() {
   const query = normalizeLitcanonTitle(timedShakespeareAnswerInput.value);
 
   if (query.length < 3) {
+    eventData.suggestionMatches = [];
+    eventData.highlightedSuggestionIndex = -1;
     return;
   }
 
@@ -137,11 +141,22 @@ function renderTimedShakespeareSuggestions() {
     return normalizeLitcanonTitle(novel.title).includes(query);
   }).slice(0, 8);
 
-  matches.forEach((novel) => {
+  eventData.suggestionMatches = matches;
+
+  if (eventData.highlightedSuggestionIndex >= matches.length) {
+    eventData.highlightedSuggestionIndex = matches.length - 1;
+  }
+
+  matches.forEach((novel, index) => {
     const suggestionButton = document.createElement("button");
     suggestionButton.type = "button";
     suggestionButton.classList.add("litcanon-suggestion");
-    suggestionButton.textContent = `${novel.title} - ${novel.author}`;
+
+    if (index === eventData.highlightedSuggestionIndex) {
+      suggestionButton.classList.add("highlighted");
+    }
+
+    suggestionButton.textContent = novel.title;
 
     suggestionButton.addEventListener("click", () => {
       submitTimedShakespeareNovel(novel);
@@ -151,11 +166,58 @@ function renderTimedShakespeareSuggestions() {
   });
 }
 
+function handleTimedShakespeareAnswerKeydown(event) {
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    moveTimedShakespeareSuggestionHighlight(1);
+    return;
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    moveTimedShakespeareSuggestionHighlight(-1);
+    return;
+  }
+
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitTimedShakespeareAnswer();
+  }
+}
+
+function moveTimedShakespeareSuggestionHighlight(direction) {
+  const eventData = gameState.currentTimedShakespeareEvent;
+
+  if (!eventData || eventData.suggestionMatches.length === 0) {
+    return;
+  }
+
+  const matchCount = eventData.suggestionMatches.length;
+  const currentIndex = eventData.highlightedSuggestionIndex;
+  const nextIndex =
+    currentIndex === -1
+      ? direction > 0 ? 0 : matchCount - 1
+      : (currentIndex + direction + matchCount) % matchCount;
+
+  eventData.highlightedSuggestionIndex = nextIndex;
+  renderTimedShakespeareSuggestions();
+}
+
 function submitTimedShakespeareAnswer() {
   const eventData = gameState.currentTimedShakespeareEvent;
 
   if (!eventData || !eventData.taskActive) {
     return;
+  }
+
+  if (eventData.highlightedSuggestionIndex >= 0) {
+    const highlightedNovel =
+      eventData.suggestionMatches[eventData.highlightedSuggestionIndex];
+
+    if (highlightedNovel) {
+      submitTimedShakespeareNovel(highlightedNovel);
+      return;
+    }
   }
 
   const normalizedInput = normalizeLitcanonTitle(timedShakespeareAnswerInput.value);
@@ -187,6 +249,13 @@ function submitTimedShakespeareNovel(novel) {
 }
 
 function resetTimedShakespeareInput() {
+  const eventData = gameState.currentTimedShakespeareEvent;
+
+  if (eventData) {
+    eventData.suggestionMatches = [];
+    eventData.highlightedSuggestionIndex = -1;
+  }
+
   timedShakespeareAnswerInput.value = "";
   timedShakespeareSuggestions.innerHTML = "";
   timedShakespeareAnswerInput.focus();

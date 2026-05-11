@@ -28,29 +28,24 @@ submitShakespeareButton.addEventListener("click", submitShakespeareAttempt);
 loseHpTimedShakespeareButton.addEventListener("click", chooseTimedShakespeareHpLoss);
 completeTimedShakespeareButton.addEventListener("click", chooseTimedShakespeareChallenge);
 timedShakespeareAnswerInput.addEventListener("input", () => {
+  if (gameState.currentTimedShakespeareEvent) {
+    gameState.currentTimedShakespeareEvent.highlightedSuggestionIndex = -1;
+  }
+
   renderTimedShakespeareSuggestions();
 });
-timedShakespeareAnswerInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    submitTimedShakespeareAnswer();
-  }
-});
+timedShakespeareAnswerInput.addEventListener("keydown", handleTimedShakespeareAnswerKeydown);
 submitPhoneticButton.addEventListener("click", submitPhoneticAttempt);
 submitLitcanonButton.addEventListener("click", submitLitcanonGuess);
 litcanonAnswerInput.addEventListener("input", () => {
   if (gameState.currentLitcanonEvent) {
     gameState.currentLitcanonEvent.selectedNovelId = null;
+    gameState.currentLitcanonEvent.highlightedSuggestionIndex = -1;
   }
 
   renderLitcanonSuggestions();
 });
-litcanonAnswerInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    submitLitcanonGuess();
-  }
-});
+litcanonAnswerInput.addEventListener("keydown", handleLitcanonAnswerKeydown);
 closeProphecyButton.addEventListener("click", closeProphecyModal);
 developerForcedTriviaSelect.addEventListener("change", () => {
   gameState.developerForcedTriviaType = developerForcedTriviaSelect.value;

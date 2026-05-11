@@ -5,7 +5,9 @@ function buildLitcanonEncounter() {
     clue,
     attemptsUsed: 0,
     maxAttempts: 3,
-    selectedNovelId: null
+    selectedNovelId: null,
+    suggestionMatches: [],
+    highlightedSuggestionIndex: -1
   };
 }
 
@@ -39,6 +41,8 @@ function startLitcanonEvent(encounter = buildLitcanonEncounter()) {
   litcanonAnswerInput.value = "";
   litcanonAnswerInput.disabled = false;
   submitLitcanonButton.disabled = false;
+  encounter.suggestionMatches = [];
+  encounter.highlightedSuggestionIndex = -1;
 
   renderLitcanonSuggestions();
   showSection("litcanon");
@@ -57,6 +61,8 @@ function renderLitcanonSuggestions() {
   const query = normalizeLitcanonTitle(litcanonAnswerInput.value);
 
   if (query.length < 3) {
+    encounter.suggestionMatches = [];
+    encounter.highlightedSuggestionIndex = -1;
     return;
   }
 
@@ -66,10 +72,21 @@ function renderLitcanonSuggestions() {
     return title.includes(query);
   }).slice(0, 8);
 
-  matches.forEach((novel) => {
+  encounter.suggestionMatches = matches;
+
+  if (encounter.highlightedSuggestionIndex >= matches.length) {
+    encounter.highlightedSuggestionIndex = matches.length - 1;
+  }
+
+  matches.forEach((novel, index) => {
     const suggestionButton = document.createElement("button");
     suggestionButton.type = "button";
     suggestionButton.classList.add("litcanon-suggestion");
+
+    if (index === encounter.highlightedSuggestionIndex) {
+      suggestionButton.classList.add("highlighted");
+    }
+
     suggestionButton.textContent = `${novel.title} - ${novel.author}`;
 
     suggestionButton.addEventListener("click", () => {
@@ -78,6 +95,43 @@ function renderLitcanonSuggestions() {
 
     litcanonSuggestions.appendChild(suggestionButton);
   });
+}
+
+function handleLitcanonAnswerKeydown(event) {
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    moveLitcanonSuggestionHighlight(1);
+    return;
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    moveLitcanonSuggestionHighlight(-1);
+    return;
+  }
+
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitLitcanonGuess();
+  }
+}
+
+function moveLitcanonSuggestionHighlight(direction) {
+  const encounter = gameState.currentLitcanonEvent;
+
+  if (!encounter || encounter.suggestionMatches.length === 0) {
+    return;
+  }
+
+  const matchCount = encounter.suggestionMatches.length;
+  const currentIndex = encounter.highlightedSuggestionIndex;
+  const nextIndex =
+    currentIndex === -1
+      ? direction > 0 ? 0 : matchCount - 1
+      : (currentIndex + direction + matchCount) % matchCount;
+
+  encounter.highlightedSuggestionIndex = nextIndex;
+  renderLitcanonSuggestions();
 }
 
 function selectLitcanonSuggestion(novel) {
@@ -91,6 +145,8 @@ function selectLitcanonSuggestion(novel) {
   litcanonAnswerInput.value = novel.title;
   litcanonMessage.textContent = "";
   litcanonSuggestions.innerHTML = "";
+  encounter.suggestionMatches = [];
+  encounter.highlightedSuggestionIndex = -1;
 }
 
 function submitLitcanonGuess() {
@@ -98,6 +154,15 @@ function submitLitcanonGuess() {
 
   if (!encounter) {
     return;
+  }
+
+  if (encounter.highlightedSuggestionIndex >= 0) {
+    const highlightedNovel =
+      encounter.suggestionMatches[encounter.highlightedSuggestionIndex];
+
+    if (highlightedNovel) {
+      selectLitcanonSuggestion(highlightedNovel);
+    }
   }
 
   const selectedNovelId =
@@ -129,6 +194,8 @@ function submitLitcanonGuess() {
   }
 
   encounter.selectedNovelId = null;
+  encounter.suggestionMatches = [];
+  encounter.highlightedSuggestionIndex = -1;
   litcanonAnswerInput.value = "";
   litcanonMessage.textContent = "";
   renderLitcanonSuggestions();
