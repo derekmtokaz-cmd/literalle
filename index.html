@@ -147,6 +147,35 @@
           <button id="completeTimedShakespeareButton" type="button">Complete a special task</button>
         </div>
       </section>
+      <section class="loquacious-section hidden" id="loquaciousSection">
+        <h2>Loquacious</h2>
+        <p id="loquaciousIntro" class="event-meta">Choose how you want to handle this room.</p>
+
+        <div id="loquaciousChallenge" class="loquacious-challenge hidden">
+          <p id="loquaciousInstruction" class="event-meta"></p>
+
+          <div class="loquacious-answer-area">
+            <input
+              id="loquaciousAnswerInput"
+              class="litcanon-answer-input"
+              type="text"
+              autocomplete="off"
+              aria-label="Poem word"
+            />
+          </div>
+
+          <div class="controls">
+            <button id="submitLoquaciousButton" type="button">Submit</button>
+          </div>
+        </div>
+
+        <div id="loquaciousMessage" class="event-message"></div>
+
+        <div id="loquaciousChoiceControls" class="controls">
+          <button id="gainHpLoquaciousButton" type="button">Gain 5 HP</button>
+          <button id="startLoquaciousButton" type="button">Get loquacious</button>
+        </div>
+      </section>
       <section class="phonetic-section hidden" id="phoneticSection">
         <h2>Phonetic Quote</h2>
         
@@ -252,6 +281,7 @@
             <option value="fanfic">Fanfic</option>
             <option value="shakespeare">Shakespeare Characters</option>
             <option value="timedShakespeare">Timed Shakespeare</option>
+            <option value="loquacious">Loquacious</option>
           </select>
 
           <div class="developer-button-group">
@@ -265,6 +295,7 @@
           <div class="developer-button-group">
             <p>Special ?</p>
             <button id="developerStartTimedShakespeareButton" type="button">Timed Shakespeare</button>
+            <button id="developerStartLoquaciousButton" type="button">Loquacious</button>
           </div>
 
           <div class="developer-button-group">
@@ -341,6 +372,7 @@
 <script src="events-fanfic.js"></script>
 <script src="events-shakespeare.js"></script>
 <script src="events-timed-shakespeare.js"></script>
+<script src="events-loquacious.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
 <script src="events-litcanon.js"></script>

@@ -102,6 +102,9 @@ function renderInventoryItem(item, index) {
 
   if (isBabelTile(item)) {
     itemButton.textContent = getBabelTileLabel(item);
+    if (isWordBabelTile(item)) {
+      itemButton.classList.add("word-babel-tile");
+    }
     itemButton.disabled = gameState.currentPuzzleMode !== "event";
 
     itemButton.addEventListener("click", () => {
@@ -136,7 +139,7 @@ function renderInventoryItem(item, index) {
 
     if (isEchoTile) {
       const hasBabelTiles = gameState.inventory.some((inventoryItem) => {
-        return isBabelTile(inventoryItem);
+        return isBabelTileEchoEligible(inventoryItem);
       });
 
       const inPoemPuzzle = gameState.currentPuzzle !== null;
@@ -204,10 +207,18 @@ function renderInventoryItem(item, index) {
 
 function showInventoryTooltip(event, item) {
   if (isBabelTile(item)) {
-    inventoryTooltip.innerHTML = `
-      <strong>Babel Tile: ${getBabelTileLabel(item)}</strong><br>
-      Spend this Babel Tile to reveal all matching ${getBabelTileLetterList(item)} in the current poem puzzle.
-    `;
+    const tileLabel = getBabelTileLabel(item);
+    const safeTileLabel = escapeInventoryTooltipText(tileLabel);
+
+    inventoryTooltip.innerHTML = isWordBabelTile(item)
+      ? `
+        <strong>Babel Tile: ${safeTileLabel}</strong><br>
+        Spend this Babel Tile to reveal all letters from "${safeTileLabel}" in the current poem puzzle.
+      `
+      : `
+        <strong>Babel Tile: ${safeTileLabel}</strong><br>
+        Spend this Babel Tile to reveal all matching ${getBabelTileLetterList(item)} in the current poem puzzle.
+      `;
   }
 
   if (item.type === "trinket") {
@@ -234,6 +245,15 @@ function showInventoryTooltip(event, item) {
 
   inventoryTooltip.classList.remove("hidden");
   positionInventoryTooltip(event);
+}
+
+function escapeInventoryTooltipText(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function getRandomArtifactReward() {

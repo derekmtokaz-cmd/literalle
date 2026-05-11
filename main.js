@@ -35,6 +35,15 @@ timedShakespeareAnswerInput.addEventListener("input", () => {
   renderTimedShakespeareSuggestions();
 });
 timedShakespeareAnswerInput.addEventListener("keydown", handleTimedShakespeareAnswerKeydown);
+gainHpLoquaciousButton.addEventListener("click", chooseLoquaciousHpGain);
+startLoquaciousButton.addEventListener("click", startLoquaciousChallenge);
+submitLoquaciousButton.addEventListener("click", submitLoquaciousAttempt);
+loquaciousAnswerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitLoquaciousAttempt();
+  }
+});
 submitPhoneticButton.addEventListener("click", submitPhoneticAttempt);
 submitLitcanonButton.addEventListener("click", submitLitcanonGuess);
 litcanonAnswerInput.addEventListener("input", () => {
@@ -64,6 +73,9 @@ developerStartShakespeareButton.addEventListener("click", () => {
 });
 developerStartTimedShakespeareButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("timedShakespeare");
+});
+developerStartLoquaciousButton.addEventListener("click", () => {
+  startDeveloperTriviaEvent("loquacious");
 });
 developerStartKjvButton.addEventListener("click", startDeveloperKjvEvent);
 developerStartPhoneticButton.addEventListener("click", startDeveloperPhoneticEvent);
@@ -157,6 +169,7 @@ function restartGame() {
     currentFanficEvent: null,
     currentShakespeareEvent: null,
     currentTimedShakespeareEvent: null,
+    currentLoquaciousEvent: null,
     currentPhoneticQuote: null,
     currentLitcanonEvent: null,
     currentKjvEncounter: null,
@@ -280,6 +293,7 @@ function prepareDeveloperLaunch() {
   gameState.currentFanficEvent = null;
   gameState.currentShakespeareEvent = null;
   gameState.currentTimedShakespeareEvent = null;
+  gameState.currentLoquaciousEvent = null;
   gameState.currentPhoneticQuote = null;
   gameState.currentLitcanonEvent = null;
   gameState.currentKjvEncounter = null;

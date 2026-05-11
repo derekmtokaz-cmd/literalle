@@ -1,6 +1,6 @@
 const TRIVIA_GAME_POOLS = {
   ordinary: ["authorDate", "detective", "fanfic", "shakespeare"],
-  special: ["timedShakespeare"],
+  special: ["timedShakespeare", "loquacious"],
 };
 
 const TRIVIA_GAME_BUILDERS = {
@@ -9,6 +9,7 @@ const TRIVIA_GAME_BUILDERS = {
   fanfic: buildFanficEncounter,
   shakespeare: buildShakespeareEncounter,
   timedShakespeare: buildTimedShakespeareEncounter,
+  loquacious: buildLoquaciousEncounter,
 };
 
 const TRIVIA_GAME_STARTERS = {
@@ -17,6 +18,7 @@ const TRIVIA_GAME_STARTERS = {
   fanfic: startFanficEvent,
   shakespeare: startShakespeareEvent,
   timedShakespeare: startTimedShakespeareEvent,
+  loquacious: startLoquaciousEvent,
 };
 
 function getTriviaGameOptions(category = "ordinary") {

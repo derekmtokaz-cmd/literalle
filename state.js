@@ -30,6 +30,7 @@ const gameState = {
   currentFanficEvent: null,
   currentShakespeareEvent: null,
   currentTimedShakespeareEvent: null,
+  currentLoquaciousEvent: null,
   currentPhoneticQuote: null,
   currentLitcanonEvent: null,
   currentKjvEncounter: null,

@@ -644,7 +644,7 @@ function useBabelTile(tileIndex, options = {}) {
 function useEchoTile() {
   const babelTileIndexes = gameState.inventory
     .map((item, index) => ({ item, index }))
-    .filter((entry) => isBabelTile(entry.item))
+    .filter((entry) => isBabelTileEchoEligible(entry.item))
     .map((entry) => entry.index);
 
   if (babelTileIndexes.length === 0) {

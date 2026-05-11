@@ -1,4 +1,4 @@
-function createBabelTile(letters) {
+function createBabelTile(letters, options = {}) {
   const normalizedLetters = Array.isArray(letters) ? letters : [letters];
   const tileLetters = normalizedLetters
     .flatMap((letter) => String(letter).split("|"))
@@ -10,7 +10,10 @@ function createBabelTile(letters) {
     type: "babelTile",
     tier: tileLetters.length,
     letters: tileLetters,
-    letter: tileLetters[0] || ""
+    letter: tileLetters[0] || "",
+    ...(options.displayLabel ? { displayLabel: options.displayLabel } : {}),
+    ...(options.source ? { source: options.source } : {}),
+    ...(options.echoEligible === false ? { echoEligible: false } : {})
   };
 }
 
@@ -39,7 +42,19 @@ function getBabelTileName(tile) {
 }
 
 function getBabelTileLabel(tile) {
+  if (tile.displayLabel) {
+    return tile.displayLabel;
+  }
+
   return getBabelTileLetters(tile).join("|");
+}
+
+function isBabelTileEchoEligible(tile) {
+  return isBabelTile(tile) && tile.echoEligible !== false;
+}
+
+function isWordBabelTile(tile) {
+  return isBabelTile(tile) && tile.source === "loquacious";
 }
 
 function getBabelTileLetterList(tile) {
