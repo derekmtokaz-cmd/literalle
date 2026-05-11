@@ -55,7 +55,7 @@ function startLoquaciousChallenge() {
   loquaciousChallenge.classList.remove("hidden");
   loquaciousMessage.textContent = "";
   loquaciousInstruction.textContent =
-    `Name a word from ${eventData.encounter.poem.title}.`;
+    `Name a word from ${eventData.encounter.poem.title} by ${eventData.encounter.poem.author}.`;
   loquaciousAnswerInput.value = "";
   loquaciousAnswerInput.focus();
 }
