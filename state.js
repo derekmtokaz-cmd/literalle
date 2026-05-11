@@ -29,6 +29,7 @@ const gameState = {
   currentDetectiveEvent: null,
   currentFanficEvent: null,
   currentShakespeareEvent: null,
+  currentTimedShakespeareEvent: null,
   currentPhoneticQuote: null,
   currentLitcanonEvent: null,
   currentKjvEncounter: null,
@@ -40,6 +41,7 @@ const gameState = {
   usedPoemIds: [],
   usedPhoneticQuoteIds: [],
   developerMode: false,
+  developerForcedTriviaType: "",
 };
 
 const pathSpaces = [

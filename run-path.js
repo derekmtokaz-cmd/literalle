@@ -1,3 +1,54 @@
+const TRIVIA_GAME_POOLS = {
+  ordinary: ["authorDate", "detective", "fanfic", "shakespeare"],
+  special: ["timedShakespeare"],
+};
+
+const TRIVIA_GAME_BUILDERS = {
+  authorDate: buildAuthorDateEncounter,
+  detective: buildDetectiveEncounter,
+  fanfic: buildFanficEncounter,
+  shakespeare: buildShakespeareEncounter,
+  timedShakespeare: buildTimedShakespeareEncounter,
+};
+
+const TRIVIA_GAME_STARTERS = {
+  authorDate: startAuthorDateEvent,
+  detective: startDetectiveEvent,
+  fanfic: startFanficEvent,
+  shakespeare: startShakespeareEvent,
+  timedShakespeare: startTimedShakespeareEvent,
+};
+
+function getTriviaGameOptions(category = "ordinary") {
+  return TRIVIA_GAME_POOLS[category] || [];
+}
+
+function buildTriviaEncounter(category = "ordinary") {
+  const triviaTypes = getTriviaGameOptions(category);
+  const forcedTriviaType =
+    gameState.developerMode && gameState.developerForcedTriviaType
+      ? gameState.developerForcedTriviaType
+      : "";
+  const randomTriviaType =
+    forcedTriviaType || triviaTypes[Math.floor(Math.random() * triviaTypes.length)];
+
+  if (forcedTriviaType) {
+    gameState.developerForcedTriviaType = "";
+    syncDeveloperForcedTriviaControl();
+  }
+
+  const buildEncounter = TRIVIA_GAME_BUILDERS[randomTriviaType];
+
+  if (!buildEncounter) {
+    return null;
+  }
+
+  const encounter = buildEncounter();
+  encounter.triviaCategory =
+    TRIVIA_GAME_POOLS.special.includes(randomTriviaType) ? "special" : category;
+  return encounter;
+}
+
 /* ---------------- EVENT START ---------------- */
 function startMapNode(nodeId) {
   if (!gameState.developerMode && !gameState.availableNodeIds.includes(nodeId)) {
@@ -20,12 +71,16 @@ function startMapNode(nodeId) {
   if (nextSpace.type === "trivia") {
     gameState.lastEventType = "trivia";
 
-    const type = nextSpace.encounter?.triviaType;
+    if (gameState.developerMode && gameState.developerForcedTriviaType) {
+      nextSpace.encounter = buildTriviaEncounter("ordinary");
+    }
 
-    if (type === "authorDate") return startAuthorDateEvent(nextSpace.encounter);
-    if (type === "detective") return startDetectiveEvent(nextSpace.encounter);
-    if (type === "fanfic") return startFanficEvent(nextSpace.encounter);
-    if (type === "shakespeare") return startShakespeareEvent(nextSpace.encounter);
+    const type = nextSpace.encounter?.triviaType;
+    const startTriviaEvent = TRIVIA_GAME_STARTERS[type];
+
+    if (startTriviaEvent) {
+      return startTriviaEvent(nextSpace.encounter);
+    }
 
     return startFanficEvent(nextSpace.encounter);
   }
@@ -316,26 +371,7 @@ function buildRunPath() {
     }
 
     if (space.type === "trivia") {
-      const triviaTypes = ["authorDate", "detective", "fanfic", "shakespeare"];
-      const randomTriviaType =
-        triviaTypes[Math.floor(Math.random() * triviaTypes.length)];
-
-      if (randomTriviaType === "authorDate") {
-        space.encounter = buildAuthorDateEncounter();
-      }
-
-      if (randomTriviaType === "detective") {
-        space.encounter = buildDetectiveEncounter();
-      }
-
-      if (randomTriviaType === "fanfic") {
-        space.encounter = buildFanficEncounter();
-      }
-
-      if (randomTriviaType === "shakespeare") {
-        space.encounter = buildShakespeareEncounter();
-      }
-
+      space.encounter = buildTriviaEncounter("ordinary");
     }
 
     if (space.type === "kjv") {

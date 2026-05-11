@@ -117,6 +117,35 @@
           <button id="submitShakespeareButton">Submit</button>
         </div>
       </section>
+      <section class="timed-shakespeare-section hidden" id="timedShakespeareSection">
+        <h2>Timed Shakespeare</h2>
+        <p id="timedShakespeareIntro" class="event-meta">Choose how you want to handle this room.</p>
+
+        <div id="timedShakespeareChallenge" class="timed-shakespeare-challenge hidden">
+          <div id="timedShakespeareTimer" class="timed-shakespeare-timer">30</div>
+
+          <div class="litcanon-answer-area">
+            <input
+              id="timedShakespeareAnswerInput"
+              class="litcanon-answer-input"
+              type="text"
+              autocomplete="off"
+              placeholder="Type at least 3 letters..."
+              aria-label="Shakespeare play"
+            />
+            <div id="timedShakespeareSuggestions" class="litcanon-suggestions"></div>
+          </div>
+
+          <div id="timedShakespeareCorrectList" class="timed-shakespeare-correct-list"></div>
+        </div>
+
+        <div id="timedShakespeareMessage" class="event-message"></div>
+
+        <div id="timedShakespeareChoiceControls" class="controls">
+          <button id="loseHpTimedShakespeareButton" type="button">Lose 5 HP</button>
+          <button id="completeTimedShakespeareButton" type="button">Complete a special task</button>
+        </div>
+      </section>
       <section class="phonetic-section hidden" id="phoneticSection">
         <h2>Phonetic Quote</h2>
         
@@ -212,6 +241,57 @@
           <input type="checkbox" id="developerModeToggle" />
           <span>Developer Mode</span>
         </label>
+
+        <div id="developerControls" class="developer-controls hidden">
+          <label class="developer-control-label" for="developerForcedTriviaSelect">Next ? room</label>
+          <select id="developerForcedTriviaSelect">
+            <option value="">Random</option>
+            <option value="authorDate">Author Dates</option>
+            <option value="detective">Detective</option>
+            <option value="fanfic">Fanfic</option>
+            <option value="shakespeare">Shakespeare Characters</option>
+            <option value="timedShakespeare">Timed Shakespeare</option>
+          </select>
+
+          <div class="developer-button-group">
+            <p>Ordinary ?</p>
+            <button id="developerStartAuthorDateButton" type="button">Author Dates</button>
+            <button id="developerStartDetectiveButton" type="button">Detective</button>
+            <button id="developerStartFanficButton" type="button">Fanfic</button>
+            <button id="developerStartShakespeareButton" type="button">Shakespeare</button>
+          </div>
+
+          <div class="developer-button-group">
+            <p>Special ?</p>
+            <button id="developerStartTimedShakespeareButton" type="button">Timed Shakespeare</button>
+          </div>
+
+          <div class="developer-button-group">
+            <p>Floor Events</p>
+            <button id="developerStartKjvButton" type="button">KJV</button>
+            <button id="developerStartPhoneticButton" type="button">Phonetic</button>
+            <button id="developerStartLitcanonButton" type="button">Litcanon</button>
+            <button id="developerStartRestButton" type="button">Rest Site</button>
+            <button id="developerStartBossButton" type="button">Boss</button>
+            <button id="developerStartDeathButton" type="button">Death Puzzle</button>
+          </div>
+
+          <div class="developer-button-group">
+            <p>Map</p>
+            <button id="developerGoFloorOneButton" type="button">Go to Floor 1</button>
+            <button id="developerGoFloorTwoButton" type="button">Go to Floor 2</button>
+            <button id="developerRebuildFloorButton" type="button">Rebuild Current Floor</button>
+          </div>
+
+          <div class="developer-button-group">
+            <p>Player</p>
+            <button id="developerSetHpFullButton" type="button">Set HP 100</button>
+            <button id="developerSetHpOneButton" type="button">Set HP 1</button>
+            <button id="developerAddGoldButton" type="button">Add 10 Gold</button>
+            <button id="developerAddRelicsButton" type="button">Add All Items</button>
+            <button id="developerClearInventoryButton" type="button">Clear Inventory</button>
+          </div>
+        </div>
       </section>
 
       <section class="sidebar-card dialog-card" id="dialogCard">
@@ -259,6 +339,7 @@
 <script src="events-detectives.js"></script>
 <script src="events-fanfic.js"></script>
 <script src="events-shakespeare.js"></script>
+<script src="events-timed-shakespeare.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
 <script src="events-litcanon.js"></script>
