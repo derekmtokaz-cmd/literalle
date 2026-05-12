@@ -79,7 +79,8 @@ function startRewardPhase() {
 
     tileOffersSection.classList.add("hidden");
     tileOfferContainer.innerHTML = "";
-    goldRewardMessage.textContent = "Thank you for playing.";
+    goldRewardMessage.textContent =
+      "Thank you for playing this early release edition. More content to come soon.";
     rewardMessage.textContent = "";
     skipRewardButton.classList.add("hidden");
 
