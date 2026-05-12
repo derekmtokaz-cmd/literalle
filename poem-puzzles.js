@@ -341,9 +341,8 @@ function renderLineOrderPuzzle(puzzle, container) {
   const selectedLineIndexes = getLineOrderSelectedLineIndexes(puzzle);
 
   puzzle.lines.forEach((line, lineIndex) => {
-    poemArea.appendChild(createLineOrderDropzone(puzzle, lineIndex));
-
     if (selectedLineIndexes.has(lineIndex)) {
+      poemArea.appendChild(createLineOrderDropzone(puzzle, lineIndex));
       return;
     }
 
@@ -357,8 +356,6 @@ function renderLineOrderPuzzle(puzzle, container) {
     lineElement.textContent = line;
     poemArea.appendChild(lineElement);
   });
-
-  poemArea.appendChild(createLineOrderDropzone(puzzle, puzzle.lines.length));
 
   puzzle.lineOrder.trayCardIds.forEach((cardId) => {
     const card = getLineOrderCardById(puzzle, cardId);
