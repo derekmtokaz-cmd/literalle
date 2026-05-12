@@ -334,8 +334,8 @@ function isEasyPoemNode(space) {
 function getPoemBlankCountForNode(space) {
   const floorBlankCounts =
     gameState.currentFloor >= 2
-      ? { easy: 3, mid: 6, boss: 9 }
-      : { easy: 2, mid: 4, boss: 8 };
+      ? { easy: 3, mid: 4, boss: 6 }
+      : { easy: 2, mid: 3, boss: 5 };
 
   if (space.type === "boss") {
     return floorBlankCounts.boss;
