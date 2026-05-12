@@ -328,6 +328,9 @@ function renderLineOrderPuzzle(puzzle, container) {
 
   const poemArea = document.createElement("div");
   poemArea.classList.add("line-order-poem");
+  poemArea.addEventListener("dragover", handleLineOrderPoemDragOver);
+  poemArea.addEventListener("dragleave", handleLineOrderPoemDragLeave);
+  poemArea.addEventListener("drop", handleLineOrderPoemDrop);
 
   const tray = document.createElement("div");
   tray.classList.add("line-order-tray");
@@ -399,6 +402,7 @@ function createLineOrderCard(puzzle, card) {
   }
 
   cardElement.addEventListener("dragstart", handleLineOrderDragStart);
+  cardElement.addEventListener("dragend", clearLineOrderActiveDropzones);
   return cardElement;
 }
 
@@ -414,19 +418,78 @@ function handleLineOrderDragOver(event) {
 
 function handleLineOrderZoneDrop(event) {
   event.preventDefault();
+  event.stopPropagation();
 
   const cardId = event.dataTransfer.getData("text/plain");
   const insertionIndex = Number(event.currentTarget.dataset.insertionIndex);
 
   moveLineOrderCardToZone(cardId, insertionIndex);
+  clearLineOrderActiveDropzones();
 }
 
 function handleLineOrderTrayDrop(event) {
   event.preventDefault();
+  event.stopPropagation();
 
   const cardId = event.dataTransfer.getData("text/plain");
 
   moveLineOrderCardToTray(cardId);
+  clearLineOrderActiveDropzones();
+}
+
+function handleLineOrderPoemDragOver(event) {
+  event.preventDefault();
+
+  const dropzone = getClosestLineOrderDropzone(event.currentTarget, event.clientY);
+
+  clearLineOrderActiveDropzones();
+
+  if (dropzone) {
+    dropzone.classList.add("active");
+  }
+}
+
+function handleLineOrderPoemDragLeave(event) {
+  if (!event.currentTarget.contains(event.relatedTarget)) {
+    clearLineOrderActiveDropzones();
+  }
+}
+
+function handleLineOrderPoemDrop(event) {
+  event.preventDefault();
+
+  const cardId = event.dataTransfer.getData("text/plain");
+  const dropzone = getClosestLineOrderDropzone(event.currentTarget, event.clientY);
+
+  if (!dropzone) {
+    return;
+  }
+
+  moveLineOrderCardToZone(cardId, Number(dropzone.dataset.insertionIndex));
+  clearLineOrderActiveDropzones();
+}
+
+function getClosestLineOrderDropzone(poemArea, clientY) {
+  const dropzones = Array.from(poemArea.querySelectorAll(".line-order-dropzone"));
+
+  if (dropzones.length === 0) {
+    return null;
+  }
+
+  return dropzones.reduce((closestDropzone, dropzone) => {
+    const closestRect = closestDropzone.getBoundingClientRect();
+    const dropzoneRect = dropzone.getBoundingClientRect();
+    const closestDistance = Math.abs(clientY - (closestRect.top + closestRect.height / 2));
+    const dropzoneDistance = Math.abs(clientY - (dropzoneRect.top + dropzoneRect.height / 2));
+
+    return dropzoneDistance < closestDistance ? dropzone : closestDropzone;
+  }, dropzones[0]);
+}
+
+function clearLineOrderActiveDropzones() {
+  document.querySelectorAll(".line-order-dropzone.active").forEach((dropzone) => {
+    dropzone.classList.remove("active");
+  });
 }
 
 function moveLineOrderCardToZone(cardId, insertionIndex) {
