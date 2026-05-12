@@ -68,8 +68,41 @@ function preparePoemEvent(poemData, missingWordCount) {
 
   return {
     ...poemData,
+    puzzleType: "missingWords",
     missingWords
   };
+}
+
+function prepareLineOrderPoemEvent(poemData, lineCount = 4) {
+  const selectedLines = chooseLineOrderLines(poemData.lines, lineCount);
+
+  return {
+    ...poemData,
+    puzzleType: "lineOrder",
+    lineOrder: {
+      selectedLines,
+      trayCardIds: shuffleArray(selectedLines.map((line) => line.cardId)),
+      placements: Array(poemData.lines.length + 1).fill(null)
+    }
+  };
+}
+
+function chooseLineOrderLines(lines, lineCount) {
+  const eligibleLines = lines
+    .map((line, lineIndex) => ({
+      cardId: `line-${lineIndex}`,
+      lineIndex,
+      text: line
+    }))
+    .filter((line) => isEligibleLineOrderLine(line.text));
+
+  return shuffleArray(eligibleLines).slice(0, Math.min(lineCount, eligibleLines.length));
+}
+
+function isEligibleLineOrderLine(line) {
+  const trimmedLine = line.replace(/\u00a0/g, " ").trim();
+
+  return trimmedLine !== "" && trimmedLine !== "[...]";
 }
 
 function chooseMissingWords(lines, missingWordCount) {
@@ -194,6 +227,17 @@ function isAutoRevealedCharacter(char) {
 }
 
 function buildPuzzle(poemData) {
+  if (poemData.puzzleType === "lineOrder") {
+    return {
+      ...poemData,
+      lineOrder: {
+        selectedLines: poemData.lineOrder.selectedLines.map((line) => ({ ...line })),
+        trayCardIds: [...poemData.lineOrder.trayCardIds],
+        placements: [...poemData.lineOrder.placements]
+      }
+    };
+  }
+
   const selectedWords = poemData.missingWords.map((missingWord, blankIndex) => {
     const line = poemData.lines[missingWord.lineIndex];
     const tokens = tokenizeLine(line);
@@ -214,6 +258,7 @@ function buildPuzzle(poemData) {
 
   return {
     ...poemData,
+    puzzleType: "missingWords",
     selectedWords
   };
 }
@@ -236,6 +281,11 @@ function getWordTokenByIndex(tokens, targetWordIndex) {
 
 function renderPuzzle(puzzle, container) {
   container.innerHTML = "";
+
+  if (puzzle.puzzleType === "lineOrder") {
+    renderLineOrderPuzzle(puzzle, container);
+    return;
+  }
 
   puzzle.lines.forEach((line, lineIndex) => {
     const lineElement = document.createElement("div");
@@ -270,6 +320,178 @@ function renderPuzzle(puzzle, container) {
   });
 
   attachSlotListeners(container);
+}
+
+function renderLineOrderPuzzle(puzzle, container) {
+  const layout = document.createElement("div");
+  layout.classList.add("line-order-layout");
+
+  const poemArea = document.createElement("div");
+  poemArea.classList.add("line-order-poem");
+
+  const tray = document.createElement("div");
+  tray.classList.add("line-order-tray");
+  tray.dataset.dropTarget = "tray";
+  tray.addEventListener("dragover", handleLineOrderDragOver);
+  tray.addEventListener("drop", handleLineOrderTrayDrop);
+
+  const selectedLineIndexes = getLineOrderSelectedLineIndexes(puzzle);
+
+  puzzle.lines.forEach((line, lineIndex) => {
+    poemArea.appendChild(createLineOrderDropzone(puzzle, lineIndex));
+
+    if (selectedLineIndexes.has(lineIndex)) {
+      return;
+    }
+
+    const lineElement = document.createElement("div");
+    lineElement.classList.add("poem-line");
+
+    if (puzzle.italicLineIndexes && puzzle.italicLineIndexes.includes(lineIndex)) {
+      lineElement.classList.add("italic");
+    }
+
+    lineElement.textContent = line;
+    poemArea.appendChild(lineElement);
+  });
+
+  poemArea.appendChild(createLineOrderDropzone(puzzle, puzzle.lines.length));
+
+  puzzle.lineOrder.trayCardIds.forEach((cardId) => {
+    const card = getLineOrderCardById(puzzle, cardId);
+
+    if (card) {
+      tray.appendChild(createLineOrderCard(puzzle, card));
+    }
+  });
+
+  layout.appendChild(poemArea);
+  layout.appendChild(tray);
+  container.appendChild(layout);
+}
+
+function createLineOrderDropzone(puzzle, insertionIndex) {
+  const dropzone = document.createElement("div");
+  dropzone.classList.add("line-order-dropzone");
+  dropzone.dataset.insertionIndex = insertionIndex;
+  dropzone.addEventListener("dragover", handleLineOrderDragOver);
+  dropzone.addEventListener("drop", handleLineOrderZoneDrop);
+
+  const cardId = puzzle.lineOrder.placements[insertionIndex];
+  const card = getLineOrderCardById(puzzle, cardId);
+
+  if (card) {
+    dropzone.appendChild(createLineOrderCard(puzzle, card));
+  }
+
+  return dropzone;
+}
+
+function createLineOrderCard(puzzle, card) {
+  const cardElement = document.createElement("div");
+  cardElement.classList.add("line-order-card");
+  cardElement.draggable = true;
+  cardElement.dataset.cardId = card.cardId;
+  cardElement.textContent = card.text;
+
+  if (puzzle.italicLineIndexes && puzzle.italicLineIndexes.includes(card.lineIndex)) {
+    cardElement.classList.add("italic");
+  }
+
+  cardElement.addEventListener("dragstart", handleLineOrderDragStart);
+  return cardElement;
+}
+
+function handleLineOrderDragStart(event) {
+  event.dataTransfer.setData("text/plain", event.target.dataset.cardId);
+  event.dataTransfer.effectAllowed = "move";
+}
+
+function handleLineOrderDragOver(event) {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "move";
+}
+
+function handleLineOrderZoneDrop(event) {
+  event.preventDefault();
+
+  const cardId = event.dataTransfer.getData("text/plain");
+  const insertionIndex = Number(event.currentTarget.dataset.insertionIndex);
+
+  moveLineOrderCardToZone(cardId, insertionIndex);
+}
+
+function handleLineOrderTrayDrop(event) {
+  event.preventDefault();
+
+  const cardId = event.dataTransfer.getData("text/plain");
+
+  moveLineOrderCardToTray(cardId);
+}
+
+function moveLineOrderCardToZone(cardId, insertionIndex) {
+  const puzzle = gameState.currentPuzzle;
+
+  if (!puzzle || puzzle.puzzleType !== "lineOrder" || !getLineOrderCardById(puzzle, cardId)) {
+    return;
+  }
+
+  const displacedCardId = puzzle.lineOrder.placements[insertionIndex];
+
+  removeLineOrderCardFromCurrentLocation(puzzle, cardId);
+
+  if (displacedCardId && displacedCardId !== cardId) {
+    removeLineOrderCardFromCurrentLocation(puzzle, displacedCardId);
+    addLineOrderCardToTray(puzzle, displacedCardId);
+  }
+
+  puzzle.lineOrder.placements[insertionIndex] = cardId;
+  rerenderCurrentPuzzle();
+}
+
+function moveLineOrderCardToTray(cardId) {
+  const puzzle = gameState.currentPuzzle;
+
+  if (!puzzle || puzzle.puzzleType !== "lineOrder" || !getLineOrderCardById(puzzle, cardId)) {
+    return;
+  }
+
+  removeLineOrderCardFromCurrentLocation(puzzle, cardId);
+  addLineOrderCardToTray(puzzle, cardId);
+
+  rerenderCurrentPuzzle();
+}
+
+function addLineOrderCardToTray(puzzle, cardId) {
+  if (!puzzle.lineOrder.trayCardIds.includes(cardId)) {
+    puzzle.lineOrder.trayCardIds.push(cardId);
+  }
+}
+
+function removeLineOrderCardFromCurrentLocation(puzzle, cardId) {
+  puzzle.lineOrder.trayCardIds = puzzle.lineOrder.trayCardIds.filter((id) => {
+    return id !== cardId;
+  });
+
+  puzzle.lineOrder.placements = puzzle.lineOrder.placements.map((placement) => {
+    return placement === cardId ? null : placement;
+  });
+}
+
+function getLineOrderCardById(puzzle, cardId) {
+  if (!cardId || !puzzle.lineOrder) {
+    return null;
+  }
+
+  return puzzle.lineOrder.selectedLines.find((line) => line.cardId === cardId) || null;
+}
+
+function getLineOrderSelectedLineIndexes(puzzle) {
+  return new Set(puzzle.lineOrder.selectedLines.map((line) => line.lineIndex));
+}
+
+function isLineOrderCurrentPuzzle() {
+  return gameState.currentPuzzle && gameState.currentPuzzle.puzzleType === "lineOrder";
 }
 
 function createBlankWordElement(blankWord) {
@@ -463,6 +685,11 @@ function submitCurrentPuzzleAttempt() {
     return;
   }
 
+  if (isLineOrderCurrentPuzzle()) {
+    submitLineOrderPuzzleAttempt();
+    return;
+  }
+
   let allCorrect = true;
 
   gameState.currentPuzzle.selectedWords.forEach((blankWord) => {
@@ -509,6 +736,48 @@ function submitCurrentPuzzleAttempt() {
   focusFirstOpenSlot();
 
   handlePlayerDeath();
+}
+
+function submitLineOrderPuzzleAttempt() {
+  if (isLineOrderPuzzleCorrect(gameState.currentPuzzle)) {
+    handlePuzzleSuccess();
+    return;
+  }
+
+  takePuzzleDamage(4);
+  renderStats();
+
+  if (handlePlayerDeath()) {
+    return;
+  }
+
+  showPuzzleMessage("The poem is still out of order.");
+  rerenderCurrentPuzzle();
+}
+
+function isLineOrderPuzzleCorrect(puzzle) {
+  const selectedLineIndexes = getLineOrderSelectedLineIndexes(puzzle);
+  const reconstructedLineIndexes = [];
+
+  for (let lineIndex = 0; lineIndex <= puzzle.lines.length; lineIndex += 1) {
+    const placedCard = getLineOrderCardById(puzzle, puzzle.lineOrder.placements[lineIndex]);
+
+    if (placedCard) {
+      reconstructedLineIndexes.push(placedCard.lineIndex);
+    }
+
+    if (lineIndex < puzzle.lines.length && !selectedLineIndexes.has(lineIndex)) {
+      reconstructedLineIndexes.push(lineIndex);
+    }
+  }
+
+  if (reconstructedLineIndexes.length !== puzzle.lines.length) {
+    return false;
+  }
+
+  return reconstructedLineIndexes.every((lineIndex, currentIndex) => {
+    return lineIndex === currentIndex;
+  });
 }
 
 function submitRestPuzzleAttempt() {
@@ -597,7 +866,11 @@ function disableCurrentSubmitButton() {
 
 function useBabelTile(tileIndex, options = {}) {
   const consume = options.consume !== false;
-  if (gameState.currentPuzzleMode !== "event" || !gameState.currentPuzzle) {
+  if (
+    gameState.currentPuzzleMode !== "event" ||
+    !gameState.currentPuzzle ||
+    isLineOrderCurrentPuzzle()
+  ) {
     return;
   }
 
@@ -642,6 +915,10 @@ function useBabelTile(tileIndex, options = {}) {
 }
 
 function useEchoTile() {
+  if (isLineOrderCurrentPuzzle()) {
+    return;
+  }
+
   const babelTileIndexes = gameState.inventory
     .map((item, index) => ({ item, index }))
     .filter((entry) => isBabelTileEchoEligible(entry.item))
@@ -662,7 +939,11 @@ function useEchoTile() {
 }
 
 function usePenNib() {
-  if (gameState.currentPuzzleMode !== "event" || !gameState.currentPuzzle) {
+  if (
+    gameState.currentPuzzleMode !== "event" ||
+    !gameState.currentPuzzle ||
+    isLineOrderCurrentPuzzle()
+  ) {
     return;
   }
 

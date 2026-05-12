@@ -313,11 +313,22 @@ function getSeededPoemForNode(nodeId, poemSeedPlan) {
 }
 
 function assignPoemEncounter(space, poem, blankCount) {
+  const poemEvent = isEasyPoemNode(space)
+    ? prepareLineOrderPoemEvent(poem, 4)
+    : preparePoemEvent(poem, blankCount);
+
   space.encounter = {
     poem,
     blankCount,
-    poemEvent: preparePoemEvent(poem, blankCount)
+    poemEvent
   };
+}
+
+function isEasyPoemNode(space) {
+  return (
+    space.type === "poem" &&
+    (space.id === "poem-1" || space.id === "poem-2" || space.id === "poem-3")
+  );
 }
 
 function getPoemBlankCountForNode(space) {

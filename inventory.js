@@ -105,7 +105,8 @@ function renderInventoryItem(item, index) {
     if (isWordBabelTile(item)) {
       itemButton.classList.add("word-babel-tile");
     }
-    itemButton.disabled = gameState.currentPuzzleMode !== "event";
+    itemButton.disabled =
+      gameState.currentPuzzleMode !== "event" || isLineOrderCurrentPuzzle();
 
     itemButton.addEventListener("click", () => {
       useBabelTile(index);
@@ -142,7 +143,8 @@ function renderInventoryItem(item, index) {
         return isBabelTileEchoEligible(inventoryItem);
       });
 
-      const inPoemPuzzle = gameState.currentPuzzle !== null;
+      const inPoemPuzzle =
+        gameState.currentPuzzle !== null && !isLineOrderCurrentPuzzle();
 
       canUse =
         inPoemPuzzle &&
@@ -153,10 +155,12 @@ function renderInventoryItem(item, index) {
     if (isPenNib) {
       const inPoemPuzzle =
         gameState.currentPuzzleMode === "event" &&
-        gameState.currentPuzzle !== null;
+        gameState.currentPuzzle !== null &&
+        !isLineOrderCurrentPuzzle();
 
       const hasBlankLetters =
         inPoemPuzzle &&
+        gameState.currentPuzzle.selectedWords &&
         gameState.currentPuzzle.selectedWords.some((word) =>
           word.letters.some((letter) => !letter.locked)
         );
@@ -301,7 +305,11 @@ function canUseTrinket(item) {
   }
 
   if (item.trinketId === "leakyPen" || item.trinketId === "stickyNote") {
-    return gameState.currentPuzzleMode === "event" && gameState.currentPuzzle;
+    return (
+      gameState.currentPuzzleMode === "event" &&
+      gameState.currentPuzzle &&
+      !isLineOrderCurrentPuzzle()
+    );
   }
 
   if (item.trinketId === "prophecy") {
@@ -352,7 +360,11 @@ function useTrinket(itemIndex) {
 }
 
 function useLeakyPen(itemIndex) {
-  if (gameState.currentPuzzleMode !== "event" || !gameState.currentPuzzle) {
+  if (
+    gameState.currentPuzzleMode !== "event" ||
+    !gameState.currentPuzzle ||
+    isLineOrderCurrentPuzzle()
+  ) {
     return;
   }
 
@@ -391,7 +403,11 @@ function useLeakyPen(itemIndex) {
 }
 
 function useStickyNote(itemIndex) {
-  if (gameState.currentPuzzleMode !== "event" || !gameState.currentPuzzle) {
+  if (
+    gameState.currentPuzzleMode !== "event" ||
+    !gameState.currentPuzzle ||
+    isLineOrderCurrentPuzzle()
+  ) {
     return;
   }
 
