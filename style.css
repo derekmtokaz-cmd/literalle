@@ -509,6 +509,7 @@ h2 {
 .line-order-tray {
   display: grid;
   gap: 8px;
+  align-content: start;
   min-height: 180px;
   padding: 10px;
   border: 2px dashed rgba(122, 28, 38, 0.38);
