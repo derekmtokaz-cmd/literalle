@@ -471,11 +471,11 @@ h2 {
 
 .line-order-poem {
   display: grid;
-  gap: 4px;
+  gap: 0;
 }
 
 .line-order-dropzone {
-  min-height: 6px;
+  min-height: 0;
   padding: 0;
   border: 2px solid transparent;
   border-radius: 8px;
