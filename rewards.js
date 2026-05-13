@@ -346,6 +346,13 @@ function endRewardPhase() {
   }
 
   completeCurrentMapNode();
+
+  if (shouldShowEraserChoiceAfterReward()) {
+    markEraserOfferedThisFloor();
+    showEraserChoiceScreen();
+    return;
+  }
+
   renderGame();
   showSection("board");
 }

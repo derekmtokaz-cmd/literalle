@@ -38,6 +38,7 @@ const gameState = {
   currentKjvDifficulty: null,
   currentRewardOffers: [],
   prophecyUsedThisFloor: false,
+  eraserOfferedByFloor: {},
   firstDraftUsedThisPuzzle: false,
   pendingReplyReward: false,
   usedPoemIds: [],

@@ -21,6 +21,7 @@ function renderGame() {
 submitStartButton.addEventListener("click", submitCurrentPuzzleAttempt);
 submitPoemButton.addEventListener("click", submitCurrentPuzzleAttempt);
 skipRewardButton.addEventListener("click", endRewardPhase);
+skipEraserButton.addEventListener("click", skipEraserChoice);
 submitAuthorDateButton.addEventListener("click", submitAuthorDateAttempt);
 submitDetectiveButton.addEventListener("click", submitDetectiveAttempt);
 submitFanficButton.addEventListener("click", submitFanficAttempt);
@@ -192,6 +193,7 @@ function restartGame() {
     currentKjvDifficulty: null,
     currentRewardOffers: [],
     prophecyUsedThisFloor: false,
+    eraserOfferedByFloor: {},
     firstDraftUsedThisPuzzle: false,
     pendingReplyReward: false,
     usedPoemIds: [],

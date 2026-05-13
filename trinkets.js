@@ -33,5 +33,19 @@ const TRINKETS = [
     icon: "👜",
     description: "Gains one hidden Babel Tile after each completed poem puzzle. Use to empty the bag.",
     usableDuring: ["any"]
+  },
+  {
+    id: "easyA",
+    name: "Easy A",
+    icon: "A",
+    description: "Make the upcoming poem easier (reduce the number of missing words)",
+    usableDuring: ["board"]
+  },
+  {
+    id: "eraser",
+    name: "Eraser",
+    icon: "🧽",
+    description: "After the third easy poem, remove one seeded poem from this floor.",
+    usableDuring: ["special"]
   }
 ];

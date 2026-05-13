@@ -9,6 +9,7 @@ function showSection(sectionName) {
   boardSection.classList.add("hidden");
   eventSection.classList.add("hidden");
   rewardSection.classList.add("hidden");
+  eraserSection.classList.add("hidden");
   authorDateSection.classList.add("hidden");
   detectiveSection.classList.add("hidden");
   fanficSection.classList.add("hidden");
@@ -33,6 +34,10 @@ function showSection(sectionName) {
 
   if (sectionName === "reward") {
     rewardSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "eraser") {
+    eraserSection.classList.remove("hidden");
   }
 
   if (sectionName === "authorDate") {

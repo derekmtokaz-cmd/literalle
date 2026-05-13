@@ -238,20 +238,28 @@ function buildPuzzle(poemData) {
     };
   }
 
+  const easyAPrefilledWordKeys = new Set(
+    (poemData.easyAPrefilledWords || []).map((word) => {
+      return getMissingWordKey(word);
+    })
+  );
+
   const selectedWords = poemData.missingWords.map((missingWord, blankIndex) => {
     const line = poemData.lines[missingWord.lineIndex];
     const tokens = tokenizeLine(line);
     const wordToken = getWordTokenByIndex(tokens, missingWord.wordIndex);
+    const prefilledByEasyA = easyAPrefilledWordKeys.has(getMissingWordKey(missingWord));
 
     return {
       blankIndex,
       lineIndex: missingWord.lineIndex,
       wordIndex: missingWord.wordIndex,
       answer: wordToken.text,
+      prefilledByEasyA,
       letters: wordToken.text.split("").map((char) => ({
   answerChar: char,
-  value: isAutoRevealedCharacter(char) ? char : "",
-  locked: isAutoRevealedCharacter(char)
+  value: prefilledByEasyA || isAutoRevealedCharacter(char) ? char : "",
+  locked: prefilledByEasyA || isAutoRevealedCharacter(char)
 }))
     };
   });
@@ -261,6 +269,10 @@ function buildPuzzle(poemData) {
     puzzleType: "missingWords",
     selectedWords
   };
+}
+
+function getMissingWordKey(word) {
+  return `${word.lineIndex}-${word.wordIndex}`;
 }
 
 function getWordTokenByIndex(tokens, targetWordIndex) {

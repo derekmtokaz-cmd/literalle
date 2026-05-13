@@ -116,6 +116,10 @@ function renderInventoryItem(item, index) {
   if (item.type === "trinket") {
     const trinket = getTrinketById(item.trinketId);
 
+    if (item.trinketId === "easyA") {
+      itemButton.classList.add("easy-a-trinket");
+    }
+
     itemButton.textContent =
       item.trinketId === "babelBag"
         ? `${trinket ? trinket.icon : "?"}${getBabelBagTileCount(item)}`
@@ -328,6 +332,10 @@ function canUseTrinket(item) {
     return getBabelBagTileCount(item) > 0;
   }
 
+  if (item.trinketId === "easyA") {
+    return isMapScreenVisible() && getNextEasyAPoemNode() !== null;
+  }
+
   return false;
 }
 
@@ -356,6 +364,10 @@ function useTrinket(itemIndex) {
 
   if (item.trinketId === "babelBag") {
     useBabelBag(itemIndex);
+  }
+
+  if (item.trinketId === "easyA") {
+    useEasyA(itemIndex);
   }
 }
 
@@ -501,6 +513,50 @@ function getNextProphecyPoemNode() {
   );
 }
 
+function getNextEasyAPoemNode() {
+  const availableNodes = gameState.availableNodeIds
+    .map((nodeId) => getMapNodeById(nodeId))
+    .filter((node) => node !== null);
+
+  return (
+    availableNodes.find((node) => {
+      return (
+        isEasyATargetPoemNode(node) &&
+        getNextEasyAMissingWord(node.encounter.poemEvent) !== null
+      );
+    }) || null
+  );
+}
+
+function isEasyATargetPoemNode(node) {
+  return (
+    (node.id === "poem-4" || node.id === "poem-5" || node.type === "boss") &&
+    node.encounter &&
+    node.encounter.poemEvent &&
+    Array.isArray(node.encounter.poemEvent.missingWords)
+  );
+}
+
+function getNextEasyAMissingWord(poemEvent) {
+  if (!poemEvent || !Array.isArray(poemEvent.missingWords)) {
+    return null;
+  }
+
+  const prefilledWordKeys = new Set(
+    (poemEvent.easyAPrefilledWords || []).map((word) => getMissingWordKey(word))
+  );
+
+  for (let index = poemEvent.missingWords.length - 1; index >= 0; index -= 1) {
+    const missingWord = poemEvent.missingWords[index];
+
+    if (!prefilledWordKeys.has(getMissingWordKey(missingWord))) {
+      return missingWord;
+    }
+  }
+
+  return null;
+}
+
 function isMapScreenVisible() {
   return !boardSection.classList.contains("hidden");
 }
@@ -616,6 +672,35 @@ function useBabelBag(itemIndex) {
   }
 
   gameState.inventory.splice(itemIndex, 1, ...newTiles);
+  renderInventory();
+}
+
+function useEasyA(itemIndex) {
+  const targetNode = getNextEasyAPoemNode();
+
+  if (!isMapScreenVisible() || !targetNode) {
+    return;
+  }
+
+  const poemEvent = targetNode.encounter.poemEvent;
+  const missingWord = getNextEasyAMissingWord(poemEvent);
+
+  if (!missingWord) {
+    return;
+  }
+
+  hideInventoryTooltip();
+
+  if (!Array.isArray(poemEvent.easyAPrefilledWords)) {
+    poemEvent.easyAPrefilledWords = [];
+  }
+
+  poemEvent.easyAPrefilledWords.push({
+    lineIndex: missingWord.lineIndex,
+    wordIndex: missingWord.wordIndex
+  });
+
+  gameState.inventory.splice(itemIndex, 1);
   renderInventory();
 }
 
