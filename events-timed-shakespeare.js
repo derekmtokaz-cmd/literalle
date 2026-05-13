@@ -1,4 +1,4 @@
-const TIMED_SHAKESPEARE_VISIBLE_SECONDS = 30;
+const TIMED_SHAKESPEARE_VISIBLE_SECONDS = 45;
 const TIMED_SHAKESPEARE_GRACE_MS = 5000;
 
 let timedShakespeareGraceTimeoutId = null;
