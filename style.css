@@ -972,6 +972,10 @@ button:disabled {
   gap: 10px;
 }
 
+.matchmaker-choice-controls.hidden {
+  display: none;
+}
+
 .matchmaker-game-area.hidden {
   display: none;
 }
