@@ -1,6 +1,6 @@
 const MATCHMAKER_PAIR_COUNT = 8;
 const MATCHMAKER_TURN_COUNT = 5;
-const MATCHMAKER_MISMATCH_DELAY_MS = 1000;
+const MATCHMAKER_MISMATCH_DELAY_MS = 3000;
 
 let matchmakerResolutionTimeoutId = null;
 
@@ -34,6 +34,10 @@ function startMatchmakerEvent(encounter = buildMatchmakerEncounter()) {
   clearMatchmakerResolutionTimer();
 
   gameState.currentMatchmakerEvent = {
+    selectedPairs: encounter.selectedPairs.map((pair) => ({
+      ...pair,
+      names: [...pair.names]
+    })),
     cards: encounter.cards.map((card) => ({ ...card })),
     flippedCardIds: [],
     matchesFound: 0,
@@ -136,14 +140,17 @@ function resolveMatchmakerTurn() {
   renderMatchmakerEvent();
 
   if (flippedCards[0].pairId === flippedCards[1].pairId) {
-    flippedCards.forEach((card) => {
-      card.matched = true;
-    });
-    eventData.matchesFound += 1;
-    eventData.flippedCardIds = [];
-    eventData.resolving = false;
-    renderMatchmakerEvent();
-    maybeFinishMatchmakerEvent();
+    matchmakerResolutionTimeoutId = setTimeout(() => {
+      flippedCards.forEach((card) => {
+        card.matched = true;
+      });
+      eventData.matchesFound += 1;
+      eventData.flippedCardIds = [];
+      eventData.resolving = false;
+      matchmakerResolutionTimeoutId = null;
+      renderMatchmakerEvent();
+      maybeFinishMatchmakerEvent();
+    }, MATCHMAKER_MISMATCH_DELAY_MS);
     return;
   }
 
@@ -167,11 +174,22 @@ function maybeFinishMatchmakerEvent() {
   }
 
   if (eventData.turnsUsed >= MATCHMAKER_TURN_COUNT) {
-    startMatchmakerSummaryRewardPhase(eventData.matchesFound);
+    startMatchmakerSummaryRewardPhase(
+      eventData.matchesFound,
+      getMatchedMatchmakerPairs(eventData)
+    );
   }
 }
 
-function startMatchmakerSummaryRewardPhase(matchesFound) {
+function getMatchedMatchmakerPairs(eventData) {
+  return eventData.selectedPairs.filter((pair) => {
+    const pairCards = eventData.cards.filter((card) => card.pairId === pair.id);
+
+    return pairCards.length === 2 && pairCards.every((card) => card.matched);
+  });
+}
+
+function startMatchmakerSummaryRewardPhase(matchesFound, matchedPairs = []) {
   clearMatchmakerResolutionTimer();
   gameState.currentMatchmakerEvent = null;
   gameState.currentRewardOffers = [];
@@ -196,16 +214,42 @@ function startMatchmakerSummaryRewardPhase(matchesFound) {
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
   goldRewardMessage.textContent = `You found ${matchesFound} pair${matchesFound === 1 ? "" : "s"}.`;
-  rewardMessage.textContent =
-    trinketRewards.length > 0
-      ? `You found ${trinketRewards.map((trinket) => `${trinket.icon} ${trinket.name}`).join(", ")}.`
-      : "No pairs, no prize.";
+  rewardMessage.innerHTML = buildMatchmakerRewardSummary(matchedPairs, trinketRewards);
   skipRewardButton.classList.remove("hidden");
 
   renderStats();
   renderInventory();
 
   showSection("reward");
+}
+
+function buildMatchmakerRewardSummary(matchedPairs, trinketRewards) {
+  const pairSummary =
+    matchedPairs.length > 0
+      ? `
+        <div class="matchmaker-reward-pairs">
+          ${matchedPairs.map((pair) => {
+            return `<div>${escapeMatchmakerRewardText(pair.names[0])} / ${escapeMatchmakerRewardText(pair.names[1])}</div>`;
+          }).join("")}
+        </div>
+      `
+      : "";
+
+  const trinketSummary =
+    trinketRewards.length > 0
+      ? `<div>You found ${trinketRewards.map((trinket) => `${trinket.icon} ${escapeMatchmakerRewardText(trinket.name)}`).join(", ")}.</div>`
+      : "<div>No pairs, no prize.</div>";
+
+  return `${pairSummary}${trinketSummary}`;
+}
+
+function escapeMatchmakerRewardText(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function clearMatchmakerResolutionTimer() {
