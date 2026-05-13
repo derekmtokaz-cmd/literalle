@@ -546,15 +546,19 @@ function getNextEasyAMissingWord(poemEvent) {
     (poemEvent.easyAPrefilledWords || []).map((word) => getMissingWordKey(word))
   );
 
-  for (let index = poemEvent.missingWords.length - 1; index >= 0; index -= 1) {
-    const missingWord = poemEvent.missingWords[index];
+  const activeMissingWords = poemEvent.missingWords
+    .filter((missingWord) => {
+      return !prefilledWordKeys.has(getMissingWordKey(missingWord));
+    })
+    .sort((firstWord, secondWord) => {
+      if (firstWord.lineIndex !== secondWord.lineIndex) {
+        return firstWord.lineIndex - secondWord.lineIndex;
+      }
 
-    if (!prefilledWordKeys.has(getMissingWordKey(missingWord))) {
-      return missingWord;
-    }
-  }
+      return firstWord.wordIndex - secondWord.wordIndex;
+    });
 
-  return null;
+  return activeMissingWords[activeMissingWords.length - 1] || null;
 }
 
 function isMapScreenVisible() {
