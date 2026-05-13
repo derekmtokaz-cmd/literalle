@@ -891,6 +891,7 @@ button:disabled {
 .shakespeare-section,
 .timed-shakespeare-section,
 .loquacious-section,
+.matchmaker-section,
 .litcanon-section {
   padding: 24px;
   border: 2px solid #d4a94a;
@@ -907,6 +908,10 @@ button:disabled {
 }
 
 .loquacious-section > h2 {
+  display: none;
+}
+
+.matchmaker-section > h2 {
   display: none;
 }
 
@@ -935,6 +940,56 @@ button:disabled {
   background: #f4dfb8;
   color: #2a1712;
   line-height: 1.45;
+}
+
+.matchmaker-section .event-meta {
+  padding: 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 14px;
+  background: #f4dfb8;
+  color: #2a1712;
+  line-height: 1.45;
+}
+
+.matchmaker-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: #f2c46d;
+  font-weight: bold;
+}
+
+.matchmaker-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.matchmaker-card {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  min-height: 86px;
+  padding: 8px;
+  border-radius: 10px;
+  background: #7a1c26;
+  color: #fff4cc;
+  font-size: 1rem;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.matchmaker-card.face-up {
+  background: #f4dfb8;
+  color: #2a1712;
+}
+
+.matchmaker-card.matched {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .timed-shakespeare-challenge {

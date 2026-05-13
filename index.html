@@ -176,6 +176,19 @@
           <button id="startLoquaciousButton" type="button">Get loquacious</button>
         </div>
       </section>
+      <section class="matchmaker-section hidden" id="matchmakerSection">
+        <h2>Matchmaker</h2>
+        <p class="event-meta">Find as many literary pairs as you can in 5 turns.</p>
+
+        <div class="matchmaker-status">
+          <span id="matchmakerTurns">Turns remaining: 5</span>
+          <span id="matchmakerMatches">Pairs found: 0</span>
+        </div>
+
+        <div id="matchmakerBoard" class="matchmaker-board"></div>
+
+        <div id="matchmakerMessage" class="event-message"></div>
+      </section>
       <section class="phonetic-section hidden" id="phoneticSection">
         <h2>Phonetic Quote</h2>
         
@@ -282,6 +295,7 @@
             <option value="shakespeare">Shakespeare Characters</option>
             <option value="timedShakespeare">Timed Shakespeare</option>
             <option value="loquacious">Loquacious</option>
+            <option value="matchmaker">Matchmaker</option>
           </select>
 
           <div class="developer-button-group">
@@ -296,6 +310,7 @@
             <p>Special ?</p>
             <button id="developerStartTimedShakespeareButton" type="button">Timed Shakespeare</button>
             <button id="developerStartLoquaciousButton" type="button">Loquacious</button>
+            <button id="developerStartMatchmakerButton" type="button">Matchmaker</button>
           </div>
 
           <div class="developer-button-group">
@@ -352,6 +367,7 @@
 <script src="detectives.js"></script>
 <script src="fanfic-pairings.js"></script>
 <script src="shakespeare-characters.js"></script>
+<script src="matchmaker-pairs.js"></script>
 <script src="trinkets.js"></script>
 <script src="artifacts.js"></script>
 <script src="phonetics.js"></script>
@@ -373,6 +389,7 @@
 <script src="events-shakespeare.js"></script>
 <script src="events-timed-shakespeare.js"></script>
 <script src="events-loquacious.js"></script>
+<script src="events-matchmaker.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
 <script src="events-litcanon.js"></script>

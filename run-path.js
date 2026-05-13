@@ -1,6 +1,6 @@
 const TRIVIA_GAME_POOLS = {
   ordinary: ["authorDate", "detective", "fanfic", "shakespeare"],
-  special: ["timedShakespeare", "loquacious"],
+  special: ["timedShakespeare", "loquacious", "matchmaker"],
 };
 
 const TRIVIA_GAME_BUILDERS = {
@@ -10,6 +10,7 @@ const TRIVIA_GAME_BUILDERS = {
   shakespeare: buildShakespeareEncounter,
   timedShakespeare: buildTimedShakespeareEncounter,
   loquacious: buildLoquaciousEncounter,
+  matchmaker: buildMatchmakerEncounter,
 };
 
 const TRIVIA_GAME_STARTERS = {
@@ -19,6 +20,7 @@ const TRIVIA_GAME_STARTERS = {
   shakespeare: startShakespeareEvent,
   timedShakespeare: startTimedShakespeareEvent,
   loquacious: startLoquaciousEvent,
+  matchmaker: startMatchmakerEvent,
 };
 
 function getTriviaGameOptions(category = "ordinary") {
@@ -121,6 +123,16 @@ function startMapNode(nodeId) {
     return startLitcanonEvent(nextSpace.encounter);
   }
 
+  if (nextSpace.type === "timedShakespeare") {
+    gameState.lastEventType = "timedShakespeare";
+    return startTimedShakespeareEvent(nextSpace.encounter);
+  }
+
+  if (nextSpace.type === "matchmaker") {
+    gameState.lastEventType = "matchmaker";
+    return startMatchmakerEvent(nextSpace.encounter);
+  }
+
   gameState.lastEventType = nextSpace.type;
 
   eventTitle.textContent = nextSpace.type.toUpperCase();
@@ -214,7 +226,7 @@ function resolveOptionNodes() {
 
 function getSpecialEventTypesForCurrentFloor() {
   if (gameState.currentFloor >= 2) {
-    return ["phonetic", "litcanon"];
+    return ["timedShakespeare", "matchmaker"];
   }
 
   return ["phonetic", "kjv"];
@@ -244,6 +256,14 @@ function getMapIconForType(type) {
 
   if (type === "litcanon") {
     return "🎓";
+  }
+
+  if (type === "timedShakespeare") {
+    return "🪶";
+  }
+
+  if (type === "matchmaker") {
+    return "♦";
   }
 
   return "";
@@ -397,6 +417,14 @@ function buildRunPath() {
 
     if (space.type === "litcanon") {
       space.encounter = buildLitcanonEncounter();
+    }
+
+    if (space.type === "timedShakespeare") {
+      space.encounter = buildTimedShakespeareEncounter();
+    }
+
+    if (space.type === "matchmaker") {
+      space.encounter = buildMatchmakerEncounter();
     }
 
     if (space.type === "elite") {

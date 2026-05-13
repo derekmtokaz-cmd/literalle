@@ -8,7 +8,7 @@ const PHONETIC_QUOTES = [
     answerText: "Happy families are all alike; every unhappy family is unhappy in its own way.",
 
     // General American IPA
-    ipa: "ˈhæpi ˈfæməliz ɑr ɔl əˈlaɪk; ˈɛvəri ənˈhæpi ˈfæməli ɪz ənˈhæpi ɪn ɪts oʊn weɪ",
+    ipa: "ˈhæpi ˈfæməliz ɑr ɔl əˈlaɪk; ˈɛvəri ənˈhæpi ˈfæməli ɪz ənˈhæpi ɪn ɪts oʊn weɪ.",
 
     source: "Anna Karenina",
     author: "Leo Tolstoy",
@@ -23,7 +23,7 @@ const PHONETIC_QUOTES = [
     answerText: "And so we beat on, boats against the current, borne back ceaselessly into the past.",
 
     // General American IPA
-    ipa: "ænd soʊ wi bit ɑn, boʊts əˈɡɛnst ðə ˈkɜrənt, bɔrn bæk ˈsizləsli ˈɪntu ðə pæst",
+    ipa: "ænd soʊ wi bit ɑn, boʊts əˈɡɛnst ðə ˈkɜrənt, bɔrn bæk ˈsizləsli ˈɪntu ðə pæst.",
 
     source: "The Great Gatsby",
     author: "F. Scott Fitzgerald",
@@ -38,10 +38,25 @@ const PHONETIC_QUOTES = [
     answerText: "Who controls the past controls the future. Who controls the present controls the past.",
 
     // General American IPA
-    ipa: "hu kənˈtroʊlz ðə pæst kənˈtroʊlz ðə ˈfjuʧər. hu kənˈtroʊlz ðə ˈprɛzənt kənˈtroʊlz ðə pæst",
+    ipa: "hu kənˈtroʊlz ðə pæst kənˈtroʊlz ðə ˈfjuʧər. hu kənˈtroʊlz ðə ˈprɛzənt kənˈtroʊlz ðə pæst.",
 
     source: "Nineteen Eighty-Four",
     author: "George Orwell",
     year: 1949
+  },
+      {
+    id: "dorian_gray_value",
+
+    quote: "Nowadays people know the price of everything and the value of nothing.",
+
+    // This is what your puzzle system will blank out
+    answerText: "Nowadays people know the price of everything and the value of nothing.",
+
+    // General American IPA
+    ipa: "ˈnaʊəˌdeɪz ˈpipəl noʊ ðə praɪs ʌv ˈɛvriˌθɪŋ ænd ðə ˈvælju ʌv ˈnʌθɪŋ.",
+
+    source: "The Picture of Dorian Gray",
+    author: "Oscar Wilde",
+    year: 1890
   },
 ];

@@ -77,6 +77,9 @@ developerStartTimedShakespeareButton.addEventListener("click", () => {
 developerStartLoquaciousButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("loquacious");
 });
+developerStartMatchmakerButton.addEventListener("click", () => {
+  startDeveloperTriviaEvent("matchmaker");
+});
 developerStartKjvButton.addEventListener("click", startDeveloperKjvEvent);
 developerStartPhoneticButton.addEventListener("click", startDeveloperPhoneticEvent);
 developerStartLitcanonButton.addEventListener("click", startDeveloperLitcanonEvent);
@@ -170,6 +173,7 @@ function restartGame() {
     currentShakespeareEvent: null,
     currentTimedShakespeareEvent: null,
     currentLoquaciousEvent: null,
+    currentMatchmakerEvent: null,
     currentPhoneticQuote: null,
     currentLitcanonEvent: null,
     currentKjvEncounter: null,
@@ -190,6 +194,7 @@ function restartGame() {
 
   syncMusicToCurrentFloor();
   clearTimedShakespeareTimer();
+  clearMatchmakerResolutionTimer();
   buildRunPath();
 
   if (keepDeveloperMode) {
@@ -286,6 +291,7 @@ function prepareDeveloperLaunch() {
   }
 
   clearTimedShakespeareTimer();
+  clearMatchmakerResolutionTimer();
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
   gameState.currentAuthorDateEvent = null;
@@ -294,6 +300,7 @@ function prepareDeveloperLaunch() {
   gameState.currentShakespeareEvent = null;
   gameState.currentTimedShakespeareEvent = null;
   gameState.currentLoquaciousEvent = null;
+  gameState.currentMatchmakerEvent = null;
   gameState.currentPhoneticQuote = null;
   gameState.currentLitcanonEvent = null;
   gameState.currentKjvEncounter = null;
@@ -400,6 +407,7 @@ function rebuildDeveloperFloor() {
   }
 
   clearTimedShakespeareTimer();
+  clearMatchmakerResolutionTimer();
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
   gameState.lastEventType = null;
