@@ -55,7 +55,7 @@ const pathSpaces = [
 
   { id: "c2-top", column: 2, lane: 0, type: "trivia", icon: "?", connections: ["c3-top", "c3-mid"] },
   { id: "c2-mid", column: 2, lane: 1, type: "kjv", icon: "KJV", connections: ["c3-mid"] },
-  { id: "c2-bot", column: 2, lane: 2, type: "rest", icon: "❤️", connections: ["c3-mid", "c3-bot"] },
+  { id: "c2-bot", column: 2, lane: 2, type: "rest", icon: "&#9749;", connections: ["c3-mid", "c3-bot"] },
 
   { id: "c3-top", column: 3, lane: 0, type: "poem", icon: "✒️", connections: ["c4-top"] },
   { id: "c3-mid", column: 3, lane: 1, type: "merchant", icon: "🧳", connections: ["c4-top", "c4-mid", "c4-bot"] },
@@ -66,14 +66,14 @@ const pathSpaces = [
   { id: "c4-bot", column: 4, lane: 2, type: "poem", icon: "✒️", connections: ["c5-mid", "c5-bot"] },
 
   { id: "c5-top", column: 5, lane: 0, type: "trivia", icon: "?", connections: ["c6-top"] },
-  { id: "c5-mid", column: 5, lane: 1, type: "rest", icon: "❤️", connections: ["c6-top", "c6-mid"] },
+  { id: "c5-mid", column: 5, lane: 1, type: "rest", icon: "&#9749;", connections: ["c6-top", "c6-mid"] },
   { id: "c5-bot", column: 5, lane: 2, type: "elite", icon: "⚔️", connections: ["c6-mid", "c6-bot"] },
 
   { id: "c6-top", column: 6, lane: 0, type: "poem", icon: "✒️", connections: ["c7-top", "c7-mid"] },
   { id: "c6-mid", column: 6, lane: 1, type: "kjv", icon: "KJV", connections: ["c7-mid"] },
   { id: "c6-bot", column: 6, lane: 2, type: "poem", icon: "✒️", connections: ["c7-mid", "c7-bot"] },
 
-  { id: "c7-top", column: 7, lane: 0, type: "rest", icon: "❤️", connections: ["c8-top"] },
+  { id: "c7-top", column: 7, lane: 0, type: "rest", icon: "&#9749;", connections: ["c8-top"] },
   { id: "c7-mid", column: 7, lane: 1, type: "poem", icon: "✒️", connections: ["c8-top", "c8-mid", "c8-bot"] },
   { id: "c7-bot", column: 7, lane: 2, type: "trivia", icon: "?", connections: ["c8-bot"] },
 
@@ -82,12 +82,12 @@ const pathSpaces = [
   { id: "c8-bot", column: 8, lane: 2, type: "poem", icon: "✒️", connections: ["c9-mid", "c9-bot"] },
 
   { id: "c9-top", column: 9, lane: 0, type: "poem", icon: "✒️", connections: ["c10-top"] },
-  { id: "c9-mid", column: 9, lane: 1, type: "rest", icon: "❤️", connections: ["c10-top", "c10-mid", "c10-bot"] },
+  { id: "c9-mid", column: 9, lane: 1, type: "rest", icon: "&#9749;", connections: ["c10-top", "c10-mid", "c10-bot"] },
   { id: "c9-bot", column: 9, lane: 2, type: "trivia", icon: "?", connections: ["c10-bot"] },
 
   { id: "c10-top", column: 10, lane: 0, type: "poem", icon: "✒️", connections: ["boss"] },
   { id: "c10-mid", column: 10, lane: 1, type: "elite", icon: "⚔️", connections: ["boss"] },
-  { id: "c10-bot", column: 10, lane: 2, type: "rest", icon: "❤️", connections: ["boss"] },
+  { id: "c10-bot", column: 10, lane: 2, type: "rest", icon: "&#9749;", connections: ["boss"] },
 
   { id: "boss", column: 11, lane: 1, type: "boss", icon: "👑", connections: [] }
 ];
@@ -106,7 +106,7 @@ const currentPathSpaces = [
   { id: "poem-5", column: 6, lane: 1, type: "poem", icon: "📖", connections: ["option-2-a", "option-2-rest"] },
 
   { id: "option-2-a", column: 7, lane: 0, type: "option2Slot", icon: "", connections: ["boss"] },
-  { id: "option-2-rest", column: 7, lane: 2, type: "rest", icon: "❤️", connections: ["boss"] },
+  { id: "option-2-rest", column: 7, lane: 2, type: "rest", icon: "&#9749;", connections: ["boss"] },
 
   { id: "boss", column: 8, lane: 1, type: "boss", icon: "📖", connections: [] }
 ];

@@ -263,7 +263,7 @@ function getMapIconForType(type) {
   }
 
   if (type === "matchmaker") {
-    return "♦";
+    return "&hearts;";
   }
 
   return "";
@@ -504,3 +504,4 @@ function startNextFloor() {
   renderGame();
   startOpeningPuzzle();
 }
+
