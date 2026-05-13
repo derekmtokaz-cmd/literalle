@@ -178,14 +178,25 @@
       </section>
       <section class="matchmaker-section hidden" id="matchmakerSection">
         <h2>Matchmaker</h2>
-        <p class="event-meta">Find as many literary pairs as you can in 5 turns.</p>
+        <p id="matchmakerIntro" class="event-meta">Play matchmaker with some literary couples.</p>
 
-        <div class="matchmaker-status">
-          <span id="matchmakerTurns">Turns remaining: 5</span>
-          <span id="matchmakerMatches">Pairs found: 0</span>
+        <div id="matchmakerChoiceControls" class="matchmaker-choice-controls controls">
+          <button id="matchmakerFourAttemptsButton" type="button">4 match attempts (free)</button>
+          <button id="matchmakerFiveAttemptsButton" type="button">5 match attempts (3 gold)</button>
+          <button id="matchmakerSixAttemptsButton" type="button">6 match attempts (6 gold)</button>
+          <button id="matchmakerSevenAttemptsButton" type="button">7 match attempts (9 gold)</button>
         </div>
 
-        <div id="matchmakerBoard" class="matchmaker-board"></div>
+        <div id="matchmakerGameArea" class="matchmaker-game-area hidden">
+          <p class="event-meta">Find as many literary pairs as you can.</p>
+
+          <div class="matchmaker-status">
+          <span id="matchmakerTurns">Turns remaining: 5</span>
+          <span id="matchmakerMatches">Pairs found: 0</span>
+          </div>
+
+          <div id="matchmakerBoard" class="matchmaker-board"></div>
+        </div>
 
         <div id="matchmakerMessage" class="event-message"></div>
       </section>

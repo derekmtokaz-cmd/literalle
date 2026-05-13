@@ -80,6 +80,18 @@ developerStartLoquaciousButton.addEventListener("click", () => {
 developerStartMatchmakerButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("matchmaker");
 });
+matchmakerFourAttemptsButton.addEventListener("click", () => {
+  chooseMatchmakerAttemptOption(4, 0);
+});
+matchmakerFiveAttemptsButton.addEventListener("click", () => {
+  chooseMatchmakerAttemptOption(5, 3);
+});
+matchmakerSixAttemptsButton.addEventListener("click", () => {
+  chooseMatchmakerAttemptOption(6, 6);
+});
+matchmakerSevenAttemptsButton.addEventListener("click", () => {
+  chooseMatchmakerAttemptOption(7, 9);
+});
 developerStartKjvButton.addEventListener("click", startDeveloperKjvEvent);
 developerStartPhoneticButton.addEventListener("click", startDeveloperPhoneticEvent);
 developerStartLitcanonButton.addEventListener("click", startDeveloperLitcanonEvent);

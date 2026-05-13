@@ -951,6 +951,16 @@ button:disabled {
   line-height: 1.45;
 }
 
+.matchmaker-choice-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.matchmaker-game-area.hidden {
+  display: none;
+}
+
 .matchmaker-status {
   display: flex;
   justify-content: space-between;
@@ -999,6 +1009,12 @@ button:disabled {
   gap: 4px;
   margin-bottom: 12px;
   color: #f7ead2;
+}
+
+@media (max-width: 720px) {
+  .matchmaker-choice-controls {
+    grid-template-columns: 1fr;
+  }
 }
 
 .timed-shakespeare-challenge {

@@ -1,6 +1,11 @@
 const MATCHMAKER_PAIR_COUNT = 8;
-const MATCHMAKER_TURN_COUNT = 5;
 const MATCHMAKER_MISMATCH_DELAY_MS = 3000;
+const MATCHMAKER_ATTEMPT_OPTIONS = [
+  { attempts: 4, cost: 0 },
+  { attempts: 5, cost: 3 },
+  { attempts: 6, cost: 6 },
+  { attempts: 7, cost: 9 }
+];
 
 let matchmakerResolutionTimeoutId = null;
 
@@ -42,10 +47,16 @@ function startMatchmakerEvent(encounter = buildMatchmakerEncounter()) {
     flippedCardIds: [],
     matchesFound: 0,
     turnsUsed: 0,
+    turnLimit: null,
     resolving: false
   };
 
   matchmakerMessage.textContent = "";
+  matchmakerIntro.classList.remove("hidden");
+  matchmakerChoiceControls.classList.remove("hidden");
+  matchmakerGameArea.classList.add("hidden");
+  matchmakerBoard.innerHTML = "";
+  updateMatchmakerChoiceButtons();
 
   showDialog({
     dialog: [
@@ -58,6 +69,38 @@ function startMatchmakerEvent(encounter = buildMatchmakerEncounter()) {
   showSection("matchmaker");
 }
 
+function updateMatchmakerChoiceButtons() {
+  const buttons = [
+    matchmakerFourAttemptsButton,
+    matchmakerFiveAttemptsButton,
+    matchmakerSixAttemptsButton,
+    matchmakerSevenAttemptsButton
+  ];
+
+  buttons.forEach((button, index) => {
+    const option = MATCHMAKER_ATTEMPT_OPTIONS[index];
+    button.disabled = gameState.gold < option.cost;
+  });
+}
+
+function chooseMatchmakerAttemptOption(turnLimit, cost) {
+  const eventData = gameState.currentMatchmakerEvent;
+
+  if (!eventData || eventData.turnLimit !== null || gameState.gold < cost) {
+    return;
+  }
+
+  gameState.gold -= cost;
+  eventData.turnLimit = turnLimit;
+  matchmakerIntro.classList.add("hidden");
+  matchmakerChoiceControls.classList.add("hidden");
+  matchmakerGameArea.classList.remove("hidden");
+  matchmakerMessage.textContent = "";
+
+  renderStats();
+  renderMatchmakerEvent();
+}
+
 function renderMatchmakerEvent() {
   const eventData = gameState.currentMatchmakerEvent;
   matchmakerBoard.innerHTML = "";
@@ -66,7 +109,12 @@ function renderMatchmakerEvent() {
     return;
   }
 
-  matchmakerTurns.textContent = `Turns remaining: ${Math.max(0, MATCHMAKER_TURN_COUNT - eventData.turnsUsed)}`;
+  if (eventData.turnLimit === null) {
+    updateMatchmakerChoiceButtons();
+    return;
+  }
+
+  matchmakerTurns.textContent = `Turns remaining: ${Math.max(0, eventData.turnLimit - eventData.turnsUsed)}`;
   matchmakerMatches.textContent = `Pairs found: ${eventData.matchesFound}`;
 
   eventData.cards.forEach((card) => {
@@ -100,7 +148,12 @@ function renderMatchmakerEvent() {
 function flipMatchmakerCard(cardId) {
   const eventData = gameState.currentMatchmakerEvent;
 
-  if (!eventData || eventData.resolving || eventData.turnsUsed >= MATCHMAKER_TURN_COUNT) {
+  if (
+    !eventData ||
+    eventData.turnLimit === null ||
+    eventData.resolving ||
+    eventData.turnsUsed >= eventData.turnLimit
+  ) {
     return;
   }
 
@@ -173,7 +226,7 @@ function maybeFinishMatchmakerEvent() {
     return;
   }
 
-  if (eventData.turnsUsed >= MATCHMAKER_TURN_COUNT) {
+  if (eventData.turnLimit !== null && eventData.turnsUsed >= eventData.turnLimit) {
     startMatchmakerSummaryRewardPhase(
       eventData.matchesFound,
       getMatchedMatchmakerPairs(eventData)
