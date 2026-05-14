@@ -907,6 +907,7 @@ button:disabled {
 .timed-shakespeare-section,
 .loquacious-section,
 .matchmaker-section,
+.rhyme-section,
 .litcanon-section {
   padding: 24px;
   border: 2px solid #d4a94a;
@@ -927,6 +928,10 @@ button:disabled {
 }
 
 .matchmaker-section > h2 {
+  display: none;
+}
+
+.rhyme-section > h2 {
   display: none;
 }
 
@@ -958,6 +963,15 @@ button:disabled {
 }
 
 .matchmaker-section .event-meta {
+  padding: 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 14px;
+  background: #f4dfb8;
+  color: #2a1712;
+  line-height: 1.45;
+}
+
+.rhyme-section .event-meta {
   padding: 18px;
   border: 2px solid #d4a94a;
   border-radius: 14px;
@@ -1046,6 +1060,11 @@ button:disabled {
   gap: 14px;
 }
 
+.rhyme-challenge {
+  display: grid;
+  gap: 14px;
+}
+
 .timed-shakespeare-challenge.hidden {
   display: none;
 }
@@ -1056,6 +1075,30 @@ button:disabled {
 
 .loquacious-answer-area {
   margin-top: 4px;
+}
+
+.rhyme-answer-area {
+  margin-top: 4px;
+}
+
+.rhyme-prompt-line {
+  justify-self: center;
+  padding: 10px 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 10px;
+  background: #8e1f1f;
+  color: #fff4cc;
+  font-size: 1.45rem;
+  font-weight: bold;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.rhyme-target-word {
+  display: inline-block;
+  padding: 0 4px;
+  border-bottom: 3px solid #f2c46d;
+  color: #f2c46d;
 }
 
 .timed-shakespeare-timer {
@@ -1075,7 +1118,20 @@ button:disabled {
   gap: 8px;
 }
 
+.rhyme-found-list {
+  display: grid;
+  gap: 8px;
+}
+
 .timed-shakespeare-correct-answer {
+  padding: 8px 10px;
+  border: 1px solid #d4a94a;
+  border-radius: 8px;
+  background: #22593f;
+  color: #f4dfb8;
+}
+
+.rhyme-found-answer {
   padding: 8px 10px;
   border: 1px solid #d4a94a;
   border-radius: 8px;

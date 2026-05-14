@@ -1,6 +1,6 @@
 const TRIVIA_GAME_POOLS = {
   ordinary: ["authorDate", "detective", "fanfic", "shakespeare"],
-  special: ["timedShakespeare", "loquacious", "matchmaker"],
+  special: ["timedShakespeare", "loquacious", "matchmaker", "rhyme"],
 };
 
 const TRIVIA_GAME_BUILDERS = {
@@ -11,6 +11,7 @@ const TRIVIA_GAME_BUILDERS = {
   timedShakespeare: buildTimedShakespeareEncounter,
   loquacious: buildLoquaciousEncounter,
   matchmaker: buildMatchmakerEncounter,
+  rhyme: buildRhymeEncounter,
 };
 
 const TRIVIA_GAME_STARTERS = {
@@ -21,6 +22,7 @@ const TRIVIA_GAME_STARTERS = {
   timedShakespeare: startTimedShakespeareEvent,
   loquacious: startLoquaciousEvent,
   matchmaker: startMatchmakerEvent,
+  rhyme: startRhymeEvent,
 };
 
 function getTriviaGameOptions(category = "ordinary") {
@@ -133,6 +135,11 @@ function startMapNode(nodeId) {
     return startMatchmakerEvent(nextSpace.encounter);
   }
 
+  if (nextSpace.type === "rhyme") {
+    gameState.lastEventType = "rhyme";
+    return startRhymeEvent(nextSpace.encounter);
+  }
+
   gameState.lastEventType = nextSpace.type;
 
   eventTitle.textContent = nextSpace.type.toUpperCase();
@@ -208,6 +215,16 @@ function resolveOptionNodes() {
   const shuffledSpecialEventTypes = shuffleArray(getSpecialEventTypesForCurrentFloor());
   const questionInFirstBranch = Math.random() < 0.5;
 
+  if (shuffledSpecialEventTypes.length === 1) {
+    const specialType = shuffledSpecialEventTypes[0];
+    const shuffledOption1Types = shuffleArray(["trivia", specialType]);
+
+    applyResolvedOptionType(option1Slots[0], shuffledOption1Types[0]);
+    applyResolvedOptionType(option1Slots[1], shuffledOption1Types[1]);
+    applyResolvedOptionType(option2Special, "trivia");
+    return;
+  }
+
   if (questionInFirstBranch) {
     const shuffledOption1Types = shuffleArray(["trivia", shuffledSpecialEventTypes[0]]);
 
@@ -225,7 +242,11 @@ function resolveOptionNodes() {
 }
 
 function getSpecialEventTypesForCurrentFloor() {
-  if (gameState.currentFloor >= 2) {
+  if (gameState.currentFloor >= 3) {
+    return ["rhyme"];
+  }
+
+  if (gameState.currentFloor === 2) {
     return ["timedShakespeare", "matchmaker"];
   }
 
@@ -264,6 +285,10 @@ function getMapIconForType(type) {
 
   if (type === "matchmaker") {
     return "&hearts;";
+  }
+
+  if (type === "rhyme") {
+    return "R";
   }
 
   return "";
@@ -425,6 +450,10 @@ function buildRunPath() {
 
     if (space.type === "matchmaker") {
       space.encounter = buildMatchmakerEncounter();
+    }
+
+    if (space.type === "rhyme") {
+      space.encounter = buildRhymeEncounter();
     }
 
     if (space.type === "elite") {

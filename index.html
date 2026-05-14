@@ -123,7 +123,7 @@
 
         <div id="timedShakespeareChallenge" class="timed-shakespeare-challenge hidden">
           <p class="event-meta">Name as many plays by Shakespeare as you can.</p>
-          <div id="timedShakespeareTimer" class="timed-shakespeare-timer">30</div>
+          <div id="timedShakespeareTimer" class="timed-shakespeare-timer">45</div>
 
           <div class="litcanon-answer-area">
             <input
@@ -199,6 +199,33 @@
         </div>
 
         <div id="matchmakerMessage" class="event-message"></div>
+      </section>
+      <section class="rhyme-section hidden" id="rhymeSection">
+        <h2>Rhyme Game</h2>
+        <p class="event-meta">Provide as many rhyming words as you can.</p>
+
+        <div class="rhyme-challenge">
+          <div id="rhymePromptWord" class="rhyme-prompt-line"></div>
+          <div id="rhymeTimer" class="timed-shakespeare-timer">60</div>
+
+          <div class="rhyme-answer-area">
+            <input
+              id="rhymeAnswerInput"
+              class="litcanon-answer-input"
+              type="text"
+              autocomplete="off"
+              aria-label="Rhyming word"
+            />
+          </div>
+
+          <div class="controls">
+            <button id="submitRhymeButton" type="button">Submit</button>
+          </div>
+
+          <div id="rhymeFoundList" class="rhyme-found-list"></div>
+        </div>
+
+        <div id="rhymeMessage" class="event-message"></div>
       </section>
       <section class="phonetic-section hidden" id="phoneticSection">
         <h2>Phonetic Quote</h2>
@@ -317,6 +344,7 @@
             <option value="timedShakespeare">Timed Shakespeare</option>
             <option value="loquacious">Loquacious</option>
             <option value="matchmaker">Matchmaker</option>
+            <option value="rhyme">Rhyme Game</option>
           </select>
 
           <div class="developer-button-group">
@@ -332,6 +360,7 @@
             <button id="developerStartTimedShakespeareButton" type="button">Timed Shakespeare</button>
             <button id="developerStartLoquaciousButton" type="button">Loquacious</button>
             <button id="developerStartMatchmakerButton" type="button">Matchmaker</button>
+            <button id="developerStartRhymeButton" type="button">Rhyme Game</button>
           </div>
 
           <div class="developer-button-group">
@@ -348,6 +377,7 @@
             <p>Map</p>
             <button id="developerGoFloorOneButton" type="button">Go to Floor 1</button>
             <button id="developerGoFloorTwoButton" type="button">Go to Floor 2</button>
+            <button id="developerGoFloorThreeButton" type="button">Go to Floor 3</button>
             <button id="developerRebuildFloorButton" type="button">Rebuild Current Floor</button>
           </div>
 
@@ -389,6 +419,7 @@
 <script src="fanfic-pairings.js"></script>
 <script src="shakespeare-characters.js"></script>
 <script src="matchmaker-pairs.js"></script>
+<script src="rhyme-prompts.js"></script>
 <script src="trinkets.js"></script>
 <script src="artifacts.js"></script>
 <script src="phonetics.js"></script>
@@ -412,6 +443,7 @@
 <script src="events-timed-shakespeare.js"></script>
 <script src="events-loquacious.js"></script>
 <script src="events-matchmaker.js"></script>
+<script src="events-rhyme.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
 <script src="events-litcanon.js"></script>

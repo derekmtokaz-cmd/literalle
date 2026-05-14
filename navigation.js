@@ -17,6 +17,7 @@ function showSection(sectionName) {
   timedShakespeareSection.classList.add("hidden");
   loquaciousSection.classList.add("hidden");
   matchmakerSection.classList.add("hidden");
+  rhymeSection.classList.add("hidden");
   phoneticSection.classList.add("hidden");
   litcanonSection.classList.add("hidden");
 
@@ -66,6 +67,10 @@ function showSection(sectionName) {
 
   if (sectionName === "matchmaker") {
     matchmakerSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "rhyme") {
+    rhymeSection.classList.remove("hidden");
   }
 
   if (sectionName === "phonetic") {

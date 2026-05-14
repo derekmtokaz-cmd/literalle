@@ -81,6 +81,9 @@ developerStartLoquaciousButton.addEventListener("click", () => {
 developerStartMatchmakerButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("matchmaker");
 });
+developerStartRhymeButton.addEventListener("click", () => {
+  startDeveloperTriviaEvent("rhyme");
+});
 matchmakerFourAttemptsButton.addEventListener("click", () => {
   chooseMatchmakerAttemptOption(4, 0);
 });
@@ -93,6 +96,13 @@ matchmakerSixAttemptsButton.addEventListener("click", () => {
 matchmakerSevenAttemptsButton.addEventListener("click", () => {
   chooseMatchmakerAttemptOption(7, 9);
 });
+submitRhymeButton.addEventListener("click", submitRhymeAnswer);
+rhymeAnswerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitRhymeAnswer();
+  }
+});
 developerStartKjvButton.addEventListener("click", startDeveloperKjvEvent);
 developerStartPhoneticButton.addEventListener("click", startDeveloperPhoneticEvent);
 developerStartLitcanonButton.addEventListener("click", startDeveloperLitcanonEvent);
@@ -104,6 +114,9 @@ developerGoFloorOneButton.addEventListener("click", () => {
 });
 developerGoFloorTwoButton.addEventListener("click", () => {
   goToDeveloperFloor(2);
+});
+developerGoFloorThreeButton.addEventListener("click", () => {
+  goToDeveloperFloor(3);
 });
 developerRebuildFloorButton.addEventListener("click", rebuildDeveloperFloor);
 developerSetHpFullButton.addEventListener("click", () => {
@@ -187,6 +200,7 @@ function restartGame() {
     currentTimedShakespeareEvent: null,
     currentLoquaciousEvent: null,
     currentMatchmakerEvent: null,
+    currentRhymeEvent: null,
     currentPhoneticQuote: null,
     currentLitcanonEvent: null,
     currentKjvEncounter: null,
@@ -209,6 +223,7 @@ function restartGame() {
   syncMusicToCurrentFloor();
   clearTimedShakespeareTimer();
   clearMatchmakerResolutionTimer();
+  clearRhymeTimer();
   buildRunPath();
 
   if (keepDeveloperMode) {
@@ -306,6 +321,7 @@ function prepareDeveloperLaunch() {
 
   clearTimedShakespeareTimer();
   clearMatchmakerResolutionTimer();
+  clearRhymeTimer();
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
   gameState.currentAuthorDateEvent = null;
@@ -315,6 +331,7 @@ function prepareDeveloperLaunch() {
   gameState.currentTimedShakespeareEvent = null;
   gameState.currentLoquaciousEvent = null;
   gameState.currentMatchmakerEvent = null;
+  gameState.currentRhymeEvent = null;
   gameState.currentPhoneticQuote = null;
   gameState.currentLitcanonEvent = null;
   gameState.currentKjvEncounter = null;
@@ -422,8 +439,10 @@ function rebuildDeveloperFloor() {
 
   clearTimedShakespeareTimer();
   clearMatchmakerResolutionTimer();
+  clearRhymeTimer();
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
+  gameState.currentRhymeEvent = null;
   gameState.lastEventType = null;
   gameState.currentRewardOffers = [];
   gameState.rewardTilePurchased = false;
