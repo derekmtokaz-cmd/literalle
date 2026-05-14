@@ -1101,6 +1101,12 @@ button:disabled {
   color: #f2c46d;
 }
 
+.rhyme-status-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
 .timed-shakespeare-timer {
   justify-self: center;
   min-width: 74px;

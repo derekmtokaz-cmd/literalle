@@ -86,6 +86,7 @@ const matchmakerMessage = document.getElementById("matchmakerMessage");
 const rhymeSection = document.getElementById("rhymeSection");
 const rhymePromptWord = document.getElementById("rhymePromptWord");
 const rhymeTimer = document.getElementById("rhymeTimer");
+const rhymeFoundCount = document.getElementById("rhymeFoundCount");
 const rhymeAnswerInput = document.getElementById("rhymeAnswerInput");
 const submitRhymeButton = document.getElementById("submitRhymeButton");
 const rhymeFoundList = document.getElementById("rhymeFoundList");

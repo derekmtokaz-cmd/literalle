@@ -27,6 +27,7 @@ function startRhymeEvent(encounter = buildRhymeEncounter()) {
 
   renderRhymePromptLine(encounter.prompt.line);
   rhymeTimer.textContent = RHYME_VISIBLE_SECONDS;
+  rhymeFoundCount.textContent = "0";
   rhymeAnswerInput.value = "";
   rhymeAnswerInput.disabled = false;
   submitRhymeButton.disabled = false;
@@ -115,6 +116,7 @@ function renderRhymePromptLine(line) {
 function renderRhymeFoundList() {
   const eventData = gameState.currentRhymeEvent;
   rhymeFoundList.innerHTML = "";
+  rhymeFoundCount.textContent = eventData ? eventData.foundAnswers.length : "0";
 
   if (!eventData) {
     return;
@@ -136,18 +138,20 @@ function completeRhymeEvent() {
   }
 
   const rhymeCount = eventData.foundAnswers.length;
+  const goldReward = getRhymeGoldReward(eventData.foundAnswers);
 
   clearRhymeTimer();
   gameState.currentRhymeEvent = null;
   gameState.currentRewardOffers = [];
   gameState.rewardTilePurchased = false;
   const trinketRewards = getRhymeTrinketRewards(rhymeCount);
+  gameState.gold += goldReward;
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
   goldRewardMessage.textContent =
     `You found ${rhymeCount} rhyme${rhymeCount === 1 ? "" : "s"}.`;
-  rewardMessage.innerHTML = buildRhymeRewardSummary(trinketRewards);
+  rewardMessage.innerHTML = buildRhymeRewardSummary(trinketRewards, goldReward);
   skipRewardButton.classList.remove("hidden");
 
   renderStats();
@@ -178,14 +182,32 @@ function getRhymeTrinketRewards(rhymeCount) {
   return trinketRewards;
 }
 
-function buildRhymeRewardSummary(trinketRewards) {
-  if (trinketRewards.length === 0) {
+function getRhymeGoldReward(foundAnswers) {
+  const longestLength = foundAnswers.reduce((longest, answer) => {
+    return Math.max(longest, answer.length);
+  }, 0);
+
+  return Math.max(0, longestLength - 3);
+}
+
+function buildRhymeRewardSummary(trinketRewards, goldReward) {
+  const rewardMessages = [];
+
+  if (goldReward > 0) {
+    rewardMessages.push(`You gained ${goldReward} gold.`);
+  }
+
+  if (trinketRewards.length > 0) {
+    rewardMessages.push(`You found ${trinketRewards.map((trinket) => {
+      return `${trinket.icon} ${escapeRhymeRewardText(trinket.name)}`;
+    }).join(", ")}.`);
+  }
+
+  if (rewardMessages.length === 0) {
     return "No prize this time.";
   }
 
-  return `You found ${trinketRewards.map((trinket) => {
-    return `${trinket.icon} ${escapeRhymeRewardText(trinket.name)}`;
-  }).join(", ")}.`;
+  return rewardMessages.join("<br>");
 }
 
 function escapeRhymeRewardText(text) {
