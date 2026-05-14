@@ -1107,6 +1107,11 @@ button:disabled {
   gap: 12px;
 }
 
+.rhyme-status-row .timed-shakespeare-timer {
+  flex: 0 0 auto;
+  width: 74px;
+}
+
 .timed-shakespeare-timer {
   justify-self: center;
   min-width: 74px;
