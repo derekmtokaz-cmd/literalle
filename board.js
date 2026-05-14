@@ -111,7 +111,8 @@ function renderMapNode(node) {
     nodeElement.disabled = true;
   }
 
-  nodeElement.innerHTML = `<span class="space-icon">${node.icon}</span>`;
+  const nodeIcon = isCurrent ? "★" : node.icon;
+  nodeElement.innerHTML = `<span class="space-icon">${nodeIcon}</span>`;
 
   if (isCurrent) {
     const marker = document.createElement("div");

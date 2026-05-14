@@ -433,26 +433,7 @@ h2 {
 }
 
 .player-marker {
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 24px;
-  height: 24px;
-
-  border: 2px solid #fff4cc;
-  border-radius: 50%;
-  background: #b82222;
-  color: #fff4cc;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 0.72rem;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
-  z-index: 2;
+  display: none;
 }
 
 /* Poem puzzle */
