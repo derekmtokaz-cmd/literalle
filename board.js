@@ -130,6 +130,10 @@ function renderMapNode(node) {
 }
 
 function addMapDifficultyClass(nodeElement, node) {
+  if (node.id === "poem-1" || node.id === "poem-2" || node.id === "poem-3") {
+    nodeElement.classList.add("easy-poem");
+  }
+
   if (node.id === "poem-4" || node.id === "poem-5") {
     nodeElement.classList.add("mid-poem");
   }

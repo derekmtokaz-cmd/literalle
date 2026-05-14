@@ -358,6 +358,14 @@ h2 {
   letter-spacing: 0;
 }
 
+.board-space.easy-poem {
+  border-color: #6bbf59;
+}
+
+.board-space.easy-poem::before {
+  border-color: rgba(107, 191, 89, 0.62);
+}
+
 .board-space.mid-poem {
   border-color: #f2c46d;
   background: #ead09a;
