@@ -105,6 +105,11 @@ h2 {
   border-bottom: none;
 }
 
+.inventory-gold-row {
+  margin-top: -4px;
+  margin-bottom: 10px;
+}
+
 .inventory-display {
   display: flex;
   flex-wrap: wrap;

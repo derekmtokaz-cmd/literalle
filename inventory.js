@@ -72,7 +72,6 @@ function renderInventory() {
   inventoryDisplay.innerHTML = "";
 
   if (gameState.inventory.length === 0) {
-    inventoryDisplay.innerHTML = `<span class="empty-inventory">Empty</span>`;
     return;
   }
 
