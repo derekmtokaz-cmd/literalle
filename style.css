@@ -1180,7 +1180,7 @@ button:disabled {
 
 .authorle-bibliography-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 86px 112px;
+  grid-template-columns: minmax(260px, 0.9fr) 90px minmax(220px, 280px);
   gap: 10px;
   align-items: center;
   padding: 12px 14px;
@@ -1190,6 +1190,11 @@ button:disabled {
   color: #2a1712;
   font-size: 1.08rem;
   line-height: 1.35;
+}
+
+.authorle-bibliography-row > div:nth-child(2),
+.authorle-bibliography-row > div:nth-child(3) {
+  white-space: nowrap;
 }
 
 .authorle-bibliography-header {
@@ -1205,7 +1210,7 @@ button:disabled {
 
 @media (max-width: 720px) {
   .authorle-bibliography-row {
-    grid-template-columns: minmax(0, 1fr) 68px 86px;
+    grid-template-columns: minmax(0, 1fr) 64px minmax(130px, 1fr);
     gap: 6px;
     padding: 10px;
     font-size: 0.95rem;
