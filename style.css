@@ -1174,11 +1174,15 @@ button:disabled {
 
 .authorle-clue-list {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   margin: 16px 0;
 }
 
-.authorle-clue-row {
+.authorle-bibliography-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 86px 112px;
+  gap: 10px;
+  align-items: center;
   padding: 12px 14px;
   border: 2px solid #d4a94a;
   border-radius: 10px;
@@ -1188,10 +1192,24 @@ button:disabled {
   line-height: 1.35;
 }
 
+.authorle-bibliography-header {
+  background: #8e1f1f;
+  color: #fff4cc;
+  font-weight: bold;
+}
+
 .authorle-answer-list {
   display: grid;
-  gap: 6px;
-  color: #f7ead2;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .authorle-bibliography-row {
+    grid-template-columns: minmax(0, 1fr) 68px 86px;
+    gap: 6px;
+    padding: 10px;
+    font-size: 0.95rem;
+  }
 }
 
 .lone-queen-controls {

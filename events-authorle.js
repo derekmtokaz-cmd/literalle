@@ -46,17 +46,14 @@ function startAuthorleEvent(encounter = buildAuthorleEncounter()) {
 
 function renderAuthorleClues() {
   const encounter = gameState.currentAuthorleEvent;
-  authorleClueList.innerHTML = "";
+  authorleClueList.innerHTML = buildAuthorleBibliographyTableHeader();
 
   if (!encounter) {
     return;
   }
 
   encounter.bibliography.novels.forEach((novel) => {
-    const clueRow = document.createElement("div");
-    clueRow.classList.add("authorle-clue-row");
-    clueRow.textContent = `${blankAuthorleTitle(novel.title)} (${novel.publicationYear})`;
-    authorleClueList.appendChild(clueRow);
+    authorleClueList.appendChild(buildAuthorleBibliographyRow(novel, true));
   });
 }
 
@@ -256,11 +253,55 @@ function startAuthorleFailureRewardPhase(encounter) {
 function buildAuthorleBibliographySummary(bibliography) {
   return `
     <div class="authorle-answer-list">
-      ${bibliography.novels.map((novel) => {
-        return `<div>${escapeAuthorleText(novel.title)} (${novel.publicationYear})</div>`;
-      }).join("")}
+      ${buildAuthorleBibliographyTableHeader()}
+      ${bibliography.novels.map((novel) => buildAuthorleBibliographyRowHtml(novel, false)).join("")}
     </div>
   `;
+}
+
+function buildAuthorleBibliographyTableHeader() {
+  return `
+    <div class="authorle-bibliography-row authorle-bibliography-header">
+      <div>Title</div>
+      <div>Date</div>
+      <div>Goodreads score (# of ratings)</div>
+    </div>
+  `;
+}
+
+function buildAuthorleBibliographyRow(novel, maskTitle) {
+  const row = document.createElement("div");
+  row.classList.add("authorle-bibliography-row");
+
+  const titleCell = document.createElement("div");
+  const dateCell = document.createElement("div");
+  const goodreadsCell = document.createElement("div");
+
+  titleCell.textContent = maskTitle ? blankAuthorleTitle(novel.title) : novel.title;
+  dateCell.textContent = novel.publicationYear;
+  goodreadsCell.textContent = getAuthorleGoodreadsDisplay(novel.goodreads);
+
+  row.appendChild(titleCell);
+  row.appendChild(dateCell);
+  row.appendChild(goodreadsCell);
+
+  return row;
+}
+
+function buildAuthorleBibliographyRowHtml(novel, maskTitle) {
+  const title = maskTitle ? blankAuthorleTitle(novel.title) : novel.title;
+
+  return `
+    <div class="authorle-bibliography-row">
+      <div>${escapeAuthorleText(title)}</div>
+      <div>${novel.publicationYear}</div>
+      <div>${escapeAuthorleText(getAuthorleGoodreadsDisplay(novel.goodreads))}</div>
+    </div>
+  `;
+}
+
+function getAuthorleGoodreadsDisplay(goodreads) {
+  return String(goodreads || "").trim();
 }
 
 function blankAuthorleTitle(title) {
