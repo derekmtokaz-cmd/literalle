@@ -18,6 +18,7 @@ function showSection(sectionName) {
   loquaciousSection.classList.add("hidden");
   matchmakerSection.classList.add("hidden");
   rhymeSection.classList.add("hidden");
+  authorleSection.classList.add("hidden");
   loneQueenSection.classList.add("hidden");
   phoneticSection.classList.add("hidden");
   litcanonSection.classList.add("hidden");
@@ -72,6 +73,10 @@ function showSection(sectionName) {
 
   if (sectionName === "rhyme") {
     rhymeSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "authorle") {
+    authorleSection.classList.remove("hidden");
   }
 
   if (sectionName === "loneQueen") {

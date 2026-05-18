@@ -902,6 +902,7 @@ button:disabled {
 .loquacious-section,
 .matchmaker-section,
 .rhyme-section,
+.authorle-section,
 .lone-queen-section,
 .litcanon-section {
   padding: 24px;
@@ -927,6 +928,10 @@ button:disabled {
 }
 
 .rhyme-section > h2 {
+  display: none;
+}
+
+.authorle-section > h2 {
   display: none;
 }
 
@@ -971,6 +976,15 @@ button:disabled {
 }
 
 .rhyme-section .event-meta {
+  padding: 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 14px;
+  background: #f4dfb8;
+  color: #2a1712;
+  line-height: 1.45;
+}
+
+.authorle-section .event-meta {
   padding: 18px;
   border: 2px solid #d4a94a;
   border-radius: 14px;
@@ -1156,6 +1170,28 @@ button:disabled {
   border-radius: 8px;
   background: #22593f;
   color: #f4dfb8;
+}
+
+.authorle-clue-list {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.authorle-clue-row {
+  padding: 12px 14px;
+  border: 2px solid #d4a94a;
+  border-radius: 10px;
+  background: #f4dfb8;
+  color: #2a1712;
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+
+.authorle-answer-list {
+  display: grid;
+  gap: 6px;
+  color: #f7ead2;
 }
 
 .lone-queen-controls {

@@ -56,6 +56,16 @@ litcanonAnswerInput.addEventListener("input", () => {
   renderLitcanonSuggestions();
 });
 litcanonAnswerInput.addEventListener("keydown", handleLitcanonAnswerKeydown);
+authorleAnswerInput.addEventListener("input", () => {
+  if (gameState.currentAuthorleEvent) {
+    gameState.currentAuthorleEvent.selectedAuthor = null;
+    gameState.currentAuthorleEvent.highlightedSuggestionIndex = -1;
+  }
+
+  renderAuthorleSuggestions();
+});
+authorleAnswerInput.addEventListener("keydown", handleAuthorleAnswerKeydown);
+submitAuthorleButton.addEventListener("click", submitAuthorleGuess);
 closeProphecyButton.addEventListener("click", closeProphecyModal);
 developerForcedTriviaSelect.addEventListener("change", () => {
   gameState.developerForcedTriviaType = developerForcedTriviaSelect.value;
@@ -83,6 +93,9 @@ developerStartMatchmakerButton.addEventListener("click", () => {
 });
 developerStartRhymeButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("rhyme");
+});
+developerStartAuthorleButton.addEventListener("click", () => {
+  startDeveloperTriviaEvent("authorle");
 });
 developerStartLoneQueenButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("loneQueen");
@@ -216,6 +229,7 @@ function restartGame() {
     currentLoquaciousEvent: null,
     currentMatchmakerEvent: null,
     currentRhymeEvent: null,
+    currentAuthorleEvent: null,
     currentLoneQueenEvent: null,
     currentPhoneticQuote: null,
     currentLitcanonEvent: null,
@@ -348,6 +362,7 @@ function prepareDeveloperLaunch() {
   gameState.currentLoquaciousEvent = null;
   gameState.currentMatchmakerEvent = null;
   gameState.currentRhymeEvent = null;
+  gameState.currentAuthorleEvent = null;
   gameState.currentLoneQueenEvent = null;
   gameState.currentPhoneticQuote = null;
   gameState.currentLitcanonEvent = null;
@@ -460,6 +475,7 @@ function rebuildDeveloperFloor() {
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
   gameState.currentRhymeEvent = null;
+  gameState.currentAuthorleEvent = null;
   gameState.currentLoneQueenEvent = null;
   gameState.lastEventType = null;
   gameState.currentRewardOffers = [];

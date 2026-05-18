@@ -148,6 +148,7 @@ const LITCANON_NOVELS = [
   { id: "their-eyes-were-watching-god", title: "Their Eyes Were Watching God", author: "Zora Neale Hurston" },
   { id: "things-fall-apart", title: "Things Fall Apart", author: "Chinua Achebe" },
   { id: "to-kill-a-mockingbird", title: "To Kill a Mockingbird", author: "Harper Lee" },
+  { id: "pride-and-prejudice", title: "Pride and Prejudice", author: "Jane Austen" },
   { id: "ubik", title: "Ubik", author: "Philip K. Dick" },
   { id: "watchmen", title: "Watchmen", author: "Alan Moore and Dave Gibbons" },
   { id: "white-noise", title: "White Noise", author: "Don DeLillo" },

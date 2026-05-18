@@ -230,6 +230,30 @@
 
         <div id="rhymeMessage" class="event-message"></div>
       </section>
+      <section class="authorle-section hidden" id="authorleSection">
+        <h2>Authorle</h2>
+        <p class="event-meta">Guess the author from the blanked-out titles.</p>
+
+        <div id="authorleClueList" class="authorle-clue-list"></div>
+
+        <div class="litcanon-answer-area">
+          <input
+            id="authorleAnswerInput"
+            class="litcanon-answer-input"
+            type="text"
+            autocomplete="off"
+            placeholder="Type at least 3 letters..."
+            aria-label="Author"
+          />
+          <div id="authorleSuggestions" class="litcanon-suggestions"></div>
+        </div>
+
+        <div id="authorleMessage" class="event-message"></div>
+
+        <div class="controls">
+          <button id="submitAuthorleButton" type="button">Submit</button>
+        </div>
+      </section>
       <section class="lone-queen-section hidden" id="loneQueenSection">
         <h2>Lone Queen</h2>
         <p id="loneQueenAnnouncement" class="event-meta"></p>
@@ -358,6 +382,7 @@
             <option value="loquacious">Loquacious</option>
             <option value="matchmaker">Matchmaker</option>
             <option value="rhyme">Rhyme Game</option>
+            <option value="authorle">Authorle</option>
             <option value="loneQueen">Lone Queen</option>
           </select>
 
@@ -375,6 +400,7 @@
             <button id="developerStartLoquaciousButton" type="button">Loquacious</button>
             <button id="developerStartMatchmakerButton" type="button">Matchmaker</button>
             <button id="developerStartRhymeButton" type="button">Rhyme Game</button>
+            <button id="developerStartAuthorleButton" type="button">Authorle</button>
             <button id="developerStartLoneQueenButton" type="button">Lone Queen</button>
           </div>
 
@@ -442,6 +468,7 @@
 <script src="kjv-passages.js"></script>
 <script src="litcanon-novels.js"></script>
 <script src="litcanon-clues.js"></script>
+<script src="authorle-bibliographies.js"></script>
 <script src="state.js"></script>
 <script src="dom.js"></script>
 <script src="utils.js"></script>
@@ -460,6 +487,7 @@
 <script src="events-loquacious.js"></script>
 <script src="events-matchmaker.js"></script>
 <script src="events-rhyme.js"></script>
+<script src="events-authorle.js"></script>
 <script src="events-lone-queen.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
