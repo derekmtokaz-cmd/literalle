@@ -84,6 +84,9 @@ developerStartMatchmakerButton.addEventListener("click", () => {
 developerStartRhymeButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("rhyme");
 });
+developerStartLoneQueenButton.addEventListener("click", () => {
+  startDeveloperTriviaEvent("loneQueen");
+});
 matchmakerFourAttemptsButton.addEventListener("click", () => {
   chooseMatchmakerAttemptOption(4, 0);
 });
@@ -103,6 +106,15 @@ rhymeAnswerInput.addEventListener("keydown", (event) => {
     submitRhymeAnswer();
   }
 });
+loneQueenPawnButton.addEventListener("click", () => {
+  selectLoneQueenMoveType("pawn");
+});
+loneQueenKnightButton.addEventListener("click", () => {
+  selectLoneQueenMoveType("knight");
+});
+loneQueenBishopButton.addEventListener("click", () => {
+  selectLoneQueenMoveType("bishop");
+});
 developerStartKjvButton.addEventListener("click", startDeveloperKjvEvent);
 developerStartPhoneticButton.addEventListener("click", startDeveloperPhoneticEvent);
 developerStartLitcanonButton.addEventListener("click", startDeveloperLitcanonEvent);
@@ -117,6 +129,9 @@ developerGoFloorTwoButton.addEventListener("click", () => {
 });
 developerGoFloorThreeButton.addEventListener("click", () => {
   goToDeveloperFloor(3);
+});
+developerGoFloorFourButton.addEventListener("click", () => {
+  goToDeveloperFloor(4);
 });
 developerRebuildFloorButton.addEventListener("click", rebuildDeveloperFloor);
 developerSetHpFullButton.addEventListener("click", () => {
@@ -201,6 +216,7 @@ function restartGame() {
     currentLoquaciousEvent: null,
     currentMatchmakerEvent: null,
     currentRhymeEvent: null,
+    currentLoneQueenEvent: null,
     currentPhoneticQuote: null,
     currentLitcanonEvent: null,
     currentKjvEncounter: null,
@@ -332,6 +348,7 @@ function prepareDeveloperLaunch() {
   gameState.currentLoquaciousEvent = null;
   gameState.currentMatchmakerEvent = null;
   gameState.currentRhymeEvent = null;
+  gameState.currentLoneQueenEvent = null;
   gameState.currentPhoneticQuote = null;
   gameState.currentLitcanonEvent = null;
   gameState.currentKjvEncounter = null;
@@ -443,6 +460,7 @@ function rebuildDeveloperFloor() {
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
   gameState.currentRhymeEvent = null;
+  gameState.currentLoneQueenEvent = null;
   gameState.lastEventType = null;
   gameState.currentRewardOffers = [];
   gameState.rewardTilePurchased = false;

@@ -33,6 +33,7 @@ const gameState = {
   currentLoquaciousEvent: null,
   currentMatchmakerEvent: null,
   currentRhymeEvent: null,
+  currentLoneQueenEvent: null,
   currentPhoneticQuote: null,
   currentLitcanonEvent: null,
   currentKjvEncounter: null,

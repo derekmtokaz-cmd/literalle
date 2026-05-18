@@ -1,6 +1,6 @@
 const TRIVIA_GAME_POOLS = {
   ordinary: ["authorDate", "detective", "fanfic", "shakespeare"],
-  special: ["timedShakespeare", "loquacious", "matchmaker", "rhyme"],
+  special: ["timedShakespeare", "loquacious", "matchmaker", "rhyme", "loneQueen"],
 };
 
 const TRIVIA_GAME_BUILDERS = {
@@ -12,6 +12,7 @@ const TRIVIA_GAME_BUILDERS = {
   loquacious: buildLoquaciousEncounter,
   matchmaker: buildMatchmakerEncounter,
   rhyme: buildRhymeEncounter,
+  loneQueen: buildLoneQueenEncounter,
 };
 
 const TRIVIA_GAME_STARTERS = {
@@ -23,6 +24,7 @@ const TRIVIA_GAME_STARTERS = {
   loquacious: startLoquaciousEvent,
   matchmaker: startMatchmakerEvent,
   rhyme: startRhymeEvent,
+  loneQueen: startLoneQueenEvent,
 };
 
 function getTriviaGameOptions(category = "ordinary") {
@@ -140,6 +142,11 @@ function startMapNode(nodeId) {
     return startRhymeEvent(nextSpace.encounter);
   }
 
+  if (nextSpace.type === "loneQueen") {
+    gameState.lastEventType = "loneQueen";
+    return startLoneQueenEvent(nextSpace.encounter);
+  }
+
   gameState.lastEventType = nextSpace.type;
 
   eventTitle.textContent = nextSpace.type.toUpperCase();
@@ -242,7 +249,11 @@ function resolveOptionNodes() {
 }
 
 function getSpecialEventTypesForCurrentFloor() {
-  if (gameState.currentFloor >= 3) {
+  if (gameState.currentFloor >= 4) {
+    return ["loneQueen"];
+  }
+
+  if (gameState.currentFloor === 3) {
     return ["rhyme"];
   }
 
@@ -289,6 +300,10 @@ function getMapIconForType(type) {
 
   if (type === "rhyme") {
     return "R";
+  }
+
+  if (type === "loneQueen") {
+    return "♛";
   }
 
   return "";
@@ -454,6 +469,10 @@ function buildRunPath() {
 
     if (space.type === "rhyme") {
       space.encounter = buildRhymeEncounter();
+    }
+
+    if (space.type === "loneQueen") {
+      space.encounter = buildLoneQueenEncounter();
     }
 
     if (space.type === "elite") {

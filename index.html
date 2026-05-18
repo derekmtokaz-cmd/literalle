@@ -230,6 +230,20 @@
 
         <div id="rhymeMessage" class="event-message"></div>
       </section>
+      <section class="lone-queen-section hidden" id="loneQueenSection">
+        <h2>Lone Queen</h2>
+        <p id="loneQueenAnnouncement" class="event-meta"></p>
+
+        <div class="lone-queen-controls controls">
+          <button id="loneQueenPawnButton" type="button">Pawn</button>
+          <button id="loneQueenKnightButton" type="button">Knight</button>
+          <button id="loneQueenBishopButton" type="button">Bishop</button>
+        </div>
+
+        <div id="loneQueenBoard" class="lone-queen-board"></div>
+
+        <div id="loneQueenMessage" class="event-message"></div>
+      </section>
       <section class="phonetic-section hidden" id="phoneticSection">
         <h2>Phonetic Quote</h2>
         
@@ -344,6 +358,7 @@
             <option value="loquacious">Loquacious</option>
             <option value="matchmaker">Matchmaker</option>
             <option value="rhyme">Rhyme Game</option>
+            <option value="loneQueen">Lone Queen</option>
           </select>
 
           <div class="developer-button-group">
@@ -360,6 +375,7 @@
             <button id="developerStartLoquaciousButton" type="button">Loquacious</button>
             <button id="developerStartMatchmakerButton" type="button">Matchmaker</button>
             <button id="developerStartRhymeButton" type="button">Rhyme Game</button>
+            <button id="developerStartLoneQueenButton" type="button">Lone Queen</button>
           </div>
 
           <div class="developer-button-group">
@@ -377,6 +393,7 @@
             <button id="developerGoFloorOneButton" type="button">Go to Floor 1</button>
             <button id="developerGoFloorTwoButton" type="button">Go to Floor 2</button>
             <button id="developerGoFloorThreeButton" type="button">Go to Floor 3</button>
+            <button id="developerGoFloorFourButton" type="button">Go to Floor 4</button>
             <button id="developerRebuildFloorButton" type="button">Rebuild Current Floor</button>
           </div>
 
@@ -443,6 +460,7 @@
 <script src="events-loquacious.js"></script>
 <script src="events-matchmaker.js"></script>
 <script src="events-rhyme.js"></script>
+<script src="events-lone-queen.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
 <script src="events-litcanon.js"></script>
