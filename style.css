@@ -1170,6 +1170,7 @@ button:disabled {
 .lone-queen-board {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
   width: min(560px, 100%);
   aspect-ratio: 1 / 1;
   margin: 18px auto;
@@ -1184,7 +1185,9 @@ button:disabled {
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
   border: 1px solid rgba(58, 20, 27, 0.35);
   border-radius: 0;
   font-size: clamp(1.4rem, 5vw, 2.55rem);
@@ -1217,6 +1220,35 @@ button:disabled {
 }
 
 .lone-queen-square.black-piece {
+  color: #1f1211;
+}
+
+.lone-queen-square.announced-piece {
+  box-shadow: inset 0 0 0 4px #f2c46d;
+}
+
+.lone-queen-square.moving-origin {
+  color: transparent;
+  text-shadow: none;
+}
+
+.lone-queen-moving-piece {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-size: clamp(1.4rem, 5vw, 2.55rem);
+  line-height: 1;
+}
+
+.lone-queen-moving-piece.player-piece {
+  color: #22593f;
+  text-shadow: 0 1px 0 #fff4cc;
+}
+
+.lone-queen-moving-piece.black-piece {
   color: #1f1211;
 }
 

@@ -2,6 +2,7 @@ const LONE_QUEEN_FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const LONE_QUEEN_RANKS = [8, 7, 6, 5, 4, 3, 2, 1];
 const LONE_QUEEN_MOVE_TYPES = ["pawn", "knight", "bishop"];
 const LONE_QUEEN_PROMOTION_ORDER = ["knight", "bishop", "rook", "queen"];
+const LONE_QUEEN_MOVE_ANIMATION_MS = 320;
 const LONE_QUEEN_SYMBOLS = {
   player: "♕",
   king: "♚",
@@ -29,6 +30,7 @@ function startLoneQueenEvent() {
     playerPawnDoubleAvailable: true,
     promotionCount: 0,
     status: "playing",
+    animating: false,
     message: "Choose how the queen moves this turn."
   };
 
@@ -120,6 +122,14 @@ function renderLoneQueenEvent() {
       if (piece) {
         squareButton.classList.add(piece.id === "player" ? "player-piece" : "black-piece");
         squareButton.textContent = LONE_QUEEN_SYMBOLS[piece.type];
+
+        if (
+          piece.id !== "player" &&
+          piece.type === eventData.announcedType &&
+          eventData.status === "playing"
+        ) {
+          squareButton.classList.add("announced-piece");
+        }
       }
 
       squareButton.addEventListener("click", () => {
@@ -141,29 +151,41 @@ function updateLoneQueenMoveButtons() {
 
   buttons.forEach(({ type, button }) => {
     button.classList.toggle("selected", eventData?.selectedMoveType === type);
-    button.disabled = !eventData || eventData.status !== "playing";
+    button.disabled = !eventData || eventData.status !== "playing" || eventData.animating;
   });
 }
 
 function selectLoneQueenMoveType(moveType) {
   const eventData = gameState.currentLoneQueenEvent;
 
-  if (!eventData || eventData.status !== "playing" || !LONE_QUEEN_MOVE_TYPES.includes(moveType)) {
+  if (
+    !eventData ||
+    eventData.status !== "playing" ||
+    eventData.animating ||
+    !LONE_QUEEN_MOVE_TYPES.includes(moveType)
+  ) {
     return;
   }
 
   eventData.selectedMoveType = moveType;
   eventData.legalPlayerMoves = getLoneQueenPlayerLegalMoves(moveType);
+
+  if (eventData.legalPlayerMoves.length === 0) {
+    finishLoneQueenEvent("stalemate");
+    return;
+  }
+
   eventData.message = `Moving as ${moveType}.`;
   renderLoneQueenEvent();
 }
 
-function moveLoneQueenPlayerTo(square) {
+async function moveLoneQueenPlayerTo(square) {
   const eventData = gameState.currentLoneQueenEvent;
 
   if (
     !eventData ||
     eventData.status !== "playing" ||
+    eventData.animating ||
     !eventData.legalPlayerMoves.includes(square)
   ) {
     return;
@@ -180,6 +202,14 @@ function moveLoneQueenPlayerTo(square) {
     eventData.playerPawnDoubleAvailable = false;
   }
 
+  eventData.animating = true;
+  eventData.legalPlayerMoves = [];
+  eventData.message = eventData.announcedType
+    ? `Black ${eventData.announcedType}s move next.`
+    : "";
+  renderLoneQueenEvent();
+  await animateLoneQueenPieceMove(player, player.square, square);
+
   if (targetPiece?.type === "king") {
     player.square = square;
     eventData.pieces = eventData.pieces.filter((piece) => {
@@ -191,14 +221,13 @@ function moveLoneQueenPlayerTo(square) {
 
   player.square = square;
   eventData.selectedMoveType = null;
-  eventData.legalPlayerMoves = [];
   eventData.message = `Black ${eventData.announcedType}s move.`;
   renderLoneQueenEvent();
 
-  runLoneQueenBlackTurn();
+  await runLoneQueenBlackTurn();
 }
 
-function runLoneQueenBlackTurn() {
+async function runLoneQueenBlackTurn() {
   const eventData = gameState.currentLoneQueenEvent;
 
   if (!eventData || eventData.status !== "playing" || !eventData.announcedType) {
@@ -212,6 +241,7 @@ function runLoneQueenBlackTurn() {
     firstAxis: null,
     processedRooks: 0
   };
+  let blackMoved = false;
 
   for (const piece of activatedPieces) {
     if (!eventData.pieces.includes(piece)) {
@@ -219,26 +249,36 @@ function runLoneQueenBlackTurn() {
     }
 
     if (canLoneQueenBlackPieceCapturePlayer(piece)) {
+      await animateLoneQueenPieceMove(piece, piece.square, getLoneQueenPlayerPiece().square);
       finishLoneQueenEvent("loss");
       return;
     }
 
-    moveLoneQueenBlackPiece(piece, rookMoveState);
+    const moved = await moveLoneQueenBlackPiece(piece, rookMoveState);
+
+    if (moved) {
+      blackMoved = true;
+    }
   }
 
+  if (!blackMoved) {
+    finishLoneQueenEvent("stalemate");
+    return;
+  }
+
+  eventData.animating = false;
   eventData.message = "Choose how the queen moves this turn.";
   announceNextLoneQueenType();
   renderLoneQueenEvent();
 }
 
-function moveLoneQueenBlackPiece(piece, rookMoveState) {
+async function moveLoneQueenBlackPiece(piece, rookMoveState) {
   if (piece.type === "pawn") {
-    moveLoneQueenBlackPawn(piece);
-    return;
+    return await moveLoneQueenBlackPawn(piece);
   }
 
   if (piece.type === "knight") {
-    moveLoneQueenPieceToRandomSquare(piece, getLoneQueenKnightMoves(piece.square).filter((square) => {
+    return await moveLoneQueenPieceToRandomSquare(piece, getLoneQueenKnightMoves(piece.square).filter((square) => {
       const position = parseLoneQueenSquare(square);
       return (
         !isLoneQueenRimSquare(square) &&
@@ -247,49 +287,52 @@ function moveLoneQueenBlackPiece(piece, rookMoveState) {
         position.rank <= 7
       );
     }));
-    return;
   }
 
   if (piece.type === "bishop") {
-    moveLoneQueenPieceToRandomSquare(piece, getLoneQueenSlidingMoves(piece.square, getLoneQueenBishopDirections()));
-    return;
+    return await moveLoneQueenPieceToRandomSquare(piece, getLoneQueenSlidingMoves(piece.square, getLoneQueenBishopDirections()));
   }
 
   if (piece.type === "rook") {
-    moveLoneQueenBlackRook(piece, rookMoveState);
-    return;
+    return await moveLoneQueenBlackRook(piece, rookMoveState);
   }
 
   if (piece.type === "queen") {
-    moveLoneQueenBlackQueen(piece);
-    return;
+    return await moveLoneQueenBlackQueen(piece);
   }
 
   if (piece.type === "king") {
-    moveLoneQueenBlackKing(piece);
+    return await moveLoneQueenBlackKing(piece);
   }
+
+  return false;
 }
 
-function moveLoneQueenBlackPawn(piece) {
+async function moveLoneQueenBlackPawn(piece) {
   const position = parseLoneQueenSquare(piece.square);
   const oneStep = makeLoneQueenSquare(position.fileIndex, position.rank - 1);
 
   if (!oneStep || getLoneQueenPieceAt(oneStep)) {
-    return;
+    return false;
   }
 
   if (position.rank === 7) {
     const twoStep = makeLoneQueenSquare(position.fileIndex, position.rank - 2);
 
     if (twoStep && !getLoneQueenPieceAt(twoStep)) {
+      await animateLoneQueenPieceMove(piece, piece.square, twoStep);
       piece.square = twoStep;
       maybePromoteLoneQueenPawn(piece);
-      return;
+      renderLoneQueenEvent();
+      return true;
     }
   }
 
+  await animateLoneQueenPieceMove(piece, piece.square, oneStep);
   piece.square = oneStep;
   maybePromoteLoneQueenPawn(piece);
+  renderLoneQueenEvent();
+  return true;
 }
 
 function maybePromoteLoneQueenPawn(piece) {
@@ -306,7 +349,7 @@ function maybePromoteLoneQueenPawn(piece) {
   eventData.promotionCount += 1;
 }
 
-function moveLoneQueenBlackRook(piece, rookMoveState) {
+async function moveLoneQueenBlackRook(piece, rookMoveState) {
   const allMoves = getLoneQueenSlidingMoves(piece.square, getLoneQueenRookDirections());
   let candidateMoves = allMoves;
 
@@ -317,20 +360,21 @@ function moveLoneQueenBlackRook(piece, rookMoveState) {
     });
   }
 
-  const moved = moveLoneQueenPieceToRandomSquare(piece, candidateMoves);
+  const moved = await moveLoneQueenPieceToRandomSquare(piece, candidateMoves);
 
   if (moved && rookMoveState.processedRooks === 0) {
     rookMoveState.firstAxis = getLoneQueenMoveAxis(moved.from, moved.to);
   }
 
   rookMoveState.processedRooks += 1;
+  return Boolean(moved);
 }
 
-function moveLoneQueenBlackQueen(piece) {
+async function moveLoneQueenBlackQueen(piece) {
   const player = getLoneQueenPlayerPiece();
 
   if (!player) {
-    return;
+    return false;
   }
 
   const legalMoves = getLoneQueenSlidingMoves(piece.square, [
@@ -339,30 +383,38 @@ function moveLoneQueenBlackQueen(piece) {
   ]);
 
   if (legalMoves.length === 0) {
-    return;
+    return false;
   }
 
   const bestDistance = Math.min(...legalMoves.map((square) => {
     return getLoneQueenDistance(square, player.square);
   }));
-  piece.square = getRandomItem(legalMoves.filter((square) => {
+  const destination = getRandomItem(legalMoves.filter((square) => {
     return getLoneQueenDistance(square, player.square) === bestDistance;
   }));
+  await animateLoneQueenPieceMove(piece, piece.square, destination);
+  piece.square = destination;
+  renderLoneQueenEvent();
+  return true;
 }
 
-function moveLoneQueenBlackKing(piece) {
+async function moveLoneQueenBlackKing(piece) {
   const castleMove = getBestLoneQueenCastleMove(piece);
 
   if (castleMove) {
+    await animateLoneQueenPieceMove(piece, piece.square, castleMove.kingTo);
     piece.square = castleMove.kingTo;
+    renderLoneQueenEvent();
+    await animateLoneQueenPieceMove(castleMove.rook, castleMove.rook.square, castleMove.rookTo);
     castleMove.rook.square = castleMove.rookTo;
-    return;
+    renderLoneQueenEvent();
+    return true;
   }
 
   const player = getLoneQueenPlayerPiece();
 
   if (!player) {
-    return;
+    return false;
   }
 
   const adjacentMoves = getLoneQueenKingMoves(piece.square).filter((square) => {
@@ -370,8 +422,11 @@ function moveLoneQueenBlackKing(piece) {
   });
 
   if (adjacentMoves.length > 0) {
-    piece.square = getRandomItem(adjacentMoves);
-    return;
+    const destination = getRandomItem(adjacentMoves);
+    await animateLoneQueenPieceMove(piece, piece.square, destination);
+    piece.square = destination;
+    renderLoneQueenEvent();
+    return true;
   }
 
   const currentDistance = getLoneQueenDistance(piece.square, player.square);
@@ -380,15 +435,19 @@ function moveLoneQueenBlackKing(piece) {
   });
 
   if (awayMoves.length === 0) {
-    return;
+    return false;
   }
 
   const bestDistance = Math.max(...awayMoves.map((square) => {
     return getLoneQueenDistance(square, player.square);
   }));
-  piece.square = getRandomItem(awayMoves.filter((square) => {
+  const destination = getRandomItem(awayMoves.filter((square) => {
     return getLoneQueenDistance(square, player.square) === bestDistance;
   }));
+  await animateLoneQueenPieceMove(piece, piece.square, destination);
+  piece.square = destination;
+  renderLoneQueenEvent();
+  return true;
 }
 
 function getBestLoneQueenCastleMove(king) {
@@ -648,16 +707,70 @@ function getLoneQueenSlidingMoves(square, directions) {
   return moves;
 }
 
-function moveLoneQueenPieceToRandomSquare(piece, legalMoves) {
+async function moveLoneQueenPieceToRandomSquare(piece, legalMoves) {
   if (legalMoves.length === 0) {
     return null;
   }
 
   const from = piece.square;
   const to = getRandomItem(legalMoves);
+  await animateLoneQueenPieceMove(piece, from, to);
   piece.square = to;
+  renderLoneQueenEvent();
 
   return { from, to };
+}
+
+function animateLoneQueenPieceMove(piece, fromSquare, toSquare) {
+  if (!piece || !fromSquare || !toSquare || fromSquare === toSquare) {
+    return Promise.resolve();
+  }
+
+  const fromElement = getLoneQueenSquareElement(fromSquare);
+  const toElement = getLoneQueenSquareElement(toSquare);
+
+  if (!fromElement || !toElement || !fromElement.getBoundingClientRect) {
+    return Promise.resolve();
+  }
+
+  const fromRect = fromElement.getBoundingClientRect();
+  const toRect = toElement.getBoundingClientRect();
+  const movingPiece = document.createElement("div");
+
+  movingPiece.classList.add("lone-queen-moving-piece");
+  movingPiece.classList.add(piece.id === "player" ? "player-piece" : "black-piece");
+  movingPiece.textContent = LONE_QUEEN_SYMBOLS[piece.type];
+  movingPiece.style.left = `${fromRect.left}px`;
+  movingPiece.style.top = `${fromRect.top}px`;
+  movingPiece.style.width = `${fromRect.width}px`;
+  movingPiece.style.height = `${fromRect.height}px`;
+
+  fromElement.classList.add("moving-origin");
+  document.body.appendChild(movingPiece);
+
+  return new Promise((resolve) => {
+    const animation = movingPiece.animate(
+      [
+        { transform: "translate(0, 0)" },
+        { transform: `translate(${toRect.left - fromRect.left}px, ${toRect.top - fromRect.top}px)` }
+      ],
+      {
+        duration: LONE_QUEEN_MOVE_ANIMATION_MS,
+        easing: "ease-in-out",
+        fill: "forwards"
+      }
+    );
+
+    animation.addEventListener("finish", () => {
+      fromElement.classList.remove("moving-origin");
+      movingPiece.remove();
+      resolve();
+    }, { once: true });
+  });
+}
+
+function getLoneQueenSquareElement(square) {
+  return loneQueenBoard.querySelector(`[data-square="${square}"]`);
 }
 
 function getLoneQueenKnightMoves(square) {
@@ -860,8 +973,13 @@ function finishLoneQueenEvent(result) {
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent =
-    result === "win" ? "You captured the king." : "Your queen was captured.";
+  if (result === "win") {
+    goldRewardMessage.textContent = "You captured the king.";
+  } else if (result === "stalemate") {
+    goldRewardMessage.textContent = "Stalemate.";
+  } else {
+    goldRewardMessage.textContent = "Your queen was captured.";
+  }
   rewardMessage.textContent = "";
   skipRewardButton.classList.remove("hidden");
 
