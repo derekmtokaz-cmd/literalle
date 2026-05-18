@@ -190,6 +190,7 @@ function submitAuthorleGuess() {
   ) {
     gameState.currentAuthorleEvent = null;
     startTrinketRewardPhase();
+    rewardMessage.innerHTML = buildAuthorleBibliographySummary(encounter.bibliography);
     return;
   }
 
@@ -243,7 +244,7 @@ function startAuthorleFailureRewardPhase(encounter) {
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
   goldRewardMessage.textContent = encounter.bibliography.author;
-  rewardMessage.innerHTML = buildAuthorleFailureSummary(encounter.bibliography);
+  rewardMessage.innerHTML = buildAuthorleBibliographySummary(encounter.bibliography);
   skipRewardButton.classList.remove("hidden");
 
   renderStats();
@@ -252,11 +253,11 @@ function startAuthorleFailureRewardPhase(encounter) {
   showSection("reward");
 }
 
-function buildAuthorleFailureSummary(bibliography) {
+function buildAuthorleBibliographySummary(bibliography) {
   return `
     <div class="authorle-answer-list">
       ${bibliography.novels.map((novel) => {
-        return `<div>${escapeAuthorleText(novel.title)} — ${novel.publicationYear}</div>`;
+        return `<div>${escapeAuthorleText(novel.title)} (${novel.publicationYear})</div>`;
       }).join("")}
     </div>
   `;
