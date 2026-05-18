@@ -2,8 +2,8 @@ const AUTHORLE_BIBLIOGRAPHIES = [
   {
     author: "Harper Lee",
     novels: [
-      { title: "To Kill a Mockingbird", publicationYear: 1960, goodreads: "4.26 (7,000,992" },
-      { title: "Go Set a Watchman", publicationYear: 2015, goodreads: "3.31 (293,819" }
+      { title: "To Kill a Mockingbird", publicationYear: 1960, goodreads: "4.26 (7,000,992)" },
+      { title: "Go Set a Watchman", publicationYear: 2015, goodreads: "3.31 (293,819)" }
     ]
   },
   {
