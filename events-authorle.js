@@ -55,7 +55,7 @@ function renderAuthorleClues() {
   encounter.bibliography.novels.forEach((novel) => {
     const clueRow = document.createElement("div");
     clueRow.classList.add("authorle-clue-row");
-    clueRow.textContent = `${novel.publicationYear} — ${blankAuthorleTitle(novel.title)}`;
+    clueRow.textContent = `${blankAuthorleTitle(novel.title)} (${novel.publicationYear})`;
     authorleClueList.appendChild(clueRow);
   });
 }
@@ -263,7 +263,7 @@ function buildAuthorleFailureSummary(bibliography) {
 }
 
 function blankAuthorleTitle(title) {
-  return String(title).replace(/[A-Za-z0-9]/g, "_");
+  return String(title).replace(/[A-Za-z0-9]/g, "X");
 }
 
 function normalizeAuthorleAuthor(author) {
