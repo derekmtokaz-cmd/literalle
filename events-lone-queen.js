@@ -431,8 +431,12 @@ async function moveLoneQueenBlackKing(piece) {
     return false;
   }
 
-  const adjacentMoves = getLoneQueenKingMoves(piece.square).filter((square) => {
-    return !getLoneQueenPieceAt(square) && isLoneQueenOrthogonallyAdjacent(square, player.square);
+  const legalMoves = getLoneQueenKingMoves(piece.square).filter((square) => {
+    return !getLoneQueenPieceAt(square);
+  });
+
+  const adjacentMoves = legalMoves.filter((square) => {
+    return isLoneQueenOrthogonallyAdjacent(square, player.square);
   });
 
   if (adjacentMoves.length > 0) {
@@ -444,19 +448,48 @@ async function moveLoneQueenBlackKing(piece) {
   }
 
   const currentDistance = getLoneQueenDistance(piece.square, player.square);
-  const awayMoves = getLoneQueenKingMoves(piece.square).filter((square) => {
-    return !getLoneQueenPieceAt(square) && getLoneQueenDistance(square, player.square) > currentDistance;
+  const awayMoves = legalMoves.filter((square) => {
+    return getLoneQueenDistance(square, player.square) > currentDistance;
   });
 
-  if (awayMoves.length === 0) {
+  if (awayMoves.length > 0) {
+    const bestDistance = Math.max(...awayMoves.map((square) => {
+      return getLoneQueenDistance(square, player.square);
+    }));
+    const destination = getRandomItem(awayMoves.filter((square) => {
+      return getLoneQueenDistance(square, player.square) === bestDistance;
+    }));
+    await animateLoneQueenPieceMove(piece, piece.square, destination);
+    piece.square = destination;
+    renderLoneQueenEvent();
+    return true;
+  }
+
+  const sameDistanceMoves = legalMoves.filter((square) => {
+    return getLoneQueenDistance(square, player.square) === currentDistance;
+  });
+
+  if (sameDistanceMoves.length > 0) {
+    const destination = getRandomItem(sameDistanceMoves);
+    await animateLoneQueenPieceMove(piece, piece.square, destination);
+    piece.square = destination;
+    renderLoneQueenEvent();
+    return true;
+  }
+
+  const closerMoves = legalMoves.filter((square) => {
+    return getLoneQueenDistance(square, player.square) < currentDistance;
+  });
+
+  if (closerMoves.length === 0) {
     return false;
   }
 
-  const bestDistance = Math.max(...awayMoves.map((square) => {
+  const leastBadDistance = Math.max(...closerMoves.map((square) => {
     return getLoneQueenDistance(square, player.square);
   }));
-  const destination = getRandomItem(awayMoves.filter((square) => {
-    return getLoneQueenDistance(square, player.square) === bestDistance;
+  const destination = getRandomItem(closerMoves.filter((square) => {
+    return getLoneQueenDistance(square, player.square) === leastBadDistance;
   }));
   await animateLoneQueenPieceMove(piece, piece.square, destination);
   piece.square = destination;
