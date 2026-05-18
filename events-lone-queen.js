@@ -56,13 +56,23 @@ function createLoneQueenPieces() {
     createLoneQueenPiece("black-knight-g8", "knight", "g8"),
     createLoneQueenPiece("black-rook-h8", "rook", "h8")
   ];
-  const pawnFiles = shuffleArray(LONE_QUEEN_FILES).slice(0, 4);
+  const pawnFiles = getLoneQueenStartingPawnFiles();
 
   pawnFiles.forEach((file) => {
     pieces.push(createLoneQueenPiece(`black-pawn-${file}7`, "pawn", `${file}7`));
   });
 
   return pieces;
+}
+
+function getLoneQueenStartingPawnFiles() {
+  let pawnFiles = [];
+
+  do {
+    pawnFiles = shuffleArray(LONE_QUEEN_FILES).slice(0, 4);
+  } while (pawnFiles.includes("a") && pawnFiles.includes("h"));
+
+  return pawnFiles;
 }
 
 function createLoneQueenPiece(id, type, square) {
@@ -358,6 +368,10 @@ async function moveLoneQueenBlackRook(piece, rookMoveState) {
     candidateMoves = allMoves.filter((square) => {
       return getLoneQueenMoveAxis(piece.square, square) === oppositeAxis;
     });
+
+    if (candidateMoves.length === 0) {
+      candidateMoves = allMoves;
+    }
   }
 
   const moved = await moveLoneQueenPieceToRandomSquare(piece, candidateMoves);
