@@ -2,6 +2,10 @@
 
 let displayedHp = null;
 let hpAnimationFrame = null;
+const hpPoemText =
+  "The art of losing isn't hard to master;\n" +
+  "so many things seem filled with the intent\n" +
+  "to be lost that their loss is no disaster.";
 
 function renderStats() {
   renderHpDisplay();
@@ -29,7 +33,30 @@ function resetDisplayedHp() {
 }
 
 function updateHpDisplay() {
-  hpDisplay.textContent = `${displayedHp} / ${gameState.maxHp}`;
+  const redLetterCount = Math.max(0, gameState.maxHp - displayedHp);
+  let eligibleLetterIndex = 0;
+
+  hpDisplay.innerHTML = "";
+
+  [...hpPoemText].forEach((character) => {
+    if (character === "\n") {
+      hpDisplay.appendChild(document.createElement("br"));
+      return;
+    }
+
+    const characterElement = document.createElement("span");
+    characterElement.textContent = character;
+
+    if (/[A-Za-z]/.test(character)) {
+      if (eligibleLetterIndex < redLetterCount) {
+        characterElement.classList.add("hp-poem-lost");
+      }
+
+      eligibleLetterIndex += 1;
+    }
+
+    hpDisplay.appendChild(characterElement);
+  });
 }
 
 function animateHpDisplay(targetHp) {

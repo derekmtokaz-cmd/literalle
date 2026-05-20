@@ -10,8 +10,8 @@ const alphabet = Object.keys(letterCostMap);
 
 const gameState = {
   currentFloor: 1,
-  hp: 100,
-  maxHp: 100,
+  hp: 98,
+  maxHp: 98,
   gold: 3,
   inventory: [],
   currentNodeId: "start",

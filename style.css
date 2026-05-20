@@ -105,6 +105,16 @@ h2 {
   border-bottom: none;
 }
 
+.hp-poem-display {
+  color: #f7ead2;
+  font-size: 0.95rem;
+  line-height: 1.42;
+}
+
+.hp-poem-lost {
+  color: #d23b3b;
+}
+
 .inventory-gold-row {
   margin-top: -4px;
   margin-bottom: 10px;
