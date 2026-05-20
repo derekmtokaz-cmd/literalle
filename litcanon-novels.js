@@ -156,6 +156,7 @@ const LITCANON_NOVELS = [
   { id: "uncle-toms-cabin", title: "Uncle Tom's Cabin", author: "Harriet Beecher Stowe" },
   { id: "the-jungle", title: "The Jungle", author: "Upton Sinclair" },
   { id: "the-handmaids-tale", title: "The Handmaid's Tale", author: "Margaret Atwood" },
+  { id: "a-game-of-thrones", title: "A Game of Thrones", author: "George RR Martin" },
   { id: "alls-well-that-ends-well", title: "All's Well That Ends Well", author: "William Shakespeare" },
   { id: "as-you-like-it", title: "As You Like It", author: "William Shakespeare" },
   { id: "comedy-of-errors", title: "Comedy of Errors", author: "William Shakespeare" },
