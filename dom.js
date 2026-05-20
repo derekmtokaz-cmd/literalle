@@ -100,7 +100,6 @@ const submitAuthorleButton = document.getElementById("submitAuthorleButton");
 const murdleSection = document.getElementById("murdleSection");
 const murdlePromptLine = document.getElementById("murdlePromptLine");
 const murdleGrid = document.getElementById("murdleGrid");
-const murdleAnswerInput = document.getElementById("murdleAnswerInput");
 const submitMurdleButton = document.getElementById("submitMurdleButton");
 const murdleMessage = document.getElementById("murdleMessage");
 const loneQueenSection = document.getElementById("loneQueenSection");

@@ -123,15 +123,7 @@ rhymeAnswerInput.addEventListener("keydown", (event) => {
   }
 });
 submitMurdleButton.addEventListener("click", submitMurdleGuess);
-murdleAnswerInput.addEventListener("input", () => {
-  murdleAnswerInput.value = murdleAnswerInput.value.slice(0, MURDLE_WORD_LENGTH);
-});
-murdleAnswerInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    submitMurdleGuess();
-  }
-});
+document.addEventListener("keydown", handleMurdleKeydown);
 loneQueenPawnButton.addEventListener("click", () => {
   selectLoneQueenMoveType("pawn");
 });

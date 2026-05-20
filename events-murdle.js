@@ -16,6 +16,7 @@ function startMurdleEvent(encounter = buildMurdleEncounter()) {
     prompt: encounter.prompt,
     answer: normalizeMurdleGuess(encounter.prompt.answer),
     guesses: [],
+    currentGuess: "",
     complete: false
   };
   gameState.lastEventType = "murdle";
@@ -27,15 +28,11 @@ function startMurdleEvent(encounter = buildMurdleEncounter()) {
   });
 
   murdlePromptLine.textContent = encounter.prompt.displayLine;
-  murdleAnswerInput.value = "";
-  murdleAnswerInput.maxLength = MURDLE_WORD_LENGTH;
-  murdleAnswerInput.disabled = false;
   submitMurdleButton.disabled = false;
   murdleMessage.textContent = "";
 
   renderMurdleGrid();
   showSection("murdle");
-  murdleAnswerInput.focus();
 }
 
 function renderMurdleGrid() {
@@ -47,6 +44,14 @@ function renderMurdleGrid() {
     row.classList.add("murdle-row");
 
     const guessData = eventData?.guesses[rowIndex] || null;
+    const isActiveRow =
+      eventData &&
+      !eventData.complete &&
+      rowIndex === eventData.guesses.length;
+
+    if (isActiveRow) {
+      row.classList.add("murdle-row-active");
+    }
 
     for (let cellIndex = 0; cellIndex < MURDLE_WORD_LENGTH; cellIndex += 1) {
       const cell = document.createElement("div");
@@ -55,6 +60,8 @@ function renderMurdleGrid() {
       if (guessData) {
         cell.textContent = guessData.guess[cellIndex].toUpperCase();
         cell.classList.add(`murdle-cell-${guessData.feedback[cellIndex]}`);
+      } else if (isActiveRow && eventData.currentGuess[cellIndex]) {
+        cell.textContent = eventData.currentGuess[cellIndex].toUpperCase();
       }
 
       row.appendChild(cell);
@@ -71,25 +78,21 @@ function submitMurdleGuess() {
     return;
   }
 
-  const guess = normalizeMurdleGuess(murdleAnswerInput.value);
+  const guess = normalizeMurdleGuess(eventData.currentGuess);
 
   if (guess.length !== MURDLE_WORD_LENGTH) {
     murdleMessage.textContent = "Enter a five-letter word.";
-    murdleAnswerInput.value = "";
-    murdleAnswerInput.focus();
     return;
   }
 
   if (!isMurdleAcceptedWord(guess)) {
     murdleMessage.textContent = "That word is not in the Murdle word list.";
-    murdleAnswerInput.value = "";
-    murdleAnswerInput.focus();
     return;
   }
 
   const feedback = getMurdleFeedback(guess, eventData.answer);
   eventData.guesses.push({ guess, feedback });
-  murdleAnswerInput.value = "";
+  eventData.currentGuess = "";
   murdleMessage.textContent = "";
   renderMurdleGrid();
 
@@ -102,8 +105,35 @@ function submitMurdleGuess() {
     completeMurdleFailure();
     return;
   }
+}
 
-  murdleAnswerInput.focus();
+function handleMurdleKeydown(event) {
+  const eventData = gameState.currentMurdleEvent;
+
+  if (!eventData || eventData.complete) {
+    return;
+  }
+
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitMurdleGuess();
+    return;
+  }
+
+  if (event.key === "Backspace") {
+    event.preventDefault();
+    eventData.currentGuess = eventData.currentGuess.slice(0, -1);
+    murdleMessage.textContent = "";
+    renderMurdleGrid();
+    return;
+  }
+
+  if (/^[a-zA-Z]$/.test(event.key) && eventData.currentGuess.length < MURDLE_WORD_LENGTH) {
+    event.preventDefault();
+    eventData.currentGuess += event.key.toLowerCase();
+    murdleMessage.textContent = "";
+    renderMurdleGrid();
+  }
 }
 
 function getMurdleFeedback(guess, answer) {

@@ -1183,6 +1183,10 @@ button:disabled {
   text-transform: uppercase;
 }
 
+.murdle-row-active .murdle-cell {
+  box-shadow: inset 0 0 0 2px rgba(142, 31, 31, 0.35);
+}
+
 .murdle-cell-correct {
   background: #22593f;
   color: #f4dfb8;
@@ -1199,10 +1203,8 @@ button:disabled {
 }
 
 .murdle-answer-area {
-  display: grid;
-  grid-template-columns: minmax(0, 220px) auto;
-  gap: 10px;
-  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .rhyme-status-row {
@@ -1331,7 +1333,6 @@ button:disabled {
   }
 
   .murdle-answer-area {
-    grid-template-columns: 1fr;
     width: 100%;
   }
 }
