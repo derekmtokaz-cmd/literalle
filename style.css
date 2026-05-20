@@ -87,8 +87,9 @@ h2 {
   grid-column: 1;
 }
 
-.status-sidebar > .hp-card {
+.status-sidebar > .sidebar-card.hp-card {
   grid-column: 1 / -1;
+  width: 100%;
 }
 
 .status-sidebar > .dialog-card {
