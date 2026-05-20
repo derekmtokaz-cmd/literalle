@@ -1,6 +1,6 @@
 const TRIVIA_GAME_POOLS = {
   ordinary: ["authorDate", "detective", "fanfic", "shakespeare"],
-  special: ["timedShakespeare", "loquacious", "matchmaker", "rhyme", "authorle", "loneQueen"],
+  special: ["timedShakespeare", "loquacious", "matchmaker", "rhyme", "authorle", "loneQueen", "murdle"],
 };
 
 const TRIVIA_GAME_BUILDERS = {
@@ -14,6 +14,7 @@ const TRIVIA_GAME_BUILDERS = {
   rhyme: buildRhymeEncounter,
   authorle: buildAuthorleEncounter,
   loneQueen: buildLoneQueenEncounter,
+  murdle: buildMurdleEncounter,
 };
 
 const TRIVIA_GAME_STARTERS = {
@@ -27,6 +28,7 @@ const TRIVIA_GAME_STARTERS = {
   rhyme: startRhymeEvent,
   authorle: startAuthorleEvent,
   loneQueen: startLoneQueenEvent,
+  murdle: startMurdleEvent,
 };
 
 function getTriviaGameOptions(category = "ordinary") {
@@ -154,6 +156,11 @@ function startMapNode(nodeId) {
     return startLoneQueenEvent(nextSpace.encounter);
   }
 
+  if (nextSpace.type === "murdle") {
+    gameState.lastEventType = "murdle";
+    return startMurdleEvent(nextSpace.encounter);
+  }
+
   gameState.lastEventType = nextSpace.type;
 
   eventTitle.textContent = nextSpace.type.toUpperCase();
@@ -257,7 +264,7 @@ function resolveOptionNodes() {
 
 function getSpecialEventTypesForCurrentFloor() {
   if (gameState.currentFloor >= 4) {
-    return ["loneQueen"];
+    return ["loneQueen", "murdle"];
   }
 
   if (gameState.currentFloor === 3) {
@@ -315,6 +322,10 @@ function getMapIconForType(type) {
 
   if (type === "loneQueen") {
     return "♛";
+  }
+
+  if (type === "murdle") {
+    return "M";
   }
 
   return "";
@@ -490,6 +501,10 @@ function buildRunPath() {
       space.encounter = buildLoneQueenEncounter();
     }
 
+    if (space.type === "murdle") {
+      space.encounter = buildMurdleEncounter();
+    }
+
     if (space.type === "elite") {
       const previousPoemSpaces = gameState.runPath
         .slice(0, index)
@@ -552,6 +567,7 @@ function startNextFloor() {
   gameState.rewardTilePurchased = false;
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
+  gameState.currentMurdleEvent = null;
   gameState.currentKjvEncounter = null;
   gameState.currentKjvDifficulty = null;
   gameState.lastEventType = null;

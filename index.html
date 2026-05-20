@@ -234,25 +234,46 @@
         <h2>Authorle</h2>
         <p class="event-meta">Guess the author from the blanked-out titles.</p>
 
-        <div class="litcanon-answer-area">
-          <input
-            id="authorleAnswerInput"
-            class="litcanon-answer-input"
-            type="text"
-            autocomplete="off"
-            placeholder="Type at least 3 letters..."
-            aria-label="Author"
-          />
-          <div id="authorleSuggestions" class="litcanon-suggestions"></div>
+        <div class="authorle-answer-area">
+          <div class="authorle-input-column">
+            <input
+              id="authorleAnswerInput"
+              class="litcanon-answer-input"
+              type="text"
+              autocomplete="off"
+              placeholder="Type at least 3 letters..."
+              aria-label="Author"
+            />
+            <div id="authorleSuggestions" class="litcanon-suggestions"></div>
+          </div>
+          <button id="submitAuthorleButton" type="button">Submit</button>
         </div>
 
         <div id="authorleClueList" class="authorle-clue-list"></div>
 
         <div id="authorleMessage" class="event-message"></div>
+      </section>
+      <section class="murdle-section hidden" id="murdleSection">
+        <h2>Murdle</h2>
+        <p class="event-meta">Guess the missing Middle English word.</p>
 
-        <div class="controls">
-          <button id="submitAuthorleButton" type="button">Submit</button>
+        <div class="murdle-challenge">
+          <div id="murdlePromptLine" class="murdle-prompt-line"></div>
+          <div id="murdleGrid" class="murdle-grid"></div>
+
+          <div class="murdle-answer-area">
+            <input
+              id="murdleAnswerInput"
+              class="litcanon-answer-input"
+              type="text"
+              autocomplete="off"
+              aria-label="Murdle guess"
+            />
+            <button id="submitMurdleButton" type="button">Submit</button>
+          </div>
         </div>
+
+        <div id="murdleMessage" class="event-message"></div>
       </section>
       <section class="lone-queen-section hidden" id="loneQueenSection">
         <h2>Lone Queen</h2>
@@ -384,6 +405,7 @@
             <option value="rhyme">Rhyme Game</option>
             <option value="authorle">Authorle</option>
             <option value="loneQueen">Lone Queen</option>
+            <option value="murdle">Murdle</option>
           </select>
 
           <div class="developer-button-group">
@@ -402,6 +424,7 @@
             <button id="developerStartRhymeButton" type="button">Rhyme Game</button>
             <button id="developerStartAuthorleButton" type="button">Authorle</button>
             <button id="developerStartLoneQueenButton" type="button">Lone Queen</button>
+            <button id="developerStartMurdleButton" type="button">Murdle</button>
           </div>
 
           <div class="developer-button-group">
@@ -462,6 +485,8 @@
 <script src="shakespeare-characters.js"></script>
 <script src="matchmaker-pairs.js"></script>
 <script src="rhyme-prompts.js"></script>
+<script src="murdle-prompts.js"></script>
+<script src="murdle-accepted-words.js"></script>
 <script src="trinkets.js"></script>
 <script src="artifacts.js"></script>
 <script src="phonetics.js"></script>
@@ -489,6 +514,7 @@
 <script src="events-rhyme.js"></script>
 <script src="events-authorle.js"></script>
 <script src="events-lone-queen.js"></script>
+<script src="events-murdle.js"></script>
 <script src="events-phonetics.js"></script>
 <script src="events-kjv.js"></script>
 <script src="events-litcanon.js"></script>

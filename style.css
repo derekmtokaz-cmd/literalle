@@ -903,6 +903,7 @@ button:disabled {
 .matchmaker-section,
 .rhyme-section,
 .authorle-section,
+.murdle-section,
 .lone-queen-section,
 .litcanon-section {
   padding: 24px;
@@ -932,6 +933,10 @@ button:disabled {
 }
 
 .authorle-section > h2 {
+  display: none;
+}
+
+.murdle-section > h2 {
   display: none;
 }
 
@@ -985,6 +990,15 @@ button:disabled {
 }
 
 .authorle-section .event-meta {
+  padding: 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 14px;
+  background: #f4dfb8;
+  color: #2a1712;
+  line-height: 1.45;
+}
+
+.murdle-section .event-meta {
   padding: 18px;
   border: 2px solid #d4a94a;
   border-radius: 14px;
@@ -1087,6 +1101,12 @@ button:disabled {
   gap: 14px;
 }
 
+.murdle-challenge {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+}
+
 .timed-shakespeare-challenge.hidden {
   display: none;
 }
@@ -1121,6 +1141,67 @@ button:disabled {
   padding: 0 4px;
   border-bottom: 3px solid #f2c46d;
   color: #f2c46d;
+}
+
+.murdle-prompt-line {
+  width: 100%;
+  padding: 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 14px;
+  background: #f4dfb8;
+  color: #2a1712;
+  font-size: 1.25rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.murdle-grid {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.murdle-row {
+  display: grid;
+  grid-template-columns: repeat(5, 48px);
+  gap: 8px;
+}
+
+.murdle-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #d4a94a;
+  border-radius: 8px;
+  background: #f4dfb8;
+  color: #2a1712;
+  font-size: 1.45rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.murdle-cell-correct {
+  background: #22593f;
+  color: #f4dfb8;
+}
+
+.murdle-cell-present {
+  background: #a87824;
+  color: #fff4cc;
+}
+
+.murdle-cell-absent {
+  background: #6e5f5c;
+  color: #fff4cc;
+}
+
+.murdle-answer-area {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) auto;
+  gap: 10px;
+  align-items: center;
 }
 
 .rhyme-status-row {
@@ -1208,12 +1289,49 @@ button:disabled {
   gap: 8px;
 }
 
+.authorle-answer-area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+.authorle-input-column {
+  min-width: 0;
+}
+
+.authorle-answer-area > button {
+  min-height: 48px;
+  white-space: nowrap;
+}
+
 @media (max-width: 720px) {
   .authorle-bibliography-row {
     grid-template-columns: minmax(0, 1fr) 64px minmax(130px, 1fr);
     gap: 6px;
     padding: 10px;
     font-size: 0.95rem;
+  }
+
+  .authorle-answer-area {
+    grid-template-columns: 1fr;
+  }
+
+  .murdle-row {
+    grid-template-columns: repeat(5, 40px);
+    gap: 6px;
+  }
+
+  .murdle-cell {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .murdle-answer-area {
+    grid-template-columns: 1fr;
+    width: 100%;
   }
 }
 

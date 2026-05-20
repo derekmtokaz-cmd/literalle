@@ -19,6 +19,7 @@ function showSection(sectionName) {
   matchmakerSection.classList.add("hidden");
   rhymeSection.classList.add("hidden");
   authorleSection.classList.add("hidden");
+  murdleSection.classList.add("hidden");
   loneQueenSection.classList.add("hidden");
   phoneticSection.classList.add("hidden");
   litcanonSection.classList.add("hidden");
@@ -77,6 +78,10 @@ function showSection(sectionName) {
 
   if (sectionName === "authorle") {
     authorleSection.classList.remove("hidden");
+  }
+
+  if (sectionName === "murdle") {
+    murdleSection.classList.remove("hidden");
   }
 
   if (sectionName === "loneQueen") {

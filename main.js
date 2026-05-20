@@ -100,6 +100,9 @@ developerStartAuthorleButton.addEventListener("click", () => {
 developerStartLoneQueenButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("loneQueen");
 });
+developerStartMurdleButton.addEventListener("click", () => {
+  startDeveloperTriviaEvent("murdle");
+});
 matchmakerFourAttemptsButton.addEventListener("click", () => {
   chooseMatchmakerAttemptOption(4, 0);
 });
@@ -117,6 +120,16 @@ rhymeAnswerInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
     submitRhymeAnswer();
+  }
+});
+submitMurdleButton.addEventListener("click", submitMurdleGuess);
+murdleAnswerInput.addEventListener("input", () => {
+  murdleAnswerInput.value = murdleAnswerInput.value.slice(0, MURDLE_WORD_LENGTH);
+});
+murdleAnswerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitMurdleGuess();
   }
 });
 loneQueenPawnButton.addEventListener("click", () => {
@@ -230,6 +243,7 @@ function restartGame() {
     currentMatchmakerEvent: null,
     currentRhymeEvent: null,
     currentAuthorleEvent: null,
+    currentMurdleEvent: null,
     currentLoneQueenEvent: null,
     currentPhoneticQuote: null,
     currentLitcanonEvent: null,
@@ -363,6 +377,7 @@ function prepareDeveloperLaunch() {
   gameState.currentMatchmakerEvent = null;
   gameState.currentRhymeEvent = null;
   gameState.currentAuthorleEvent = null;
+  gameState.currentMurdleEvent = null;
   gameState.currentLoneQueenEvent = null;
   gameState.currentPhoneticQuote = null;
   gameState.currentLitcanonEvent = null;
@@ -476,6 +491,7 @@ function rebuildDeveloperFloor() {
   gameState.currentPuzzleMode = null;
   gameState.currentRhymeEvent = null;
   gameState.currentAuthorleEvent = null;
+  gameState.currentMurdleEvent = null;
   gameState.currentLoneQueenEvent = null;
   gameState.lastEventType = null;
   gameState.currentRewardOffers = [];
