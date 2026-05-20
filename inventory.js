@@ -38,24 +38,26 @@ function updateHpDisplay() {
 
   hpDisplay.innerHTML = "";
 
-  [...hpPoemText].forEach((character) => {
-    if (character === "\n") {
-      hpDisplay.appendChild(document.createElement("br"));
-      return;
-    }
+  hpPoemText.split("\n").forEach((line) => {
+    const lineElement = document.createElement("div");
+    lineElement.classList.add("hp-poem-line");
 
-    const characterElement = document.createElement("span");
-    characterElement.textContent = character;
+    [...line].forEach((character) => {
+      const characterElement = document.createElement("span");
+      characterElement.textContent = character;
 
-    if (/[A-Za-z]/.test(character)) {
-      if (eligibleLetterIndex < redLetterCount) {
-        characterElement.classList.add("hp-poem-lost");
+      if (/[A-Za-z]/.test(character)) {
+        if (eligibleLetterIndex < redLetterCount) {
+          characterElement.classList.add("hp-poem-lost");
+        }
+
+        eligibleLetterIndex += 1;
       }
 
-      eligibleLetterIndex += 1;
-    }
+      lineElement.appendChild(characterElement);
+    });
 
-    hpDisplay.appendChild(characterElement);
+    hpDisplay.appendChild(lineElement);
   });
 }
 
