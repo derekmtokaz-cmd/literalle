@@ -1153,6 +1153,7 @@ button:disabled {
   font-size: 1.25rem;
   line-height: 1.45;
   text-align: center;
+  white-space: pre-line;
 }
 
 .murdle-grid {
