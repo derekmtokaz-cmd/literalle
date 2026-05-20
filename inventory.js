@@ -35,6 +35,7 @@ function resetDisplayedHp() {
 function updateHpDisplay() {
   const redLetterCount = Math.max(0, gameState.maxHp - displayedHp);
   let eligibleLetterIndex = 0;
+  let precedingLetterLost = false;
 
   hpDisplay.innerHTML = "";
 
@@ -47,11 +48,15 @@ function updateHpDisplay() {
       characterElement.textContent = character;
 
       if (/[A-Za-z]/.test(character)) {
-        if (eligibleLetterIndex < redLetterCount) {
+        precedingLetterLost = eligibleLetterIndex < redLetterCount;
+
+        if (precedingLetterLost) {
           characterElement.classList.add("hp-poem-lost");
         }
 
         eligibleLetterIndex += 1;
+      } else if (!/\s/.test(character) && precedingLetterLost) {
+        characterElement.classList.add("hp-poem-lost");
       }
 
       lineElement.appendChild(characterElement);
