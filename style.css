@@ -2220,7 +2220,7 @@ body {
 .start-section .poem-container,
 .event-section .poem-container {
   width: fit-content;
-  max-width: 660px;
+  max-width: 860px;
   margin: 72px 0 0;
   padding: 18px 22px;
   border: 0;
