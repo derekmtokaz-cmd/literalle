@@ -236,6 +236,7 @@ h2 {
 
 .inventory-babel-tile {
   background-image: url("assets/layout/babel%20frame.png");
+  color: #000;
 }
 
 .inventory-trinket-tile {
