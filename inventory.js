@@ -127,7 +127,7 @@ function renderInventory() {
 
 function renderInkInventoryTile() {
   const inkTile = document.createElement("button");
-  const inkIcon = document.createElement("span");
+  const inkIcon = document.createElement("img");
   const inkCount = document.createElement("span");
 
   inkTile.type = "button";
@@ -137,6 +137,8 @@ function renderInkInventoryTile() {
   inkTile.setAttribute("aria-label", `Ink: ${gameState.ink}`);
 
   inkIcon.classList.add("inventory-ink-icon");
+  inkIcon.src = "assets/layout/ink%20icon.png";
+  inkIcon.alt = "";
   inkCount.classList.add("inventory-ink-count");
   inkCount.textContent = gameState.ink;
 
@@ -172,10 +174,15 @@ function renderInventoryItem(item, index) {
       itemButton.classList.add("easy-a-trinket");
     }
 
-    itemButton.textContent =
-      item.trinketId === "babelBag"
-        ? `${trinket ? trinket.icon : "?"}${getBabelBagTileCount(item)}`
-        : trinket ? trinket.icon : "?";
+    renderInventoryItemIcon(itemButton, trinket);
+
+    if (item.trinketId === "babelBag") {
+      const babelBagCount = document.createElement("span");
+      babelBagCount.classList.add("inventory-item-count");
+      babelBagCount.textContent = getBabelBagTileCount(item);
+      itemButton.appendChild(babelBagCount);
+    }
+
     itemButton.disabled = !canUseTrinket(item);
 
     itemButton.addEventListener("click", () => {
@@ -188,7 +195,7 @@ function renderInventoryItem(item, index) {
 
     itemButton.classList.add("inventory-artifact-tile");
 
-    itemButton.textContent = artifact ? artifact.icon : "?";
+    renderInventoryItemIcon(itemButton, artifact);
 
     const isEchoTile = item.artifactId === "echo_tile";
     const isPenNib = item.artifactId === "pen_nib";
@@ -265,6 +272,40 @@ function renderInventoryItem(item, index) {
   });
 
   inventoryDisplay.appendChild(itemButton);
+}
+
+function renderInventoryItemIcon(itemButton, itemDefinition) {
+  if (itemDefinition?.iconImage) {
+    const iconImage = document.createElement("img");
+    iconImage.classList.add("inventory-item-icon");
+    iconImage.src = itemDefinition.iconImage;
+    iconImage.alt = "";
+    itemButton.appendChild(iconImage);
+    return;
+  }
+
+  itemButton.textContent = itemDefinition ? itemDefinition.icon : "?";
+}
+
+function setRewardMessageWithItemIcon(messageElement, itemDefinition, messageText) {
+  messageElement.innerHTML = "";
+
+  if (itemDefinition?.iconImage) {
+    const iconImage = document.createElement("img");
+    iconImage.classList.add("reward-item-icon");
+    iconImage.src = itemDefinition.iconImage;
+    iconImage.alt = "";
+    messageElement.appendChild(iconImage);
+  } else if (itemDefinition?.icon) {
+    const fallbackIcon = document.createElement("span");
+    fallbackIcon.classList.add("reward-item-icon-fallback");
+    fallbackIcon.textContent = itemDefinition.icon;
+    messageElement.appendChild(fallbackIcon);
+  }
+
+  const textElement = document.createElement("span");
+  textElement.textContent = messageText;
+  messageElement.appendChild(textElement);
 }
 
 function showInventoryTooltip(event, item) {
@@ -825,7 +866,11 @@ function startTrinketRewardPhase(trinket = getRandomTrinket()) {
     ...(trinket.id === "babelBag" ? { babelTileCount: 0 } : {})
   });
 
-  inkRewardMessage.textContent = `You found ${trinket.icon} ${trinket.name}.`;
+  setRewardMessageWithItemIcon(
+    inkRewardMessage,
+    trinket,
+    `You found ${trinket.name}.`
+  );
   rewardMessage.textContent = "";
 
   tileOfferContainer.innerHTML = "";

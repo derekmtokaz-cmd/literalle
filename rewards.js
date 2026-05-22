@@ -52,6 +52,16 @@ function startRewardPhase() {
       rewardMessage.textContent = "You found 📄 Reply.";
     }
 
+    if (gameState.pendingReplyReward) {
+      const replyTrinket = getTrinketById("reply");
+
+      setRewardMessageWithItemIcon(
+        rewardMessage,
+        replyTrinket,
+        "You found Reply."
+      );
+    }
+
     gameState.pendingReplyReward = false;
 
     renderStats();
@@ -147,7 +157,11 @@ function startRewardPhase() {
       });
 
       renderInventory();
-      rewardMessage.textContent = `You found an artifact: ${artifactReward.name}.`;
+      setRewardMessageWithItemIcon(
+        rewardMessage,
+        artifactReward,
+        `You found an artifact: ${artifactReward.name}.`
+      );
     } else {
       rewardMessage.textContent = "You found no new artifact.";
     }
