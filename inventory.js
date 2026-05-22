@@ -131,10 +131,10 @@ function renderInkInventoryTile() {
   const inkCount = document.createElement("span");
 
   inkTile.type = "button";
-  inkTile.disabled = true;
   inkTile.classList.add("inventory-tile", "inventory-ink-tile");
   inkTile.setAttribute("role", "img");
   inkTile.setAttribute("aria-label", `Ink: ${gameState.ink}`);
+  inkTile.setAttribute("aria-disabled", "true");
 
   inkIcon.classList.add("inventory-ink-icon");
   inkIcon.src = "assets/layout/ink%20icon.png";
@@ -144,6 +144,23 @@ function renderInkInventoryTile() {
 
   inkTile.appendChild(inkIcon);
   inkTile.appendChild(inkCount);
+
+  inkTile.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
+
+  inkTile.addEventListener("mouseenter", (event) => {
+    showInkTooltip(event);
+  });
+
+  inkTile.addEventListener("mousemove", (event) => {
+    positionInventoryTooltip(event);
+  });
+
+  inkTile.addEventListener("mouseleave", () => {
+    hideInventoryTooltip();
+  });
+
   inventoryDisplay.appendChild(inkTile);
 }
 
@@ -346,6 +363,15 @@ function showInventoryTooltip(event, item) {
     `;
   }
 
+  inventoryTooltip.classList.remove("hidden");
+  positionInventoryTooltip(event);
+}
+
+function showInkTooltip(event) {
+  inventoryTooltip.innerHTML = `
+    <strong>Ink</strong><br>
+    Spend ink to buy rewards.
+  `;
   inventoryTooltip.classList.remove("hidden");
   positionInventoryTooltip(event);
 }

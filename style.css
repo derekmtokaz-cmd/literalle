@@ -225,7 +225,7 @@ h2 {
   cursor: default;
 }
 
-.inventory-ink-tile:disabled {
+.inventory-ink-tile[aria-disabled="true"] {
   opacity: 1;
   cursor: default;
 }
