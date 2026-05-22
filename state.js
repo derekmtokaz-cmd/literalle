@@ -12,7 +12,7 @@ const gameState = {
   currentFloor: 1,
   hp: 98,
   maxHp: 98,
-  gold: 3,
+  ink: 3,
   inventory: [],
   currentNodeId: "start",
   completedNodeIds: [],

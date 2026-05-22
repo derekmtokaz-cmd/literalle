@@ -2,6 +2,7 @@
 
 function initializeGame() {
   initializeMusicControls();
+  initializeStickyNotePositioning();
   initializeDeveloperTools();
   buildRunPath();
   renderStats();
@@ -158,8 +159,8 @@ developerSetHpFullButton.addEventListener("click", () => {
 developerSetHpOneButton.addEventListener("click", () => {
   setDeveloperHp(1);
 });
-developerAddGoldButton.addEventListener("click", () => {
-  gameState.gold += 10;
+developerAddInkButton.addEventListener("click", () => {
+  gameState.ink += 10;
   renderStats();
 });
 developerAddRelicsButton.addEventListener("click", () => {
@@ -213,7 +214,7 @@ function restartGame() {
     currentFloor: 1,
     hp: 98,
     maxHp: 98,
-    gold: 3,
+    ink: 3,
     inventory: [],
     currentNodeId: "start",
     completedNodeIds: [],

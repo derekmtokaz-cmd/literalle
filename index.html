@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Literalle</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -182,9 +183,9 @@
 
         <div id="matchmakerChoiceControls" class="matchmaker-choice-controls controls">
           <button id="matchmakerFourAttemptsButton" type="button">4 match attempts (free)</button>
-          <button id="matchmakerFiveAttemptsButton" type="button">5 match attempts (3 gold)</button>
-          <button id="matchmakerSixAttemptsButton" type="button">6 match attempts (6 gold)</button>
-          <button id="matchmakerSevenAttemptsButton" type="button">7 match attempts (9 gold)</button>
+          <button id="matchmakerFiveAttemptsButton" type="button">5 match attempts (3 ink)</button>
+          <button id="matchmakerSixAttemptsButton" type="button">6 match attempts (6 ink)</button>
+          <button id="matchmakerSevenAttemptsButton" type="button">7 match attempts (9 ink)</button>
         </div>
 
         <div id="matchmakerGameArea" class="matchmaker-game-area hidden">
@@ -320,7 +321,7 @@
       <section class="reward-section hidden" id="rewardSection">
         <h2></h2>
 
-        <p id="goldRewardMessage" class="reward-message"></p>
+        <p id="inkRewardMessage" class="reward-message"></p>
 
         <div class="tile-offers">
           <h3 id="tileOfferTitle"></h3>
@@ -353,26 +354,33 @@
       </section>
 
       <section class="sidebar-card">
-        <h2>Inventory</h2>
-        <div class="stat-row inventory-gold-row">
-          <span>Gold</span>
-          <strong id="goldDisplay">3</strong>
-        </div>
         <div id="inventoryDisplay" class="inventory-display">
         </div>
       </section>
 
-      <section class="sidebar-card music-card">
-        <div class="music-heading">
-          <h2>Music</h2>
-          <button id="musicInfoButton" class="music-info-button" type="button" aria-label="Music attribution">i</button>
+      <div class="hud-media-row">
+        <section class="sidebar-card music-card">
+          <div class="music-heading">
+            <h2>Music</h2>
+            <button id="musicInfoButton" class="music-info-button" type="button" aria-label="Music attribution">i</button>
+          </div>
+          <audio id="backgroundMusic" preload="auto"></audio>
+          <div class="music-controls">
+            <button id="musicToggleButton" type="button" aria-label="Play music">▶</button>
+            <input id="musicVolumeControl" class="volume-control" type="range" min="0" max="100" value="45" aria-label="Music volume" />
+          </div>
+        </section>
+
+        <section class="sidebar-card dialog-card" id="dialogCard">
+          <div id="dialogBox" class="dialog-box">
+            <p id="dialogText" class="dialog-text"></p>
+          </div>
+        </section>
+
+        <div class="sidebar-portrait-frame" aria-hidden="true">
+          <img id="dialogImage" class="dialog-image hidden" src="" alt="" />
         </div>
-        <audio id="backgroundMusic" preload="auto"></audio>
-        <div class="music-controls">
-          <button id="musicToggleButton" type="button">Play</button>
-          <input id="musicVolumeControl" class="volume-control" type="range" min="0" max="100" value="45" aria-label="Music volume" />
-        </div>
-      </section>
+      </div>
 
       <section class="sidebar-card developer-card hidden" id="developerCard">
         <h2>Developer</h2>
@@ -440,19 +448,13 @@
             <p>Player</p>
             <button id="developerSetHpFullButton" type="button">Set HP 98</button>
             <button id="developerSetHpOneButton" type="button">Set HP 1</button>
-            <button id="developerAddGoldButton" type="button">Add 10 Gold</button>
+            <button id="developerAddInkButton" type="button">Add 10 Ink</button>
             <button id="developerAddRelicsButton" type="button">Add All Items</button>
             <button id="developerClearInventoryButton" type="button">Clear Inventory</button>
           </div>
         </div>
       </section>
 
-      <section class="sidebar-card dialog-card" id="dialogCard">
-        <div id="dialogBox" class="dialog-box">
-          <p id="dialogText" class="dialog-text"></p>
-          <img id="dialogImage" class="dialog-image hidden" src="" alt="" />
-        </div>
-      </section>
     </aside>
   </main>
 

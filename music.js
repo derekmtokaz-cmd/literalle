@@ -106,5 +106,14 @@ function updateMusicVolume() {
 }
 
 function updateMusicToggleButton() {
-  musicToggleButton.textContent = backgroundMusic.paused ? "Play" : "Pause";
+  const isPaused = backgroundMusic.paused;
+
+  musicToggleButton.textContent = isPaused ? "▶" : "⏸";
+  musicToggleButton.setAttribute("aria-label", isPaused ? "Play music" : "Pause music");
+  musicToggleButton.classList.toggle("music-paused", isPaused);
+  musicToggleButton.classList.toggle("music-playing", !isPaused);
+
+  if (musicInfoButton?.dataset.attribution) {
+    musicToggleButton.dataset.attribution = musicInfoButton.dataset.attribution;
+  }
 }

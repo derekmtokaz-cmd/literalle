@@ -228,7 +228,7 @@ function startLitcanonFailureRewardPhase(encounter) {
 
   gameState.currentLitcanonEvent = null;
   startTrinketRewardPhase();
-  goldRewardMessage.textContent = answerText;
+  inkRewardMessage.textContent = answerText;
   rewardMessage.textContent = "Three attempts is enough. Let's move on.";
 }
 

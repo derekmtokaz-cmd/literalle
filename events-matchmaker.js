@@ -79,18 +79,18 @@ function updateMatchmakerChoiceButtons() {
 
   buttons.forEach((button, index) => {
     const option = MATCHMAKER_ATTEMPT_OPTIONS[index];
-    button.disabled = gameState.gold < option.cost;
+    button.disabled = gameState.ink < option.cost;
   });
 }
 
 function chooseMatchmakerAttemptOption(turnLimit, cost) {
   const eventData = gameState.currentMatchmakerEvent;
 
-  if (!eventData || eventData.turnLimit !== null || gameState.gold < cost) {
+  if (!eventData || eventData.turnLimit !== null || gameState.ink < cost) {
     return;
   }
 
-  gameState.gold -= cost;
+  gameState.ink -= cost;
   eventData.turnLimit = turnLimit;
   matchmakerIntro.classList.add("hidden");
   matchmakerChoiceControls.classList.add("hidden");
@@ -266,7 +266,7 @@ function startMatchmakerSummaryRewardPhase(matchesFound, matchedPairs = []) {
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent = `You found ${matchesFound} pair${matchesFound === 1 ? "" : "s"}.`;
+  inkRewardMessage.textContent = `You found ${matchesFound} pair${matchesFound === 1 ? "" : "s"}.`;
   rewardMessage.innerHTML = buildMatchmakerRewardSummary(matchedPairs, trinketRewards);
   skipRewardButton.classList.remove("hidden");
 

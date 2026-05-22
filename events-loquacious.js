@@ -97,7 +97,7 @@ function startLoquaciousResultRewardPhase(resultText) {
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent = resultText;
+  inkRewardMessage.textContent = resultText;
   rewardMessage.textContent = "";
   skipRewardButton.classList.remove("hidden");
 

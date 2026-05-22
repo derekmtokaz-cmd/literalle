@@ -185,7 +185,7 @@ function completeMurdleFailure() {
   gameState.rewardTilePurchased = false;
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent = `The answer was ${answer}.`;
+  inkRewardMessage.textContent = `The answer was ${answer}.`;
   rewardMessage.textContent = `You lost ${MURDLE_FAILURE_DAMAGE} HP.`;
   skipRewardButton.classList.remove("hidden");
 

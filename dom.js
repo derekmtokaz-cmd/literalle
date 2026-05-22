@@ -1,5 +1,4 @@
 const hpDisplay = document.getElementById("hpDisplay");
-const goldDisplay = document.getElementById("goldDisplay");
 const inventoryDisplay = document.getElementById("inventoryDisplay");
 const inventoryTooltip = document.getElementById("inventoryTooltip");
 const backgroundMusic = document.getElementById("backgroundMusic");
@@ -122,7 +121,7 @@ const litcanonSuggestions = document.getElementById("litcanonSuggestions");
 const litcanonMessage = document.getElementById("litcanonMessage");
 const submitLitcanonButton = document.getElementById("submitLitcanonButton");
 
-const goldRewardMessage = document.getElementById("goldRewardMessage");
+const inkRewardMessage = document.getElementById("inkRewardMessage");
 const tileOfferTitle = document.getElementById("tileOfferTitle");
 const tileOfferInstruction = document.getElementById("tileOfferInstruction");
 const tileOfferContainer = document.getElementById("tileOfferContainer");
@@ -162,7 +161,7 @@ const developerGoFloorFourButton = document.getElementById("developerGoFloorFour
 const developerRebuildFloorButton = document.getElementById("developerRebuildFloorButton");
 const developerSetHpFullButton = document.getElementById("developerSetHpFullButton");
 const developerSetHpOneButton = document.getElementById("developerSetHpOneButton");
-const developerAddGoldButton = document.getElementById("developerAddGoldButton");
+const developerAddInkButton = document.getElementById("developerAddInkButton");
 const developerAddRelicsButton = document.getElementById("developerAddRelicsButton");
 const developerClearInventoryButton = document.getElementById("developerClearInventoryButton");
 const prophecyModal = document.getElementById("prophecyModal");

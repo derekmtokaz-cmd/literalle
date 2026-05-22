@@ -138,20 +138,20 @@ function completeRhymeEvent() {
   }
 
   const rhymeCount = eventData.foundAnswers.length;
-  const goldReward = getRhymeGoldReward(eventData.foundAnswers);
+  const inkReward = getRhymeInkReward(eventData.foundAnswers);
 
   clearRhymeTimer();
   gameState.currentRhymeEvent = null;
   gameState.currentRewardOffers = [];
   gameState.rewardTilePurchased = false;
   const trinketRewards = getRhymeTrinketRewards(rhymeCount);
-  gameState.gold += goldReward;
+  gameState.ink += inkReward;
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent =
+  inkRewardMessage.textContent =
     `You found ${rhymeCount} rhyme${rhymeCount === 1 ? "" : "s"}.`;
-  rewardMessage.innerHTML = buildRhymeRewardSummary(trinketRewards, goldReward);
+  rewardMessage.innerHTML = buildRhymeRewardSummary(trinketRewards, inkReward);
   skipRewardButton.classList.remove("hidden");
 
   renderStats();
@@ -182,7 +182,7 @@ function getRhymeTrinketRewards(rhymeCount) {
   return trinketRewards;
 }
 
-function getRhymeGoldReward(foundAnswers) {
+function getRhymeInkReward(foundAnswers) {
   const longestLength = foundAnswers.reduce((longest, answer) => {
     return Math.max(longest, answer.length);
   }, 0);
@@ -190,11 +190,11 @@ function getRhymeGoldReward(foundAnswers) {
   return Math.max(0, longestLength - 3);
 }
 
-function buildRhymeRewardSummary(trinketRewards, goldReward) {
+function buildRhymeRewardSummary(trinketRewards, inkReward) {
   const rewardMessages = [];
 
-  if (goldReward > 0) {
-    rewardMessages.push(`You gained ${goldReward} gold.`);
+  if (inkReward > 0) {
+    rewardMessages.push(`You gained ${inkReward} ink.`);
   }
 
   if (trinketRewards.length > 0) {

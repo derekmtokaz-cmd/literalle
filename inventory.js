@@ -9,7 +9,6 @@ const hpPoemText =
 
 function renderStats() {
   renderHpDisplay();
-  goldDisplay.textContent = gameState.gold;
 }
 
 function renderHpDisplay() {
@@ -104,10 +103,7 @@ function animateHpDisplay(targetHp) {
 
 function renderInventory() {
   inventoryDisplay.innerHTML = "";
-
-  if (gameState.inventory.length === 0) {
-    return;
-  }
+  renderInkInventoryTile();
 
   const regularItems = gameState.inventory.filter((item) => item.type !== "artifact");
   const artifacts = gameState.inventory.filter((item) => item.type === "artifact");
@@ -129,11 +125,32 @@ function renderInventory() {
   }
 }
 
+function renderInkInventoryTile() {
+  const inkTile = document.createElement("button");
+  const inkIcon = document.createElement("span");
+  const inkCount = document.createElement("span");
+
+  inkTile.type = "button";
+  inkTile.disabled = true;
+  inkTile.classList.add("inventory-tile", "inventory-ink-tile");
+  inkTile.setAttribute("role", "img");
+  inkTile.setAttribute("aria-label", `Ink: ${gameState.ink}`);
+
+  inkIcon.classList.add("inventory-ink-icon");
+  inkCount.classList.add("inventory-ink-count");
+  inkCount.textContent = gameState.ink;
+
+  inkTile.appendChild(inkIcon);
+  inkTile.appendChild(inkCount);
+  inventoryDisplay.appendChild(inkTile);
+}
+
 function renderInventoryItem(item, index) {
   const itemButton = document.createElement("button");
   itemButton.classList.add("inventory-tile");
 
   if (isBabelTile(item)) {
+    itemButton.classList.add("inventory-babel-tile");
     itemButton.textContent = getBabelTileLabel(item);
     if (isWordBabelTile(item)) {
       itemButton.classList.add("word-babel-tile");
@@ -148,6 +165,8 @@ function renderInventoryItem(item, index) {
 
   if (item.type === "trinket") {
     const trinket = getTrinketById(item.trinketId);
+
+    itemButton.classList.add("inventory-trinket-tile");
 
     if (item.trinketId === "easyA") {
       itemButton.classList.add("easy-a-trinket");
@@ -166,6 +185,8 @@ function renderInventoryItem(item, index) {
 
   if (item.type === "artifact") {
     const artifact = getArtifactById(item.artifactId);
+
+    itemButton.classList.add("inventory-artifact-tile");
 
     itemButton.textContent = artifact ? artifact.icon : "?";
 
@@ -510,24 +531,73 @@ function useStickyNote(itemIndex) {
     return;
   }
 
-  let bestLetter = missingLetters[0];
-  let bestScore = missingLetterCounts[bestLetter] * scrabbleValues[bestLetter];
+  const bestLetters = missingLetters
+    .map((letter, index) => {
+      return {
+        letter,
+        index,
+        score: missingLetterCounts[letter] * scrabbleValues[letter]
+      };
+    })
+    .sort((firstLetter, secondLetter) => {
+      if (secondLetter.score !== firstLetter.score) {
+        return secondLetter.score - firstLetter.score;
+      }
 
-  missingLetters.forEach((letter) => {
-    const score = missingLetterCounts[letter] * scrabbleValues[letter];
-
-    if (score > bestScore) {
-      bestLetter = letter;
-      bestScore = score;
-    }
-  });
+      return firstLetter.index - secondLetter.index;
+    })
+    .slice(0, 2)
+    .map((rankedLetter) => `${rankedLetter.letter}.`)
+    .join(" ");
 
   gameState.inventory.splice(itemIndex, 1);
 
   renderInventory();
 
-  stickyNoteDisplay.innerHTML = `Call me.<br>- ${bestLetter}`;
+  stickyNoteDisplay.innerHTML = `Call me.<br>- ${bestLetters}`;
   stickyNoteDisplay.classList.remove("hidden");
+  positionStickyNoteDisplay();
+}
+
+function positionStickyNoteDisplay() {
+  if (
+    !poemContainer ||
+    !stickyNoteDisplay ||
+    stickyNoteDisplay.classList.contains("hidden")
+  ) {
+    return;
+  }
+
+  const stickyNoteGap = 12;
+
+  stickyNoteDisplay.style.left = `${poemContainer.offsetLeft}px`;
+  stickyNoteDisplay.style.top = `${poemContainer.offsetTop + poemContainer.offsetHeight + stickyNoteGap}px`;
+}
+
+function initializeStickyNotePositioning() {
+  if (!poemContainer || !stickyNoteDisplay) {
+    return;
+  }
+
+  const repositionStickyNote = () => {
+    positionStickyNoteDisplay();
+  };
+  const stickyNoteObserver = new MutationObserver(repositionStickyNote);
+  const poemObserver = new MutationObserver(repositionStickyNote);
+
+  stickyNoteObserver.observe(stickyNoteDisplay, {
+    attributes: true,
+    attributeFilter: ["class"],
+    childList: true,
+    subtree: true
+  });
+
+  poemObserver.observe(poemContainer, {
+    childList: true,
+    subtree: true
+  });
+
+  window.addEventListener("resize", repositionStickyNote);
 }
 
 function getNextProphecyPoemNode() {
@@ -755,7 +825,7 @@ function startTrinketRewardPhase(trinket = getRandomTrinket()) {
     ...(trinket.id === "babelBag" ? { babelTileCount: 0 } : {})
   });
 
-  goldRewardMessage.textContent = `You found ${trinket.icon} ${trinket.name}.`;
+  inkRewardMessage.textContent = `You found ${trinket.icon} ${trinket.name}.`;
   rewardMessage.textContent = "";
 
   tileOfferContainer.innerHTML = "";

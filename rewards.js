@@ -16,7 +16,7 @@ function startRewardPhase() {
 
     tileOffersSection.classList.remove("hidden");
     setTileOfferCopy(false);
-    goldRewardMessage.textContent = "The book cart creaks into view.";
+    inkRewardMessage.textContent = "The book cart creaks into view.";
     rewardMessage.textContent = "";
 
     renderStats();
@@ -40,7 +40,7 @@ function startRewardPhase() {
 
     tileOffersSection.classList.add("hidden");
     tileOfferContainer.innerHTML = "";
-    goldRewardMessage.textContent = `You recovered ${healAmount} HP.`;
+    inkRewardMessage.textContent = `You recovered ${healAmount} HP.`;
     rewardMessage.textContent = "";
 
     if (gameState.pendingReplyReward) {
@@ -79,7 +79,7 @@ function startRewardPhase() {
 
     tileOffersSection.classList.add("hidden");
     tileOfferContainer.innerHTML = "";
-    goldRewardMessage.textContent =
+    inkRewardMessage.textContent =
       "Thank you for playing this early release edition. More content to come soon.";
     rewardMessage.textContent = "";
     skipRewardButton.classList.add("hidden");
@@ -109,20 +109,20 @@ function startRewardPhase() {
       ? 1
       : 0;
 
-  let goldGain;
+  let inkGain;
 
   if (gameState.lastEventType === "boss") {
-    goldGain = Math.floor(Math.random() * 3) + 5; // 5-7
+    inkGain = Math.floor(Math.random() * 3) + 5; // 5-7
   } else if (
     gameState.lastEventType === "midPoem" ||
     gameState.lastEventType === "elite"
   ) {
-    goldGain = Math.floor(Math.random() * 3) + 4; // 4-6
+    inkGain = Math.floor(Math.random() * 3) + 4; // 4-6
   } else {
-    goldGain = Math.floor(Math.random() * 3) + 3; // 3-5
+    inkGain = Math.floor(Math.random() * 3) + 3; // 3-5
   }
 
-  gameState.gold += goldGain;
+  gameState.ink += inkGain;
 
   gameState.currentPuzzle = null;
   gameState.currentPuzzleMode = null;
@@ -135,7 +135,7 @@ function startRewardPhase() {
   gameState.rewardTilePurchased = false;
   tileOffersSection.classList.remove("hidden");
   setTileOfferCopy(gameState.lastEventType === "boss");
-  goldRewardMessage.textContent = `You gained ${goldGain} gold.`;
+  inkRewardMessage.textContent = `You gained ${inkGain} ink.`;
 
   if (gameState.lastEventType === "elite" || gameState.lastEventType === "boss") {
     const artifactReward = getRandomArtifactReward();
@@ -272,7 +272,7 @@ function setTileOfferCopy(isBossReward) {
 
   tileOfferTitle.textContent = "Optional Babel Tile Purchase";
   tileOfferInstruction.textContent =
-    "You may buy one tile, or skip and save your gold.";
+    "You may buy one tile, or skip and save your ink.";
 }
 
 function renderTileOffers() {
@@ -284,13 +284,13 @@ function renderTileOffers() {
     const offerLabel = offer.letters ? offer.letters.join("|") : offer.letter;
     offerButton.textContent = offer.free
       ? offerLabel
-      : `${offerLabel} — ${offer.cost} gold`;
+      : `${offerLabel} — ${offer.cost} ink`;
 
     if (offer.claimed) {
       offerButton.disabled = true;
     } else if (!offer.free && gameState.rewardTilePurchased) {
       offerButton.disabled = true;
-    } else if (!offer.free && gameState.gold < offer.cost) {
+    } else if (!offer.free && gameState.ink < offer.cost) {
       offerButton.disabled = true;
     }
 
@@ -307,13 +307,13 @@ function buyRewardTile(offer) {
     return;
   }
 
-  if (!offer.free && gameState.gold < offer.cost) {
-    rewardMessage.textContent = "You don't have enough gold.";
+  if (!offer.free && gameState.ink < offer.cost) {
+    rewardMessage.textContent = "You don't have enough ink.";
     return;
   }
 
   if (!offer.free) {
-    gameState.gold -= offer.cost;
+    gameState.ink -= offer.cost;
   }
 
   const rewardTile = createBabelTile(offer.letters || offer.letter);
@@ -364,7 +364,7 @@ function startEmptyRewardPhase() {
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent = "";
+  inkRewardMessage.textContent = "";
   rewardMessage.textContent = "";
   skipRewardButton.classList.remove("hidden");
 

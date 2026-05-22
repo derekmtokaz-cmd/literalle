@@ -93,7 +93,7 @@ function startTimedShakespeareHpLossRewardPhase() {
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent = "You lost 5 HP.";
+  inkRewardMessage.textContent = "You lost 5 HP.";
   rewardMessage.textContent = "";
   skipRewardButton.classList.remove("hidden");
 
@@ -318,9 +318,9 @@ function completeTimedShakespeareChallenge() {
 
   const rewardAmount = correctCount - 9;
   gameState.hp = Math.min(gameState.maxHp, gameState.hp + rewardAmount);
-  gameState.gold += rewardAmount;
+  gameState.ink += rewardAmount;
   startTimedShakespeareResultRewardPhase(
-    `You named ${correctCount} plays. You gained ${rewardAmount} HP and ${rewardAmount} gold.`
+    `You named ${correctCount} plays. You gained ${rewardAmount} HP and ${rewardAmount} ink.`
   );
 }
 
@@ -330,7 +330,7 @@ function startTimedShakespeareResultRewardPhase(resultText) {
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent = resultText;
+  inkRewardMessage.textContent = resultText;
   rewardMessage.textContent = "";
   skipRewardButton.classList.remove("hidden");
 

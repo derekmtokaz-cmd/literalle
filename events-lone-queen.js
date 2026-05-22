@@ -1021,11 +1021,11 @@ function finishLoneQueenEvent(result) {
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
   if (result === "win") {
-    goldRewardMessage.textContent = "You captured the king.";
+    inkRewardMessage.textContent = "You captured the king.";
   } else if (result === "stalemate") {
-    goldRewardMessage.textContent = "Stalemate.";
+    inkRewardMessage.textContent = "Stalemate.";
   } else {
-    goldRewardMessage.textContent = "Your queen was captured.";
+    inkRewardMessage.textContent = "Your queen was captured.";
   }
   rewardMessage.textContent = "";
   skipRewardButton.classList.remove("hidden");

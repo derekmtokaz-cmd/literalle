@@ -30,6 +30,8 @@ function renderBoard() {
   gameState.runPath.forEach((node) => {
     renderMapNode(node);
   });
+
+  queueAssetMapConnectorRedraw();
 }
 
 function renderMapConnections(node, lineLayer) {
@@ -143,3 +145,138 @@ function addMapDifficultyClass(nodeElement, node) {
     nodeElement.classList.add("boss-poem");
   }
 }
+
+const ASSET_MAP_CONNECTOR_CLASS = "asset-map-connector";
+const MAP_VERTICAL_INSET = {
+  top: 22,
+  bottom: 86
+};
+
+let assetMapConnectorRedrawQueued = false;
+
+function remapMapYPercent(value) {
+  return MAP_VERTICAL_INSET.top + (value / 100) * (MAP_VERTICAL_INSET.bottom - MAP_VERTICAL_INSET.top);
+}
+
+function getOriginalMapTopPercent(element) {
+  if (!element.dataset.originalMapTop) {
+    element.dataset.originalMapTop = element.style.top;
+  }
+
+  return Number.parseFloat(element.dataset.originalMapTop);
+}
+
+function remapNodeVerticalPositions(board) {
+  board.querySelectorAll(".board-space").forEach((node) => {
+    const originalTop = getOriginalMapTopPercent(node);
+
+    if (Number.isNaN(originalTop)) {
+      return;
+    }
+
+    node.style.top = `${remapMapYPercent(originalTop)}%`;
+  });
+}
+
+function applyAssetMapNodeClasses(board) {
+  board.querySelectorAll(".board-space").forEach((node) => {
+    const nodeId = node.dataset.nodeId;
+    const isCurrent = node.classList.contains("current");
+
+    node.classList.remove(
+      "preview-easy-poem-icon",
+      "preview-later-poem-icon",
+      "preview-boss-frame",
+      "preview-rest-icon",
+      "preview-image-icon",
+      "preview-show-player-star"
+    );
+
+    if (nodeId === "poem-1" || nodeId === "poem-2" || nodeId === "poem-3") {
+      node.classList.add("preview-easy-poem-icon", "preview-image-icon");
+    }
+
+    if (nodeId === "poem-4" || nodeId === "poem-5" || nodeId === "boss") {
+      node.classList.add("preview-later-poem-icon", "preview-image-icon");
+    }
+
+    if (nodeId === "boss") {
+      node.classList.add("preview-boss-frame");
+    }
+
+    if (node.classList.contains("rest")) {
+      node.classList.add("preview-rest-icon", "preview-image-icon");
+    }
+
+    if (isCurrent) {
+      node.classList.add("preview-show-player-star");
+    }
+  });
+}
+
+function drawAssetMapConnectors() {
+  const lineLayer = gameBoard?.querySelector(".map-lines");
+
+  if (!gameBoard || !lineLayer) {
+    return;
+  }
+
+  gameBoard.querySelectorAll(`.${ASSET_MAP_CONNECTOR_CLASS}`).forEach((connector) => {
+    connector.remove();
+  });
+
+  applyAssetMapNodeClasses(gameBoard);
+  remapNodeVerticalPositions(gameBoard);
+
+  const boardRect = gameBoard.getBoundingClientRect();
+
+  lineLayer.querySelectorAll(".map-line").forEach((line) => {
+    const x1 = Number(line.getAttribute("x1"));
+    const y1 = Number(line.getAttribute("y1"));
+    const x2 = Number(line.getAttribute("x2"));
+    const y2 = Number(line.getAttribute("y2"));
+
+    if ([x1, y1, x2, y2].some((value) => Number.isNaN(value))) {
+      return;
+    }
+
+    const remappedY1 = remapMapYPercent(y1);
+    const remappedY2 = remapMapYPercent(y2);
+    const dx = ((x2 - x1) / 100) * boardRect.width;
+    const dy = ((remappedY2 - remappedY1) / 100) * boardRect.height;
+    const distance = Math.hypot(dx, dy);
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    const connector = document.createElement("div");
+
+    connector.classList.add(ASSET_MAP_CONNECTOR_CLASS);
+
+    if (line.classList.contains("available")) {
+      connector.classList.add("available");
+    } else if (line.classList.contains("chosen")) {
+      connector.classList.add("completed");
+    } else {
+      connector.classList.add("future");
+    }
+
+    connector.style.left = `${x1}%`;
+    connector.style.top = `${remappedY1}%`;
+    connector.style.width = `${Math.max(30, distance)}px`;
+    connector.style.transform = `translateY(-50%) rotate(${angle}deg)`;
+
+    gameBoard.appendChild(connector);
+  });
+}
+
+function queueAssetMapConnectorRedraw() {
+  if (assetMapConnectorRedrawQueued) {
+    return;
+  }
+
+  assetMapConnectorRedrawQueued = true;
+  requestAnimationFrame(() => {
+    assetMapConnectorRedrawQueued = false;
+    drawAssetMapConnectors();
+  });
+}
+
+window.addEventListener("resize", queueAssetMapConnectorRedraw);

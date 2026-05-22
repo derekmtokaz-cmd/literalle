@@ -240,7 +240,7 @@ function startAuthorleFailureRewardPhase(encounter) {
 
   tileOffersSection.classList.add("hidden");
   tileOfferContainer.innerHTML = "";
-  goldRewardMessage.textContent = encounter.bibliography.author;
+  inkRewardMessage.textContent = encounter.bibliography.author;
   rewardMessage.innerHTML = buildAuthorleBibliographySummary(encounter.bibliography);
   skipRewardButton.classList.remove("hidden");
 

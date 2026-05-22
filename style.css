@@ -130,11 +130,6 @@ h2 {
   color: #d23b3b;
 }
 
-.inventory-gold-row {
-  margin-top: -4px;
-  margin-bottom: 10px;
-}
-
 .inventory-display {
   display: flex;
   flex-wrap: wrap;
@@ -198,18 +193,82 @@ h2 {
 }
 
 .inventory-tile {
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   padding: 0;
-  border-radius: 8px;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   font-weight: bold;
+  box-shadow: none;
 }
 
 .inventory-tile.word-babel-tile {
   width: auto;
+  min-width: 48px;
   max-width: 100%;
   padding-inline: 8px;
   white-space: nowrap;
+}
+
+.inventory-ink-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background-image: url("assets/layout/ink%20frame.png");
+  cursor: default;
+}
+
+.inventory-ink-tile:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.inventory-ink-tile:hover {
+  background-color: transparent;
+}
+
+.inventory-babel-tile {
+  background-image: url("assets/layout/babel%20frame.png");
+}
+
+.inventory-trinket-tile {
+  background-image: url("assets/layout/trinket%20frame.png");
+}
+
+.inventory-artifact-tile {
+  background-image: url("assets/layout/artifact%20frame.png");
+}
+
+.inventory-ink-icon {
+  width: 18px;
+  height: 24px;
+  border-radius: 50% 50% 55% 55%;
+  background: #070403;
+  transform: rotate(45deg);
+  box-shadow:
+    inset -3px -4px 0 rgba(255, 255, 255, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.42);
+}
+
+.inventory-ink-count {
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  min-width: 18px;
+  padding: 1px 4px;
+  border: 1px solid rgba(42, 23, 18, 0.72);
+  border-radius: 999px;
+  background: #f4dfb8;
+  color: #2a1712;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  text-shadow: none;
 }
 
 .inventory-tile.easy-a-trinket {
@@ -684,7 +743,7 @@ button {
   cursor: pointer;
 }
 
-button:not(.board-space):hover {
+button:not(.board-space):not(.inventory-tile):hover {
   background: #a32634;
 }
 
@@ -1754,3 +1813,798 @@ gap: 6px;
 .prophecy-poem-line.stanza-break {
   height: 1.1em;
 }
+
+/* ---------------- PROMOTED ART THEME ---------------- */
+
+body {
+  background:
+    linear-gradient(rgba(18, 7, 7, 0.12), rgba(18, 7, 7, 0.18)),
+    url("assets/layout/background.png");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.game-shell {
+  width: min(1680px, 96vw);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 600px;
+  gap: 24px;
+  align-items: start;
+}
+
+.main-panel {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+}
+
+.game-header {
+  display: none;
+}
+
+.status-sidebar {
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  padding-top: 0;
+}
+
+.status-sidebar > .sidebar-card,
+.status-sidebar > .sidebar-card:not(.dialog-card),
+.status-sidebar > .sidebar-card.hp-card {
+  width: auto;
+}
+
+.hud-media-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  min-height: 240px;
+}
+
+.status-sidebar > .sidebar-card:not(.hp-card):not(.music-card):not(.developer-card):not(.dialog-card) {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  padding: 88px 48px 42px;
+  border: 0;
+  border-radius: 0;
+  background:
+    url("assets/layout/4-2.png") center / contain no-repeat;
+}
+
+.status-sidebar > .hp-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.hud-media-row > .music-card {
+  display: none;
+  justify-self: start;
+  width: 176px;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  padding: 36px;
+  border: 0;
+  border-radius: 0;
+  background:
+    url("assets/layout/music%20box.png") center / contain no-repeat;
+  transform: translateY(-34px);
+}
+
+.hud-media-row > .dialog-card {
+  display: block;
+  position: relative;
+  justify-self: start;
+  align-self: center;
+  width: 402px;
+  aspect-ratio: 3 / 2;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.sidebar-portrait-frame {
+  position: relative;
+  flex: 0 0 auto;
+  width: 180px;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sidebar-portrait-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: url("assets/layout/portrait.png") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.sidebar-portrait-frame .dialog-image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  display: block;
+  width: 96%;
+  height: 96%;
+  object-fit: cover;
+  object-position: center top;
+  clip-path: ellipse(45% 49% at 50% 50%);
+  transform: translate(-50%, -50%);
+}
+
+.sidebar-portrait-frame .dialog-image.hidden {
+  display: none;
+}
+
+.hud-media-row > .dialog-card #dialogBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 31px 45px;
+  border: 0;
+  border-radius: 0;
+  background:
+    url("assets/layout/3-1.png") center / contain no-repeat;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.hud-media-row > .dialog-card #dialogBox::after {
+  content: none;
+  position: absolute;
+  top: 50%;
+  right: -74px;
+  width: 225px;
+  aspect-ratio: 2 / 3;
+  background:
+    url("assets/layout/portrait.png") center / contain no-repeat;
+  pointer-events: none;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.hud-media-row > .dialog-card .dialog-text {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #d7c29a;
+  font-size: 1rem;
+  line-height: 1.35;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.72);
+}
+
+.hud-media-row > .dialog-card .dialog-image {
+  display: none !important;
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  z-index: 2;
+  width: 200px;
+  height: 340px;
+  border-radius: 50%;
+  background: transparent;
+  object-fit: cover;
+  object-position: center top;
+  clip-path: ellipse(40% 42% at 56% 51%);
+  transform: translateY(-50%);
+}
+
+.music-card .music-heading {
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.music-card .music-heading h2,
+.music-card .music-info-button,
+.music-card .volume-control {
+  display: none;
+}
+
+.music-card .music-controls {
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+.music-card #musicToggleButton {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #d7c29a;
+  font-size: 2rem;
+  line-height: 1;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.68);
+  transform: none;
+  box-shadow: none;
+}
+
+.music-card #musicToggleButton.music-paused {
+  transform: translateX(3px);
+}
+
+.music-card #musicToggleButton.music-playing {
+  transform: none;
+}
+
+.music-card #musicToggleButton:hover,
+.music-card #musicToggleButton:focus-visible {
+  background: transparent;
+  color: #f2d28a;
+  box-shadow: none;
+}
+
+.music-card #musicToggleButton::after {
+  content: attr(data-attribution);
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  z-index: 1000;
+  width: max-content;
+  max-width: 300px;
+  padding: 8px 10px;
+  border: 2px solid #d4a94a;
+  border-radius: 8px;
+  background: #f4dfb8;
+  color: #2a1712;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: pre-line;
+  text-align: left;
+  text-shadow: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.music-card #musicToggleButton:hover::after,
+.music-card #musicToggleButton:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.start-section,
+.event-section,
+.author-date-section,
+.detective-section,
+.fanfic-section,
+.shakespeare-section,
+.timed-shakespeare-section,
+.loquacious-section,
+.matchmaker-section,
+.rhyme-section,
+.authorle-section,
+.murdle-section,
+.lone-queen-section,
+.phonetic-section,
+.litcanon-section,
+.reward-section,
+.eraser-section {
+  position: relative;
+  width: min(1024px, 100%);
+  aspect-ratio: 2048 / 1940;
+  padding: 92px 128px 96px;
+  border: 0;
+  border-radius: 0;
+  background:
+    url("assets/layout/1600.png") center / contain no-repeat;
+  max-width: none;
+  margin: 0 auto;
+  color: #fff4cc;
+  overflow: visible;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.78),
+    0 0 5px rgba(242, 196, 109, 0.28);
+}
+
+.start-section h2,
+.event-section h2,
+.author-date-section h2,
+.detective-section h2,
+.fanfic-section h2,
+.shakespeare-section h2,
+.timed-shakespeare-section h2,
+.loquacious-section h2,
+.matchmaker-section h2,
+.rhyme-section h2,
+.authorle-section h2,
+.murdle-section h2,
+.lone-queen-section h2,
+.phonetic-section h2,
+.litcanon-section h2,
+.reward-section h2,
+.eraser-section h2 {
+  margin: 0 0 16px;
+  color: #fff4cc;
+  font-size: 2.35rem;
+  line-height: 1.1;
+  text-shadow:
+    0 2px 2px rgba(0, 0, 0, 0.75),
+    0 0 8px rgba(212, 169, 74, 0.38);
+}
+
+.start-section .event-meta,
+.event-section .event-meta,
+.author-date-section .event-meta,
+.detective-section .event-meta,
+.fanfic-section .event-meta,
+.shakespeare-section .event-meta,
+.timed-shakespeare-section .event-meta,
+.loquacious-section .event-meta,
+.matchmaker-section .event-meta,
+.rhyme-section .event-meta,
+.authorle-section .event-meta,
+.murdle-section .event-meta,
+.lone-queen-section .event-meta,
+.phonetic-section .event-meta,
+.litcanon-section .event-meta,
+.reward-section .event-meta,
+.eraser-section .event-meta {
+  margin: 0 0 18px;
+  color: #f2c46d;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.72);
+}
+
+.timed-shakespeare-section .event-meta,
+.loquacious-section .event-meta,
+.matchmaker-section .event-meta,
+.rhyme-section .event-meta,
+.authorle-section .event-meta,
+.murdle-section .event-meta,
+.lone-queen-section .event-meta,
+.litcanon-section .event-meta {
+  color: #2a1712;
+  text-shadow: none;
+}
+
+.start-section .poem-container,
+.event-section .poem-container {
+  width: fit-content;
+  max-width: 660px;
+  margin: 72px 0 0;
+  padding: 18px 22px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(18, 7, 4, 0.47);
+  color: #fff4cc;
+  font-size: 18px;
+  line-height: 1.45;
+  box-shadow:
+    inset 0 0 28px rgba(0, 0, 0, 0.24),
+    0 0 18px rgba(0, 0, 0, 0.12);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.78),
+    0 0 5px rgba(242, 196, 109, 0.28);
+}
+
+.start-section .poem-line,
+.event-section .poem-line {
+  color: inherit;
+}
+
+.start-section .letter-slot,
+.start-section .letter-slot.revealed,
+.event-section .letter-slot,
+.event-section .letter-slot.revealed {
+  border-bottom-color: currentColor;
+  color: inherit;
+}
+
+.event-section.rest-mode {
+  border: 0;
+  background:
+    url("assets/layout/1600.png") center / contain no-repeat;
+  color: #fff4cc;
+}
+
+.event-section.rest-mode h2,
+.event-section.rest-mode .event-meta,
+.event-section.rest-mode .event-message {
+  color: #fff4cc;
+  text-shadow:
+    0 2px 2px rgba(0, 0, 0, 0.75),
+    0 0 8px rgba(212, 169, 74, 0.38);
+}
+
+.event-section.rest-mode .event-meta {
+  color: #f2c46d;
+}
+
+.event-section.rest-mode .poem-container {
+  border: 0;
+  background: rgba(18, 7, 4, 0.47);
+  color: #fff4cc;
+}
+
+.event-section.rest-mode .letter-slot,
+.event-section.rest-mode .letter-slot.revealed {
+  border-bottom-color: currentColor;
+  color: inherit;
+  background: transparent;
+}
+
+.event-section.rest-mode .letter-slot:focus {
+  background: rgba(185, 139, 61, 0.25);
+}
+
+.event-section.rest-mode button {
+  border-color: #f2c46d;
+  background: #7a1c26;
+  color: #fff4cc;
+}
+
+.event-section.rest-mode button:hover {
+  background: #a32634;
+}
+
+.event-section .sticky-note-display {
+  position: absolute;
+  left: 128px;
+  top: 0;
+  z-index: 5;
+}
+
+.author-date-section .author-name,
+.author-date-section .author-name *,
+.detective-section .detective-novel-card,
+.detective-section .detective-novel-card *,
+.fanfic-section .fanfic-original-card,
+.fanfic-section .fanfic-original-card *,
+.shakespeare-section .shakespeare-play-card,
+.shakespeare-section .shakespeare-play-card * {
+  text-shadow: none;
+}
+
+.fanfic-section .fanfic-original-card,
+.shakespeare-section .shakespeare-play-card {
+  font-weight: bold;
+}
+
+.reward-section .reward-message,
+.reward-section .reward-instruction,
+.reward-section .event-message {
+  padding: 18px;
+  border: 2px solid #d4a94a;
+  border-radius: 14px;
+  background: #f4dfb8;
+  color: #2a1712;
+  text-shadow: none;
+}
+
+.reward-section .reward-message:empty,
+.reward-section .reward-instruction:empty,
+.reward-section .event-message:empty {
+  display: none;
+}
+
+.hp-card .hp-poem-display {
+  font-family: Vivaldi, "IM Fell English", Georgia, "Times New Roman", serif;
+  font-size: 2.52rem;
+  color: #d7c29a;
+  line-height: 1.34;
+  -webkit-text-stroke: 0.3px #6f2119;
+  text-shadow:
+    -0.8px -0.6px 0 rgba(255, 232, 155, 0.72),
+    0 0 4px rgba(232, 171, 66, 0.42),
+    1.2px 1.4px 0 rgba(83, 31, 14, 0.82),
+    0 3px 5px rgba(0, 0, 0, 0.55);
+}
+
+.hp-card .hp-poem-lost {
+  color: #8f1f2d;
+  -webkit-text-stroke: 0.3px #d7c29a;
+  text-shadow:
+    -0.7px -0.5px 0 rgba(255, 224, 134, 0.52),
+    0 0 4px rgba(143, 31, 45, 0.5),
+    1px 1.2px 0 rgba(74, 16, 15, 0.86),
+    0 3px 5px rgba(0, 0, 0, 0.58);
+}
+
+.board-section h2 {
+  color: #ffd46d;
+}
+
+.board-section {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  max-width: none;
+  width: 100%;
+}
+
+.game-board {
+  min-height: 620px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.game-board::before {
+  content: "";
+  position: absolute;
+  left: 3.5%;
+  top: 2%;
+  width: 96%;
+  aspect-ratio: 640 / 180;
+  background: url("assets/layout/title.png") left center / contain no-repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.game-board::after {
+  content: none;
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(74, 42, 18, 0.24);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.map-line {
+  stroke: rgba(80, 45, 22, 0.72);
+  stroke-width: 5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-line.available {
+  stroke: rgba(45, 111, 66, 0.84);
+  stroke-width: 6;
+}
+
+.map-line.chosen {
+  stroke: rgba(154, 31, 39, 0.82);
+  stroke-width: 6;
+}
+
+.map-lines {
+  opacity: 0;
+}
+
+.asset-map-connector {
+  position: absolute;
+  z-index: 1;
+  height: 42px;
+  background: url("assets/layout/node_connector.svg") center / 100% 100% no-repeat;
+  opacity: 1;
+  pointer-events: none;
+  transform-origin: left center;
+  filter: drop-shadow(0 4px 3px rgba(20, 8, 3, 0.42));
+}
+
+.asset-map-connector.completed {
+  opacity: 1;
+}
+
+.asset-map-connector.available {
+  opacity: 1;
+  filter:
+    drop-shadow(0 4px 3px rgba(20, 8, 3, 0.42))
+    drop-shadow(0 0 8px rgba(72, 138, 78, 0.65));
+}
+
+.asset-map-connector.future {
+  opacity: 1;
+  filter: saturate(0.72) brightness(0.72) drop-shadow(0 4px 3px rgba(20, 8, 3, 0.32));
+}
+
+.board-space,
+.board-space.easy-poem,
+.board-space.mid-poem,
+.board-space.boss-poem,
+.board-space.start,
+.board-space.kjv {
+  width: 78px;
+  height: 78px;
+  z-index: 2;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  color: #30170e;
+  box-shadow: 0 10px 18px rgba(66, 33, 10, 0.28);
+}
+
+.board-space::before,
+.board-space.easy-poem::before,
+.board-space.mid-poem::before,
+.board-space.boss-poem::before {
+  inset: 0;
+  border: 0;
+  border-radius: inherit;
+  background:
+    url("assets/layout/node%20frame.png") center / 210% no-repeat;
+  box-shadow: none;
+  z-index: 0;
+}
+
+.space-icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 46px;
+  color: #d7c29a;
+  font-size: 1.45rem;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.72),
+    0 0 3px rgba(215, 194, 154, 0.28);
+}
+
+.board-space.kjv .space-icon,
+.board-space.special .space-icon {
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+.board-space.completed {
+  opacity: 1;
+  filter: none;
+}
+
+.board-space.completed::before {
+  filter: brightness(0.72) saturate(0.78);
+}
+
+.board-space.future {
+  opacity: 1;
+  filter: none;
+}
+
+.board-space.future::before {
+  filter: brightness(0.58) saturate(0.68);
+}
+
+.board-space.current {
+  opacity: 1;
+  filter: none;
+  box-shadow: 0 10px 18px rgba(66, 33, 10, 0.28);
+}
+
+.board-space.current::before {
+  filter: none;
+}
+
+.board-space.current .space-icon {
+  color: #a51e25;
+  font-size: 1.75rem;
+}
+
+.board-space.active {
+  transform: translate(-50%, -50%) scale(1.08);
+  filter: brightness(1.22) saturate(1.05);
+  box-shadow: 0 10px 18px rgba(66, 33, 10, 0.28);
+}
+
+button.board-space:hover,
+.board-space.selectable:hover {
+  background: transparent !important;
+  color: #30170e !important;
+  border-color: transparent !important;
+}
+
+button.board-space:hover .space-icon,
+.board-space.selectable:hover .space-icon {
+  color: #d7c29a !important;
+}
+
+.board-space.preview-boss-frame,
+.board-space.preview-boss-frame:hover,
+.board-space.preview-boss-frame.selectable:hover {
+  background: transparent !important;
+}
+
+.board-space.preview-boss-frame::before {
+  background:
+    url("assets/layout/node%20frame%20boss.png") center / 160% no-repeat;
+  box-shadow: none;
+}
+
+.board-space.preview-rest-icon,
+.board-space.preview-rest-icon:hover,
+.board-space.preview-rest-icon.selectable:hover {
+  width: 132px;
+  height: 99px;
+  background: transparent !important;
+}
+
+.board-space.preview-rest-icon::before {
+  background:
+    url("assets/layout/node%20frame%20heart.png") center / contain no-repeat;
+  transform: scale(1.2);
+}
+
+.board-space.preview-image-icon .space-icon {
+  color: transparent;
+  font-size: 0;
+  text-shadow: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.board-space.preview-easy-poem-icon .space-icon {
+  background-image: url("assets/layout/open%20book.png");
+}
+
+.board-space.preview-later-poem-icon .space-icon {
+  background-image: url("assets/layout/book.png");
+}
+
+.board-space.preview-rest-icon .space-icon {
+  background-image: url("assets/layout/coffee.png");
+  width: 64px;
+  height: 52px;
+}
+
+.board-space.preview-image-icon.preview-show-player-star .space-icon {
+  color: #a51e25;
+  font-size: 1.75rem;
+  text-shadow: 0 1px 0 rgba(255, 241, 196, 0.64);
+  background-image: none;
+}
+
+.board-space.preview-boss-frame .space-icon {
+  width: 84px;
+  height: 69px;
+}
+
+.board-space.selectable:hover {
+  filter:
+    brightness(1.16)
+    saturate(1.08)
+    drop-shadow(0 10px 18px rgba(66, 33, 10, 0.28))
+    drop-shadow(0 0 9px rgba(255, 218, 110, 0.42))
+    drop-shadow(0 0 18px rgba(255, 218, 110, 0.28));
+  box-shadow: none;
+}
+
+.board-space.preview-rest-icon.selectable:hover {
+  filter:
+    brightness(1.18)
+    saturate(1.08)
+    drop-shadow(0 10px 18px rgba(66, 33, 10, 0.28))
+    drop-shadow(0 0 10px rgba(255, 218, 110, 0.44))
+    drop-shadow(0 0 22px rgba(255, 218, 110, 0.32));
+  box-shadow: none;
+}
+
+.board-space.developer-selectable {
+  outline: 2px dashed rgba(255, 244, 204, 0.8);
+  outline-offset: 8px;
+}
+
+.board-space.boss-poem {
+  width: 162px;
+  height: 162px;
+  box-shadow: 0 10px 18px rgba(66, 33, 10, 0.28);
+}
+
