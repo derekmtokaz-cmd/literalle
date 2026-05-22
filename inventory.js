@@ -332,7 +332,7 @@ function showInventoryTooltip(event, item) {
         : "";
 
     inventoryTooltip.innerHTML = `
-      <strong>${trinket.icon} ${trinket.name}</strong><br>
+      <strong>${trinket.name}</strong><br>
       ${trinket.description}${extraDescription}
     `;
   }
@@ -341,7 +341,7 @@ function showInventoryTooltip(event, item) {
     const artifact = getArtifactById(item.artifactId);
 
     inventoryTooltip.innerHTML = `
-      <strong>${artifact ? artifact.icon : "?"} ${artifact ? artifact.name : "Artifact"}</strong><br>
+      <strong>${artifact ? artifact.name : "Artifact"}</strong><br>
       ${artifact ? artifact.description : ""}
     `;
   }
