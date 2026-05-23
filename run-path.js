@@ -397,6 +397,8 @@ function getSeededPoemForNode(nodeId, poemSeedPlan) {
 function assignPoemEncounter(space, poem, blankCount) {
   const poemEvent = isEasyPoemNode(space)
     ? prepareLineOrderPoemEvent(poem, 4)
+    : isMidPoemNode(space)
+      ? preparePhasedPoemEvent(poem)
     : preparePoemEvent(poem, blankCount);
 
   space.encounter = {
@@ -404,6 +406,10 @@ function assignPoemEncounter(space, poem, blankCount) {
     blankCount,
     poemEvent
   };
+}
+
+function isMidPoemNode(space) {
+  return space.type === "poem" && (space.id === "poem-4" || space.id === "poem-5");
 }
 
 function isEasyPoemNode(space) {

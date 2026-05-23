@@ -20,6 +20,7 @@ const poemDatabase = [
       "\u00A0\u00A0\u00A0So long as men can breathe or eyes can see,",
       "\u00A0\u00A0\u00A0So long lives this, and this gives life to thee."
     ],
+    stanzas: ["1-4", "5-8", "9-12", "13-14"],
     dialog: [
   "Shakespeare addressed this and many other sonnets to a man. I wonder what his wife thought about that.",
   "Shakespeare published 154 sonnets in 1609. When you're done with this one, we'll start on the rest.",
@@ -52,6 +53,7 @@ const poemDatabase = [
       "For having lost but once your prime,",
       "   You may forever tarry."
     ],
+    stanzas: ["1-4", "6-9", "11-14", "16-19"],
     dialog: [
       "Come out, Virginia, don't let me wait\nYou Catholic girls start much too late\nBut sooner or later it comes down to fate\nI might as well will be the one\nOnly the good die young",
       "Herrick joined the 'Sons of Ben,' a Ben Jonson fan club, and wrote five poems addressed to Jonson. Nerd.",
@@ -78,6 +80,7 @@ const poemDatabase = [
       "And then my heart with pleasure fills,",
       "And dances with the daffodils."
     ],
+    stanzas: ["1-6", "8-13"],
     dialog: [
       "Lord Byron and Samuel Taylor Coleridge both offered harsh criticism of Wordsworth's poetry.",
       "Romanticism is more about being receptive to strong emotions than the modern lovey-dovey meanince of romance. But I still like it when someone buys me flowers.",
@@ -105,6 +108,7 @@ const poemDatabase = [
       "A mind at peace with all below,",
       "A heart whose love is innocent!"
     ],
+    stanzas: ["1-6", "8-13"],
     dialog: [
       "Though Byron was born in 1788, this poem actually dates back to before the destruction of the Second Temple in 70AD.",
       "Byron fought against the Ottoman Empire in the Greek War of Independence. He died at age 36 and is considered a hero in Greece.",
@@ -136,6 +140,7 @@ const poemDatabase = [
       "It is some dream that on the deck,",
       "You’ve fallen cold and dead.",
     ],
+    stanzas: ["1-8", "10-17"],
     dialog: [
       "Yawp!",
       "So far, my research has not indicated that Abraham Lincoln was ever the captain of a ship.",
@@ -167,6 +172,7 @@ const poemDatabase = [
       "I took the one less traveled by,",
       "And that has made all the difference."
     ],
+    stanzas: ["1-5", "7-11", "13-17"],
     dialog: [
       "Most people don't realize that the final stanza is a joke.",
       "This poem was based on a walk with Frost's friend, Edward Thomas. Its message inspired Thomas to enlist in WWI, where he was killed two years later.",
@@ -195,6 +201,7 @@ const poemDatabase = [
       "Smiles, tears, of all my life; and, if God choose,",
       "I shall but love thee better after death."
     ],
+    stanzas: ["1-4", "5-8", "9-14"],
     dialog: [
   "Elizabeth's husband encouraged her to publish, saying they were the best sonnets since Shakespeare. This may have been around the time their son, Robert ('Pen'), was conceieved.",
   "The collection was originally written in English, but titled to make it seem like they were translations.",

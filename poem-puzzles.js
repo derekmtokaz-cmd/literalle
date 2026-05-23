@@ -73,6 +73,117 @@ function preparePoemEvent(poemData, missingWordCount) {
   };
 }
 
+function preparePhasedPoemEvent(poemData) {
+  const phaseLineIndexes = getPoemPhaseLineIndexes(poemData);
+  const missingWordCountPerPhase = getPhasedMissingWordCountPerPhase(phaseLineIndexes.length);
+  const phases = phaseLineIndexes.map((lineIndexes, phaseIndex) => {
+    const missingWords = chooseMissingWordsFromLineIndexes(
+      poemData.lines,
+      lineIndexes,
+      missingWordCountPerPhase
+    );
+
+    return {
+      phaseIndex,
+      lineIndexes,
+      missingWords,
+      submitted: false,
+      correct: false,
+      revealed: false
+    };
+  });
+
+  return {
+    ...poemData,
+    puzzleType: "phasedMissingWords",
+    phases,
+    missingWords: phases.flatMap((phase) => phase.missingWords),
+    currentPhaseIndex: 0,
+    awaitingPhaseContinue: false
+  };
+}
+
+function getPhasedMissingWordCountPerPhase(phaseCount) {
+  return phaseCount === 2 ? 2 : 1;
+}
+
+function getPoemPhaseLineIndexes(poemData) {
+  const parsedStanzas = Array.isArray(poemData.stanzas)
+    ? poemData.stanzas
+        .map((range) => parseStanzaRange(range, poemData.lines.length))
+        .filter((lineIndexes) => lineIndexes.length > 0)
+    : [];
+
+  if (parsedStanzas.length > 0) {
+    return parsedStanzas;
+  }
+
+  return [
+    poemData.lines
+      .map((line, lineIndex) => ({ line, lineIndex }))
+      .filter((entry) => isEligiblePoemLine(entry.line))
+      .map((entry) => entry.lineIndex)
+  ];
+}
+
+function parseStanzaRange(range, lineCount) {
+  const match = String(range).match(/^(\d+)\s*-\s*(\d+)$/);
+
+  if (!match) {
+    return [];
+  }
+
+  const startIndex = Math.max(0, Number(match[1]) - 1);
+  const endIndex = Math.min(lineCount - 1, Number(match[2]) - 1);
+
+  if (endIndex < startIndex) {
+    return [];
+  }
+
+  const lineIndexes = [];
+
+  for (let lineIndex = startIndex; lineIndex <= endIndex; lineIndex += 1) {
+    lineIndexes.push(lineIndex);
+  }
+
+  return lineIndexes;
+}
+
+function chooseMissingWordsFromLineIndexes(lines, lineIndexes, missingWordCount) {
+  const eligibleWords = getEligibleWordsForLines(lines, lineIndexes);
+
+  if (eligibleWords.length === 0) {
+    throw new Error("No eligible words found for this poem phase.");
+  }
+
+  const selectedWords = [];
+  const usedLineIndexes = new Set();
+  const targetMissingWordCount = Math.min(missingWordCount, eligibleWords.length);
+
+  while (selectedWords.length < targetMissingWordCount) {
+    const availableWordsOnUnusedLines = eligibleWords.filter((word) => {
+      return !usedLineIndexes.has(word.lineIndex);
+    });
+    const availableWords =
+      availableWordsOnUnusedLines.length > 0
+        ? availableWordsOnUnusedLines
+        : eligibleWords.filter((word) => {
+            return !selectedWords.some((selectedWord) => {
+              return (
+                selectedWord.lineIndex === word.lineIndex &&
+                selectedWord.wordIndex === word.wordIndex
+              );
+            });
+          });
+
+    const selectedWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+    selectedWords.push(selectedWord);
+    usedLineIndexes.add(selectedWord.lineIndex);
+  }
+
+  return selectedWords;
+}
+
 function prepareLineOrderPoemEvent(poemData, lineCount = 4) {
   const selectedLines = chooseLineOrderLines(poemData.lines, lineCount);
 
@@ -105,10 +216,25 @@ function isEligibleLineOrderLine(line) {
   return trimmedLine !== "" && trimmedLine !== "[...]";
 }
 
-function chooseMissingWords(lines, missingWordCount) {
+function isEligiblePoemLine(line) {
+  const trimmedLine = line.replace(/\u00a0/g, " ").trim();
+
+  return trimmedLine !== "" && trimmedLine !== "[...]";
+}
+
+function getEligibleWordsForLines(lines, lineIndexes = null) {
   const eligibleWords = [];
+  const lineIndexSet = lineIndexes ? new Set(lineIndexes) : null;
 
   lines.forEach((line, lineIndex) => {
+    if (lineIndexSet && !lineIndexSet.has(lineIndex)) {
+      return;
+    }
+
+    if (!isEligiblePoemLine(line)) {
+      return;
+    }
+
     const tokens = tokenizeLine(line);
     let wordIndex = 0;
 
@@ -124,6 +250,12 @@ function chooseMissingWords(lines, missingWordCount) {
       }
     });
   });
+
+  return eligibleWords;
+}
+
+function chooseMissingWords(lines, missingWordCount) {
+  const eligibleWords = getEligibleWordsForLines(lines);
 
   const eligibleLineIndexes = new Set(
     eligibleWords.map((word) => word.lineIndex)
@@ -203,6 +335,8 @@ function startPoemEvent(poemData) {
   if (gameState.currentPuzzleMode === "rest") {
     submitPoemButton.textContent = "Submit";
     submitPoemButton.disabled = false;
+  } else if (isPhasedPuzzle(poemEvent)) {
+    showPhasedPuzzleProgress();
   }
 
   focusFirstOpenSlot();
@@ -244,30 +378,57 @@ function buildPuzzle(poemData) {
     })
   );
 
-  const selectedWords = poemData.missingWords.map((missingWord, blankIndex) => {
-    const line = poemData.lines[missingWord.lineIndex];
-    const tokens = tokenizeLine(line);
-    const wordToken = getWordTokenByIndex(tokens, missingWord.wordIndex);
-    const prefilledByEasyA = easyAPrefilledWordKeys.has(getMissingWordKey(missingWord));
-
-    return {
-      blankIndex,
-      lineIndex: missingWord.lineIndex,
-      wordIndex: missingWord.wordIndex,
-      answer: wordToken.text,
-      prefilledByEasyA,
-      letters: wordToken.text.split("").map((char) => ({
-  answerChar: char,
-  value: prefilledByEasyA || isAutoRevealedCharacter(char) ? char : "",
-  locked: prefilledByEasyA || isAutoRevealedCharacter(char)
-}))
+  if (poemData.puzzleType === "phasedMissingWords") {
+    const phases = poemData.phases.map((phase) => {
+      return {
+        ...phase,
+        missingWords: phase.missingWords.map((missingWord) => ({ ...missingWord })),
+        selectedWords: phase.missingWords.map((missingWord, blankIndex) => {
+          return buildSelectedWord(poemData.lines, missingWord, blankIndex, easyAPrefilledWordKeys);
+        })
+      };
+    });
+    const puzzle = {
+      ...poemData,
+      puzzleType: "phasedMissingWords",
+      phases,
+      currentPhaseIndex: poemData.currentPhaseIndex || 0,
+      awaitingPhaseContinue: false,
+      selectedWords: []
     };
+
+    syncActivePhasedSelectedWords(puzzle);
+    return puzzle;
+  }
+
+  const selectedWords = poemData.missingWords.map((missingWord, blankIndex) => {
+    return buildSelectedWord(poemData.lines, missingWord, blankIndex, easyAPrefilledWordKeys);
   });
 
   return {
     ...poemData,
     puzzleType: "missingWords",
     selectedWords
+  };
+}
+
+function buildSelectedWord(lines, missingWord, blankIndex, easyAPrefilledWordKeys) {
+  const line = lines[missingWord.lineIndex];
+  const tokens = tokenizeLine(line);
+  const wordToken = getWordTokenByIndex(tokens, missingWord.wordIndex);
+  const prefilledByEasyA = easyAPrefilledWordKeys.has(getMissingWordKey(missingWord));
+
+  return {
+    blankIndex,
+    lineIndex: missingWord.lineIndex,
+    wordIndex: missingWord.wordIndex,
+    answer: wordToken.text,
+    prefilledByEasyA,
+    letters: wordToken.text.split("").map((char) => ({
+      answerChar: char,
+      value: prefilledByEasyA || isAutoRevealedCharacter(char) ? char : "",
+      locked: prefilledByEasyA || isAutoRevealedCharacter(char)
+    }))
   };
 }
 
@@ -300,39 +461,90 @@ function renderPuzzle(puzzle, container) {
     return;
   }
 
+  if (isPhasedPuzzle(puzzle)) {
+    renderPhasedPuzzle(puzzle, container);
+    return;
+  }
+
   puzzle.lines.forEach((line, lineIndex) => {
-    const lineElement = document.createElement("div");
-    lineElement.classList.add("poem-line");
-
-    if (puzzle.italicLineIndexes && puzzle.italicLineIndexes.includes(lineIndex)) {
-      lineElement.classList.add("italic");
-    }
-
-    const tokens = tokenizeLine(line);
-    let wordCounter = 0;
-
-    tokens.forEach((token) => {
-      if (token.type === "word") {
-        const selectedWord = puzzle.selectedWords.find(
-          (word) => word.lineIndex === lineIndex && word.wordIndex === wordCounter
-        );
-
-        if (selectedWord) {
-          lineElement.appendChild(createBlankWordElement(selectedWord));
-        } else {
-          lineElement.appendChild(document.createTextNode(token.text));
-        }
-
-        wordCounter += 1;
-      } else {
-        lineElement.appendChild(document.createTextNode(token.text));
-      }
-    });
-
-    container.appendChild(lineElement);
+    container.appendChild(createRenderedPoemLine(puzzle, line, lineIndex));
   });
 
   attachSlotListeners(container);
+}
+
+function renderPhasedPuzzle(puzzle, container) {
+  const phase = getActivePhasedPuzzlePhase(puzzle);
+
+  if (!phase) {
+    return;
+  }
+
+  syncActivePhasedSelectedWords(puzzle);
+
+  phase.lineIndexes.forEach((lineIndex) => {
+    const line = puzzle.lines[lineIndex];
+    container.appendChild(createRenderedPoemLine(puzzle, line, lineIndex));
+  });
+
+  attachSlotListeners(container);
+}
+
+function createRenderedPoemLine(puzzle, line, lineIndex) {
+  const lineElement = document.createElement("div");
+  lineElement.classList.add("poem-line");
+
+  if (puzzle.italicLineIndexes && puzzle.italicLineIndexes.includes(lineIndex)) {
+    lineElement.classList.add("italic");
+  }
+
+  const tokens = tokenizeLine(line);
+  let wordCounter = 0;
+
+  tokens.forEach((token) => {
+    if (token.type === "word") {
+      const selectedWord = puzzle.selectedWords.find(
+        (word) => word.lineIndex === lineIndex && word.wordIndex === wordCounter
+      );
+
+      if (selectedWord) {
+        lineElement.appendChild(createBlankWordElement(selectedWord));
+      } else {
+        lineElement.appendChild(document.createTextNode(token.text));
+      }
+
+      wordCounter += 1;
+    } else {
+      lineElement.appendChild(document.createTextNode(token.text));
+    }
+  });
+
+  return lineElement;
+}
+
+function isPhasedPuzzle(puzzle) {
+  return puzzle && puzzle.puzzleType === "phasedMissingWords";
+}
+
+function isPhasedCurrentPuzzle() {
+  return isPhasedPuzzle(gameState.currentPuzzle);
+}
+
+function isPhasedPuzzleAwaitingContinue() {
+  return isPhasedCurrentPuzzle() && gameState.currentPuzzle.awaitingPhaseContinue;
+}
+
+function getActivePhasedPuzzlePhase(puzzle) {
+  if (!isPhasedPuzzle(puzzle)) {
+    return null;
+  }
+
+  return puzzle.phases[puzzle.currentPhaseIndex] || null;
+}
+
+function syncActivePhasedSelectedWords(puzzle) {
+  const phase = getActivePhasedPuzzlePhase(puzzle);
+  puzzle.selectedWords = phase ? phase.selectedWords : [];
 }
 
 function updateLineOrderPresentation(puzzle, container) {
@@ -777,6 +989,11 @@ function submitCurrentPuzzleAttempt() {
     return;
   }
 
+  if (isPhasedCurrentPuzzle()) {
+    submitPhasedPuzzleAttempt();
+    return;
+  }
+
   let allCorrect = true;
 
   gameState.currentPuzzle.selectedWords.forEach((blankWord) => {
@@ -823,6 +1040,103 @@ function submitCurrentPuzzleAttempt() {
   focusFirstOpenSlot();
 
   handlePlayerDeath();
+}
+
+function submitPhasedPuzzleAttempt() {
+  const puzzle = gameState.currentPuzzle;
+  const phase = getActivePhasedPuzzlePhase(puzzle);
+
+  if (!phase) {
+    return;
+  }
+
+  if (puzzle.awaitingPhaseContinue) {
+    advancePhasedPuzzle();
+    return;
+  }
+
+  let allCorrect = true;
+
+  puzzle.selectedWords.forEach((blankWord) => {
+    blankWord.letters.forEach((letter) => {
+      if (letter.locked) {
+        return;
+      }
+
+      const expected = normalizeForComparison(letter.answerChar);
+      const actual = normalizeForComparison(letter.value);
+
+      if (actual !== expected) {
+        allCorrect = false;
+      }
+    });
+  });
+
+  puzzle.selectedWords.forEach((blankWord) => {
+    blankWord.letters.forEach((letter) => {
+      if (!allCorrect && !letter.locked) {
+        letter.revealedByGame = true;
+      }
+
+      letter.value = letter.answerChar;
+      letter.locked = true;
+    });
+  });
+
+  phase.submitted = true;
+  phase.correct = allCorrect;
+  phase.revealed = true;
+  puzzle.awaitingPhaseContinue = true;
+
+  if (!allCorrect) {
+    takePuzzleDamage(3);
+    renderStats();
+
+    if (handlePlayerDeath()) {
+      return;
+    }
+  }
+
+  rerenderCurrentPuzzle();
+  renderInventory();
+  showPuzzleMessage(
+    allCorrect
+      ? "Correct. Continue when ready."
+      : "Not quite. The answer is revealed. Continue when ready."
+  );
+  submitPoemButton.textContent = "Continue";
+  submitPoemButton.disabled = false;
+}
+
+function advancePhasedPuzzle() {
+  const puzzle = gameState.currentPuzzle;
+
+  if (puzzle.currentPhaseIndex >= puzzle.phases.length - 1) {
+    submitPoemButton.textContent = "Submit";
+    puzzle.awaitingPhaseContinue = false;
+    handlePuzzleSuccess();
+    return;
+  }
+
+  puzzle.currentPhaseIndex += 1;
+  puzzle.awaitingPhaseContinue = false;
+  syncActivePhasedSelectedWords(puzzle);
+  submitPoemButton.textContent = "Submit";
+  submitPoemButton.disabled = false;
+  rerenderCurrentPuzzle();
+  renderInventory();
+  showPhasedPuzzleProgress();
+  focusFirstOpenSlot();
+}
+
+function showPhasedPuzzleProgress() {
+  if (!isPhasedCurrentPuzzle()) {
+    return;
+  }
+
+  const phaseNumber = gameState.currentPuzzle.currentPhaseIndex + 1;
+  const phaseCount = gameState.currentPuzzle.phases.length;
+  showPuzzleMessage(`Stanza ${phaseNumber} of ${phaseCount}.`);
 }
 
 function submitLineOrderPuzzleAttempt() {
@@ -956,7 +1270,8 @@ function useBabelTile(tileIndex, options = {}) {
   if (
     gameState.currentPuzzleMode !== "event" ||
     !gameState.currentPuzzle ||
-    isLineOrderCurrentPuzzle()
+    isLineOrderCurrentPuzzle() ||
+    isPhasedPuzzleAwaitingContinue()
   ) {
     return;
   }
@@ -1002,7 +1317,7 @@ function useBabelTile(tileIndex, options = {}) {
 }
 
 function useEchoTile() {
-  if (isLineOrderCurrentPuzzle()) {
+  if (isLineOrderCurrentPuzzle() || isPhasedPuzzleAwaitingContinue()) {
     return;
   }
 
@@ -1029,7 +1344,8 @@ function usePenNib() {
   if (
     gameState.currentPuzzleMode !== "event" ||
     !gameState.currentPuzzle ||
-    isLineOrderCurrentPuzzle()
+    isLineOrderCurrentPuzzle() ||
+    isPhasedPuzzleAwaitingContinue()
   ) {
     return;
   }

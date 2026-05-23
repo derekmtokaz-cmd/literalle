@@ -175,7 +175,9 @@ function renderInventoryItem(item, index) {
       itemButton.classList.add("word-babel-tile");
     }
     itemButton.disabled =
-      gameState.currentPuzzleMode !== "event" || isLineOrderCurrentPuzzle();
+      gameState.currentPuzzleMode !== "event" ||
+      isLineOrderCurrentPuzzle() ||
+      isPhasedPuzzleAwaitingContinue();
 
     itemButton.addEventListener("click", () => {
       useBabelTile(index);
@@ -226,7 +228,9 @@ function renderInventoryItem(item, index) {
       });
 
       const inPoemPuzzle =
-        gameState.currentPuzzle !== null && !isLineOrderCurrentPuzzle();
+        gameState.currentPuzzle !== null &&
+        !isLineOrderCurrentPuzzle() &&
+        !isPhasedPuzzleAwaitingContinue();
 
       canUse =
         inPoemPuzzle &&
@@ -238,7 +242,8 @@ function renderInventoryItem(item, index) {
       const inPoemPuzzle =
         gameState.currentPuzzleMode === "event" &&
         gameState.currentPuzzle !== null &&
-        !isLineOrderCurrentPuzzle();
+        !isLineOrderCurrentPuzzle() &&
+        !isPhasedPuzzleAwaitingContinue();
 
       const hasBlankLetters =
         inPoemPuzzle &&
@@ -433,7 +438,8 @@ function canUseTrinket(item) {
     return (
       gameState.currentPuzzleMode === "event" &&
       gameState.currentPuzzle &&
-      !isLineOrderCurrentPuzzle()
+      !isLineOrderCurrentPuzzle() &&
+      !isPhasedPuzzleAwaitingContinue()
     );
   }
 
@@ -496,7 +502,8 @@ function useLeakyPen(itemIndex) {
   if (
     gameState.currentPuzzleMode !== "event" ||
     !gameState.currentPuzzle ||
-    isLineOrderCurrentPuzzle()
+    isLineOrderCurrentPuzzle() ||
+    isPhasedPuzzleAwaitingContinue()
   ) {
     return;
   }
@@ -539,7 +546,8 @@ function useStickyNote(itemIndex) {
   if (
     gameState.currentPuzzleMode !== "event" ||
     !gameState.currentPuzzle ||
-    isLineOrderCurrentPuzzle()
+    isLineOrderCurrentPuzzle() ||
+    isPhasedPuzzleAwaitingContinue()
   ) {
     return;
   }
@@ -703,18 +711,42 @@ function isEasyATargetPoemNode(node) {
     (node.id === "poem-4" || node.id === "poem-5" || node.type === "boss") &&
     node.encounter &&
     node.encounter.poemEvent &&
-    Array.isArray(node.encounter.poemEvent.missingWords)
+    (
+      Array.isArray(node.encounter.poemEvent.missingWords) ||
+      Array.isArray(node.encounter.poemEvent.phases)
+    )
   );
 }
 
 function getNextEasyAMissingWord(poemEvent) {
-  if (!poemEvent || !Array.isArray(poemEvent.missingWords)) {
+  if (!poemEvent) {
     return null;
   }
 
   const prefilledWordKeys = new Set(
     (poemEvent.easyAPrefilledWords || []).map((word) => getMissingWordKey(word))
   );
+
+  if (poemEvent.puzzleType === "phasedMissingWords" && Array.isArray(poemEvent.phases)) {
+    const phasedMissingWords = poemEvent.phases
+      .flatMap((phase) => phase.missingWords || [])
+      .filter((missingWord) => {
+        return !prefilledWordKeys.has(getMissingWordKey(missingWord));
+      })
+      .sort((firstWord, secondWord) => {
+        if (firstWord.lineIndex !== secondWord.lineIndex) {
+          return firstWord.lineIndex - secondWord.lineIndex;
+        }
+
+        return firstWord.wordIndex - secondWord.wordIndex;
+      });
+
+    return phasedMissingWords[0] || null;
+  }
+
+  if (!Array.isArray(poemEvent.missingWords)) {
+    return null;
+  }
 
   const activeMissingWords = poemEvent.missingWords
     .filter((missingWord) => {
