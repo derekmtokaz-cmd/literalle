@@ -292,6 +292,7 @@ function getWordTokenByIndex(tokens, targetWordIndex) {
 }
 
 function renderPuzzle(puzzle, container) {
+  updateLineOrderPresentation(puzzle, container);
   container.innerHTML = "";
 
   if (puzzle.puzzleType === "lineOrder") {
@@ -332,6 +333,20 @@ function renderPuzzle(puzzle, container) {
   });
 
   attachSlotListeners(container);
+}
+
+function updateLineOrderPresentation(puzzle, container) {
+  const isLineOrder = puzzle && puzzle.puzzleType === "lineOrder";
+  const poemTargets = [
+    { section: startSection, container: startPoemContainer },
+    { section: eventSection, container: poemContainer }
+  ];
+
+  poemTargets.forEach((target) => {
+    const isActiveLineOrder = isLineOrder && target.container === container;
+    target.section.classList.toggle("line-order-stage", isActiveLineOrder);
+    target.container.classList.toggle("line-order-poem-container", isActiveLineOrder);
+  });
 }
 
 function renderLineOrderPuzzle(puzzle, container) {
