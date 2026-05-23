@@ -41,6 +41,7 @@ const gameState = {
   currentKjvEncounter: null,
   currentKjvDifficulty: null,
   currentRewardOffers: [],
+  pendingEasyABossNodeId: null,
   prophecyUsedThisFloor: false,
   eraserOfferedByFloor: {},
   firstDraftUsedThisPuzzle: false,

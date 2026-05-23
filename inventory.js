@@ -480,7 +480,7 @@ function canUseTrinket(item) {
   }
 
   if (item.trinketId === "easyA") {
-    return isMapScreenVisible() && getNextEasyAPoemNode() !== null;
+    return false;
   }
 
   return false;
@@ -728,13 +728,10 @@ function getNextEasyAPoemNode() {
 
 function isEasyATargetPoemNode(node) {
   return (
-    (node.id === "poem-4" || node.id === "poem-5" || node.type === "boss") &&
+    node.type === "boss" &&
     node.encounter &&
     node.encounter.poemEvent &&
-    (
-      Array.isArray(node.encounter.poemEvent.missingWords) ||
-      Array.isArray(node.encounter.poemEvent.phases)
-    )
+    Array.isArray(node.encounter.poemEvent.missingWords)
   );
 }
 
@@ -785,6 +782,69 @@ function getNextEasyAMissingWord(poemEvent) {
 
 function isMapScreenVisible() {
   return !boardSection.classList.contains("hidden");
+}
+
+function getEasyAInventoryIndex() {
+  return gameState.inventory.findIndex((item) => {
+    return item.type === "trinket" && item.trinketId === "easyA";
+  });
+}
+
+function shouldPromptEasyABeforeBoss(node) {
+  return (
+    getEasyAInventoryIndex() !== -1 &&
+    isEasyATargetPoemNode(node) &&
+    getNextEasyAMissingWord(node.encounter.poemEvent) !== null
+  );
+}
+
+function startEasyABossPrompt(node) {
+  gameState.pendingEasyABossNodeId = node.id;
+  easyAPromptText.textContent = "Use Easy A to make the final poem easier?";
+  showSection("easyA");
+}
+
+function useEasyABeforeBoss() {
+  const bossNode = getMapNodeById(gameState.pendingEasyABossNodeId);
+  const easyAIndex = getEasyAInventoryIndex();
+
+  if (!bossNode || easyAIndex === -1 || !shouldPromptEasyABeforeBoss(bossNode)) {
+    skipEasyABeforeBoss();
+    return;
+  }
+
+  applyEasyAToBossPoem(bossNode.encounter.poemEvent);
+  gameState.inventory.splice(easyAIndex, 1);
+  gameState.pendingEasyABossNodeId = null;
+  renderInventory();
+  startPoemEvent(bossNode.encounter.poemEvent);
+}
+
+function skipEasyABeforeBoss() {
+  const bossNode = getMapNodeById(gameState.pendingEasyABossNodeId);
+
+  gameState.pendingEasyABossNodeId = null;
+
+  if (bossNode?.encounter?.poemEvent) {
+    startPoemEvent(bossNode.encounter.poemEvent);
+  }
+}
+
+function applyEasyAToBossPoem(poemEvent) {
+  const missingWord = getNextEasyAMissingWord(poemEvent);
+
+  if (!missingWord) {
+    return;
+  }
+
+  if (!Array.isArray(poemEvent.easyAPrefilledWords)) {
+    poemEvent.easyAPrefilledWords = [];
+  }
+
+  poemEvent.easyAPrefilledWords.push({
+    lineIndex: missingWord.lineIndex,
+    wordIndex: missingWord.wordIndex
+  });
 }
 
 function useProphecy() {
@@ -902,32 +962,7 @@ function useBabelBag(itemIndex) {
 }
 
 function useEasyA(itemIndex) {
-  const targetNode = getNextEasyAPoemNode();
-
-  if (!isMapScreenVisible() || !targetNode) {
-    return;
-  }
-
-  const poemEvent = targetNode.encounter.poemEvent;
-  const missingWord = getNextEasyAMissingWord(poemEvent);
-
-  if (!missingWord) {
-    return;
-  }
-
   hideInventoryTooltip();
-
-  if (!Array.isArray(poemEvent.easyAPrefilledWords)) {
-    poemEvent.easyAPrefilledWords = [];
-  }
-
-  poemEvent.easyAPrefilledWords.push({
-    lineIndex: missingWord.lineIndex,
-    wordIndex: missingWord.wordIndex
-  });
-
-  gameState.inventory.splice(itemIndex, 1);
-  renderInventory();
 }
 
 function startTrinketRewardPhase(trinket = getRandomTrinket()) {

@@ -108,6 +108,11 @@ function startMapNode(nodeId) {
       nextSpace.id === "poem-4" || nextSpace.id === "poem-5"
         ? "midPoem"
         : nextSpace.type;
+
+    if (nextSpace.type === "boss" && shouldPromptEasyABeforeBoss(nextSpace)) {
+      return startEasyABossPrompt(nextSpace);
+    }
+
     return startPoemEvent(nextSpace.encounter.poemEvent);
   }
 

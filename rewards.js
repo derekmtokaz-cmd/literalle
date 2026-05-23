@@ -120,13 +120,14 @@ function startRewardPhase() {
       : 0;
 
   let inkGain;
+  let midPoemCorrectMissingWordCount = null;
 
   if (gameState.lastEventType === "boss") {
     inkGain = Math.floor(Math.random() * 3) + 5; // 5-7
-  } else if (
-    gameState.lastEventType === "midPoem" ||
-    gameState.lastEventType === "elite"
-  ) {
+  } else if (gameState.lastEventType === "midPoem") {
+    midPoemCorrectMissingWordCount = getMidPoemCorrectMissingWordCount();
+    inkGain = getMidPoemInkReward(midPoemCorrectMissingWordCount);
+  } else if (gameState.lastEventType === "elite") {
     inkGain = Math.floor(Math.random() * 3) + 4; // 4-6
   } else {
     inkGain = Math.floor(Math.random() * 3) + 3; // 3-5
@@ -145,7 +146,12 @@ function startRewardPhase() {
   gameState.rewardTilePurchased = false;
   tileOffersSection.classList.remove("hidden");
   setTileOfferCopy(gameState.lastEventType === "boss");
-  inkRewardMessage.textContent = `You gained ${inkGain} ink.`;
+  inkRewardMessage.textContent =
+    gameState.lastEventType === "midPoem"
+      ? `You got ${midPoemCorrectMissingWordCount} ${
+          midPoemCorrectMissingWordCount === 1 ? "answer" : "answers"
+        } right and gained ${inkGain} ink.`
+      : `You gained ${inkGain} ink.`;
 
   if (gameState.lastEventType === "elite" || gameState.lastEventType === "boss") {
     const artifactReward = getRandomArtifactReward();
@@ -174,6 +180,38 @@ function startRewardPhase() {
   renderTileOffers();
 
   showSection("reward");
+}
+
+function getMidPoemCorrectMissingWordCount() {
+  const puzzle = gameState.currentPuzzle;
+
+  if (!puzzle || puzzle.puzzleType !== "phasedMissingWords") {
+    return 0;
+  }
+
+  return puzzle.phases.reduce((total, phase) => {
+    return total + (Number(phase.correctMissingWordCount) || 0);
+  }, 0);
+}
+
+function getMidPoemInkReward(correctMissingWordCount) {
+  if (correctMissingWordCount <= 0) {
+    return 0;
+  }
+
+  if (correctMissingWordCount === 1) {
+    return 1;
+  }
+
+  if (correctMissingWordCount === 2) {
+    return 3;
+  }
+
+  if (correctMissingWordCount === 3) {
+    return 5;
+  }
+
+  return 7;
 }
 
 function generateRewardTileOffers(discount = 0) {

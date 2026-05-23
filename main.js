@@ -21,6 +21,8 @@ function renderGame() {
 
 submitStartButton.addEventListener("click", submitCurrentPuzzleAttempt);
 submitPoemButton.addEventListener("click", submitCurrentPuzzleAttempt);
+useEasyAButton.addEventListener("click", useEasyABeforeBoss);
+skipEasyAButton.addEventListener("click", skipEasyABeforeBoss);
 skipRewardButton.addEventListener("click", endRewardPhase);
 skipEraserButton.addEventListener("click", skipEraserChoice);
 submitAuthorDateButton.addEventListener("click", submitAuthorDateAttempt);

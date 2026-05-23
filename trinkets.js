@@ -44,7 +44,7 @@ const TRINKETS = [
     name: "Easy A",
     icon: "A",
     iconImage: "assets/layout/easy%20a%20icon.png",
-    description: "Make the upcoming poem easier (reduce the number of missing words)",
+    description: "Make the final poem easier (reduce the number of missing words",
     usableDuring: ["board"]
   },
   {

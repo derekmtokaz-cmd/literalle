@@ -89,6 +89,7 @@ function preparePhasedPoemEvent(poemData) {
       missingWords,
       submitted: false,
       correct: false,
+      correctMissingWordCount: 0,
       revealed: false
     };
   });
@@ -1063,37 +1064,34 @@ function submitPhasedPuzzleAttempt() {
     return;
   }
 
-  let allCorrect = true;
-
-  puzzle.selectedWords.forEach((blankWord) => {
-    blankWord.letters.forEach((letter) => {
-      if (letter.locked) {
-        return;
-      }
-
+  const wordResults = puzzle.selectedWords.map((blankWord) => {
+    return blankWord.letters.every((letter) => {
       const expected = normalizeForComparison(letter.answerChar);
       const actual = normalizeForComparison(letter.value);
 
-      if (actual !== expected) {
-        allCorrect = false;
-      }
+      return actual === expected;
     });
   });
+  const correctMissingWordCount = wordResults.filter(Boolean).length;
+  const allCorrect = wordResults.length > 0 && correctMissingWordCount === wordResults.length;
 
-  puzzle.selectedWords.forEach((blankWord) => {
+  puzzle.selectedWords.forEach((blankWord, blankIndex) => {
+    const wordCorrect = wordResults[blankIndex];
+
     blankWord.letters.forEach((letter) => {
-      if (!allCorrect && !letter.locked) {
+      if (!wordCorrect && !letter.locked) {
         letter.revealedByGame = true;
       }
 
       letter.value = letter.answerChar;
       letter.locked = true;
-      letter.phaseResult = allCorrect ? "correct" : "incorrect";
+      letter.phaseResult = wordCorrect ? "correct" : "incorrect";
     });
   });
 
   phase.submitted = true;
   phase.correct = allCorrect;
+  phase.correctMissingWordCount = correctMissingWordCount;
   phase.revealed = true;
   puzzle.awaitingPhaseContinue = true;
 

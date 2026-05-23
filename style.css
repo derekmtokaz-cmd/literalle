@@ -342,6 +342,7 @@ h2 {
 /* Main content boxes */
 
 .event-section,
+.easy-a-section,
 .reward-section,
 .eraser-section,
 .start-section {
@@ -889,6 +890,7 @@ button:disabled {
 
   .board-section,
   .event-section,
+  .easy-a-section,
   .game-header,
   .reward-section,
   .start-section {
@@ -2144,6 +2146,7 @@ body {
 
 .start-section,
 .event-section,
+.easy-a-section,
 .author-date-section,
 .detective-section,
 .fanfic-section,
@@ -2188,6 +2191,7 @@ body {
 
 .start-section h2,
 .event-section h2,
+.easy-a-section h2,
 .author-date-section h2,
 .detective-section h2,
 .fanfic-section h2,
@@ -2214,6 +2218,7 @@ body {
 
 .start-section .event-meta,
 .event-section .event-meta,
+.easy-a-section .event-meta,
 .author-date-section .event-meta,
 .detective-section .event-meta,
 .fanfic-section .event-meta,
