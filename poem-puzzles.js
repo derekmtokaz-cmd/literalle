@@ -814,6 +814,14 @@ function createBlankWordElement(blankWord) {
       input.disabled = true;
     }
 
+    if (letter.phaseResult === "correct") {
+      input.classList.add("phase-correct");
+    }
+
+    if (letter.phaseResult === "incorrect") {
+      input.classList.add("phase-incorrect");
+    }
+
     wordElement.appendChild(input);
   });
 
@@ -1080,6 +1088,7 @@ function submitPhasedPuzzleAttempt() {
 
       letter.value = letter.answerChar;
       letter.locked = true;
+      letter.phaseResult = allCorrect ? "correct" : "incorrect";
     });
   });
 
@@ -1136,7 +1145,7 @@ function showPhasedPuzzleProgress() {
 
   const phaseNumber = gameState.currentPuzzle.currentPhaseIndex + 1;
   const phaseCount = gameState.currentPuzzle.phases.length;
-  showPuzzleMessage(`Stanza ${phaseNumber} of ${phaseCount}.`);
+  showPuzzleMessage(`Round ${phaseNumber} of ${phaseCount}.`);
 }
 
 function submitLineOrderPuzzleAttempt() {

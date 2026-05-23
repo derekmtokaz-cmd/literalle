@@ -2287,6 +2287,18 @@ body {
   color: inherit;
 }
 
+.start-section .letter-slot.phase-correct,
+.event-section .letter-slot.phase-correct {
+  border-bottom-color: #6fc46f;
+  color: #6fc46f;
+}
+
+.start-section .letter-slot.phase-incorrect,
+.event-section .letter-slot.phase-incorrect {
+  border-bottom-color: #d84a3a;
+  color: #d84a3a;
+}
+
 .event-section.rest-mode {
   border: 0;
   background:
