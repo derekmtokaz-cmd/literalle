@@ -236,7 +236,7 @@ h2 {
 }
 
 .inventory-babel-tile.word-babel-tile {
-  background-image: none;
+  background-image: url("assets/layout/trinket%20frame.png");
 }
 
 .inventory-trinket-tile {
