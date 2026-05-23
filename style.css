@@ -2157,7 +2157,12 @@ body {
 
 .start-section.line-order-stage,
 .event-section.line-order-stage {
-  padding: 92px 64px 96px;
+  padding: 122px 64px 96px;
+}
+
+.start-section,
+.event-section {
+  padding: 122px 128px 96px;
 }
 
 .start-section h2,
@@ -2226,7 +2231,7 @@ body {
 .event-section .poem-container {
   width: fit-content;
   max-width: 860px;
-  margin: 60px 0 0;
+  margin: 30px 0 0;
   padding: 18px 22px;
   border: 0;
   border-radius: 10px;
