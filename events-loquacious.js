@@ -81,9 +81,7 @@ function submitLoquaciousAttempt() {
     const tile = createLoquaciousBabelTile(normalizedWord, submittedLabel);
     gameState.inventory.push(tile);
     gameState.currentLoquaciousEvent = null;
-    startLoquaciousResultRewardPhase(
-      `You gained a ${getBabelTileLabel(tile)} Babel Tile.`
-    );
+    startLoquaciousResultRewardPhase("You gained a Note to self.");
     return;
   }
 

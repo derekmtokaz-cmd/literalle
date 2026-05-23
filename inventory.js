@@ -170,9 +170,11 @@ function renderInventoryItem(item, index) {
 
   if (isBabelTile(item)) {
     itemButton.classList.add("inventory-babel-tile");
-    itemButton.textContent = getBabelTileLabel(item);
     if (isWordBabelTile(item)) {
       itemButton.classList.add("word-babel-tile");
+      renderNoteToSelfTile(itemButton, item);
+    } else {
+      itemButton.textContent = getBabelTileLabel(item);
     }
     itemButton.disabled =
       gameState.currentPuzzleMode !== "event" ||
@@ -296,6 +298,24 @@ function renderInventoryItem(item, index) {
   inventoryDisplay.appendChild(itemButton);
 }
 
+function renderNoteToSelfTile(itemButton, item) {
+  const iconImage = document.createElement("img");
+  iconImage.classList.add("inventory-note-to-self-icon");
+  iconImage.src = "assets/layout/note%20to%20self%20icon.png";
+  iconImage.alt = "";
+  itemButton.appendChild(iconImage);
+
+  const firstLetter = document.createElement("span");
+  firstLetter.classList.add("inventory-note-to-self-letter");
+  firstLetter.textContent = getNoteToSelfDisplayLetter(item);
+  itemButton.appendChild(firstLetter);
+}
+
+function getNoteToSelfDisplayLetter(item) {
+  const label = getBabelTileLabel(item).trim();
+  return label ? label[0].toUpperCase() : "?";
+}
+
 function renderInventoryItemIcon(itemButton, itemDefinition) {
   if (itemDefinition?.iconImage) {
     const iconImage = document.createElement("img");
@@ -337,8 +357,8 @@ function showInventoryTooltip(event, item) {
 
     inventoryTooltip.innerHTML = isWordBabelTile(item)
       ? `
-        <strong>Babel Tile: ${safeTileLabel}</strong><br>
-        Spend this Babel Tile to reveal all letters from "${safeTileLabel}" in the current poem puzzle.
+        <strong>Note to self</strong><br>
+        Spend this Note to self to reveal all letters from "${safeTileLabel}" in the current poem puzzle.
       `
       : `
         <strong>Babel Tile: ${safeTileLabel}</strong><br>
