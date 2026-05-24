@@ -2441,7 +2441,7 @@ body {
   position: absolute;
   left: 3.5%;
   top: 2%;
-  width: 96%;
+  width: 77%;
   aspect-ratio: 640 / 180;
   background: url("assets/layout/title.png") left center / contain no-repeat;
   pointer-events: none;

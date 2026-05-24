@@ -35,7 +35,7 @@ function startRhymeEvent(encounter = buildRhymeEncounter()) {
   renderRhymeFoundList();
 
   showDialog({
-    dialog: ["The cat, sat on, the mat."],
+    dialog: ["The cat,\nsat on,\nthe mat."],
     dialogImage: "images/lib.png"
   });
 
