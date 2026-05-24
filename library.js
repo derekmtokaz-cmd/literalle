@@ -55,11 +55,34 @@ function renderLibraryPoemList() {
   libraryPoemList.appendChild(list);
 }
 
+function openLibraryConfirmationModal() {
+  libraryConfirmModal.classList.remove("hidden");
+}
+
+function closeLibraryConfirmationModal() {
+  libraryConfirmModal.classList.add("hidden");
+}
+
 function openLibraryModal() {
   renderLibraryPoemList();
   libraryModal.classList.remove("hidden");
 }
 
-function closeLibraryModal() {
+function startAgainFromLibrary() {
   libraryModal.classList.add("hidden");
+  restartGame();
+}
+
+function confirmLibraryProceed() {
+  closeLibraryConfirmationModal();
+  restartGame();
+  openLibraryModal();
+}
+
+function openHowToPlayModal() {
+  howToPlayModal.classList.remove("hidden");
+}
+
+function closeHowToPlayModal() {
+  howToPlayModal.classList.add("hidden");
 }

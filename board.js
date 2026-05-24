@@ -55,16 +55,20 @@ function renderFloorIndicator() {
     indicator.appendChild(floorFrame);
   }
 
-  const howToPlayBox = document.createElement("div");
-  howToPlayBox.classList.add("floor-info-box");
-  howToPlayBox.textContent = "How to play";
-  indicator.appendChild(howToPlayBox);
+  const howToPlayButton = document.createElement("button");
+  howToPlayButton.classList.add("floor-info-box", "floor-info-button");
+  howToPlayButton.type = "button";
+  howToPlayButton.textContent = "How to play";
+  howToPlayButton.addEventListener("click", openHowToPlayModal);
+  indicator.appendChild(howToPlayButton);
 
   const libraryButton = document.createElement("button");
   libraryButton.classList.add("floor-info-box", "floor-info-button");
   libraryButton.type = "button";
+  libraryButton.title = "Entering the library will reset all progress.";
+  libraryButton.setAttribute("aria-label", "Library. Entering the library will reset all progress.");
   libraryButton.textContent = "Library";
-  libraryButton.addEventListener("click", openLibraryModal);
+  libraryButton.addEventListener("click", openLibraryConfirmationModal);
   indicator.appendChild(libraryButton);
 
   gameBoard.appendChild(indicator);

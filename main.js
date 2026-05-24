@@ -79,7 +79,10 @@ authorleAnswerInput.addEventListener("input", () => {
 authorleAnswerInput.addEventListener("keydown", handleAuthorleAnswerKeydown);
 submitAuthorleButton.addEventListener("click", submitAuthorleGuess);
 closeProphecyButton.addEventListener("click", closeProphecyModal);
-closeLibraryButton.addEventListener("click", closeLibraryModal);
+closeLibraryButton.addEventListener("click", startAgainFromLibrary);
+confirmLibraryProceedButton.addEventListener("click", confirmLibraryProceed);
+cancelLibraryProceedButton.addEventListener("click", closeLibraryConfirmationModal);
+closeHowToPlayButton.addEventListener("click", closeHowToPlayModal);
 developerForcedTriviaSelect.addEventListener("change", () => {
   gameState.developerForcedTriviaType = developerForcedTriviaSelect.value;
 });
