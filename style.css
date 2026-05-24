@@ -2652,20 +2652,20 @@ button.board-space:hover .space-icon,
 
 .board-space.preview-rest-icon .space-icon {
   background-image: url("assets/layout/coffee.png");
-  width: 64px;
-  height: 52px;
+  width: 54px;
+  height: 44px;
 }
 
 .board-space.preview-matchmaker-icon .space-icon {
   background-image: url("assets/layout/boutonniere.png");
-  width: 45px;
-  height: 36px;
+  width: 56px;
+  height: 45px;
 }
 
 .board-space.preview-timed-shakespeare-icon .space-icon {
   background-image: url("assets/layout/watch.png");
-  width: 45px;
-  height: 36px;
+  width: 56px;
+  height: 45px;
 }
 
 .board-space.preview-image-icon.preview-show-player-star .space-icon {
