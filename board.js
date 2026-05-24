@@ -188,6 +188,8 @@ function applyAssetMapNodeClasses(board) {
       "preview-later-poem-icon",
       "preview-boss-frame",
       "preview-rest-icon",
+      "preview-matchmaker-icon",
+      "preview-timed-shakespeare-icon",
       "preview-image-icon",
       "preview-show-player-star"
     );
@@ -206,6 +208,14 @@ function applyAssetMapNodeClasses(board) {
 
     if (node.classList.contains("rest")) {
       node.classList.add("preview-rest-icon", "preview-image-icon");
+    }
+
+    if (node.classList.contains("matchmaker")) {
+      node.classList.add("preview-matchmaker-icon", "preview-image-icon");
+    }
+
+    if (node.classList.contains("timedShakespeare")) {
+      node.classList.add("preview-timed-shakespeare-icon", "preview-image-icon");
     }
 
     if (isCurrent) {

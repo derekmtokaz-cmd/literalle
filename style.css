@@ -2656,6 +2656,18 @@ button.board-space:hover .space-icon,
   height: 52px;
 }
 
+.board-space.preview-matchmaker-icon .space-icon {
+  background-image: url("assets/layout/boutonniere.png");
+  width: 64px;
+  height: 52px;
+}
+
+.board-space.preview-timed-shakespeare-icon .space-icon {
+  background-image: url("assets/layout/watch.png");
+  width: 64px;
+  height: 52px;
+}
+
 .board-space.preview-image-icon.preview-show-player-star .space-icon {
   color: #a51e25;
   font-size: 1.75rem;
