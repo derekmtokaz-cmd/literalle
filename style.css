@@ -2658,14 +2658,14 @@ button.board-space:hover .space-icon,
 
 .board-space.preview-matchmaker-icon .space-icon {
   background-image: url("assets/layout/boutonniere.png");
-  width: 64px;
-  height: 52px;
+  width: 45px;
+  height: 36px;
 }
 
 .board-space.preview-timed-shakespeare-icon .space-icon {
   background-image: url("assets/layout/watch.png");
-  width: 64px;
-  height: 52px;
+  width: 45px;
+  height: 36px;
 }
 
 .board-space.preview-image-icon.preview-show-player-star .space-icon {
