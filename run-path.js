@@ -372,6 +372,14 @@ function recordFloorPoemSeedPlan(poemSeedPlan) {
     poemSeedPlan.openingPoems.map((poem) => poem.id);
 }
 
+function getUnrepeatedOpeningPoem(poemSeedPlan) {
+  const laterPoemIds = poemSeedPlan.laterPoems.map((poem) => poem.id);
+
+  return poemSeedPlan.openingPoems.find((poem) => {
+    return !laterPoemIds.includes(poem.id);
+  }) || null;
+}
+
 function buildRestPoemSeedPlan(restNodeCount) {
   if (restNodeCount <= 0) {
     return {
@@ -516,6 +524,10 @@ function buildRunPath() {
   const restPoemSeedPlan = restPoemSeedPlanData.poems;
   let restPoemSeedIndex = 0;
   recordFloorPoemSeedPlan(poemSeedPlan);
+
+  if (gameState.currentFloor === 1) {
+    gameState.loquaciousPoemId = getUnrepeatedOpeningPoem(poemSeedPlan)?.id || null;
+  }
 
   if (restPoemSeedPlanData.resetCycle) {
     gameState.floorRestPoemSeedCycleStartFloor = gameState.currentFloor;

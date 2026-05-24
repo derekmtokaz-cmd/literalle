@@ -22,6 +22,7 @@ const gameState = {
   floorPoemSeedIdsByFloor: {},
   floorRestPoemSeedIdsByFloor: {},
   floorRestPoemSeedCycleStartFloor: 1,
+  loquaciousPoemId: null,
   currentPuzzle: null,
   currentPuzzleMode: null,
   lastEventType: null,

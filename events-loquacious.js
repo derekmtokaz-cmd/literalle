@@ -1,5 +1,8 @@
 function buildLoquaciousEncounter() {
-  const poem = poemDatabase[Math.floor(Math.random() * poemDatabase.length)];
+  const seededPoem = poemDatabase.find((poem) => {
+    return poem.id === gameState.loquaciousPoemId;
+  });
+  const poem = seededPoem || poemDatabase[Math.floor(Math.random() * poemDatabase.length)];
 
   return {
     triviaType: "loquacious",
@@ -12,7 +15,9 @@ function startLoquaciousEvent(encounter = buildLoquaciousEncounter()) {
   gameState.firstDraftUsedThisPuzzle = false;
   gameState.currentLoquaciousEvent = {
     encounter,
-    submitted: false
+    currentWordLength: 3,
+    bestCorrectWord: null,
+    correctWords: []
   };
 
   loquaciousIntro.classList.remove("hidden");
@@ -54,8 +59,13 @@ function startLoquaciousChallenge() {
   loquaciousChoiceControls.classList.add("hidden");
   loquaciousChallenge.classList.remove("hidden");
   loquaciousMessage.textContent = "";
-  loquaciousInstruction.textContent =
-    `Name a word from ${eventData.encounter.poem.title} by ${eventData.encounter.poem.author}.`;
+  eventData.currentWordLength = 3;
+  if (!advanceLoquaciousPromptToNextValidLength(eventData, eventData.currentWordLength, true)) {
+    gameState.currentLoquaciousEvent = null;
+    startLoquaciousResultRewardPhase("No valid words found.");
+    return;
+  }
+
   loquaciousAnswerInput.value = "";
   loquaciousAnswerInput.focus();
 }
@@ -63,30 +73,95 @@ function startLoquaciousChallenge() {
 function submitLoquaciousAttempt() {
   const eventData = gameState.currentLoquaciousEvent;
 
-  if (!eventData || eventData.submitted) {
+  if (!eventData) {
     return;
   }
-
-  eventData.submitted = true;
-  submitLoquaciousButton.disabled = true;
-  loquaciousAnswerInput.disabled = true;
 
   const submittedLabel = loquaciousAnswerInput.value.trim();
   const normalizedWord = normalizeLoquaciousWord(submittedLabel);
 
-  if (
-    normalizedWord &&
-    eventData.encounter.poemWords.includes(normalizedWord)
-  ) {
-    const tile = createLoquaciousBabelTile(normalizedWord, submittedLabel);
-    gameState.inventory.push(tile);
-    gameState.currentLoquaciousEvent = null;
-    startLoquaciousResultRewardPhase("You gained a Note to self.");
+  if (isCorrectLoquaciousWord(eventData, normalizedWord)) {
+    eventData.bestCorrectWord = normalizedWord;
+    eventData.correctWords.push(normalizedWord);
+    loquaciousAnswerInput.value = "";
+
+    if (!advanceLoquaciousPromptToNextValidLength(eventData, eventData.currentWordLength + 1, false)) {
+      awardLoquaciousNoteToSelf(normalizedWord);
+      gameState.currentLoquaciousEvent = null;
+      startLoquaciousResultRewardPhase("You gained a Note to self.");
+      return;
+    }
+
+    loquaciousMessage.textContent = "Correct.";
+    loquaciousAnswerInput.focus();
     return;
   }
 
+  const hpLoss = eventData.currentWordLength;
+  gameState.hp = Math.max(0, gameState.hp - hpLoss);
+  renderStats();
   gameState.currentLoquaciousEvent = null;
-  startLoquaciousResultRewardPhase("Sorry, that word was not in the poem");
+
+  if (handlePlayerDeath()) {
+    return;
+  }
+
+  if (eventData.bestCorrectWord) {
+    awardLoquaciousNoteToSelf(eventData.bestCorrectWord);
+    startLoquaciousResultRewardPhase(`You lost ${hpLoss} HP. You gained a Note to self.`);
+    return;
+  }
+
+  startLoquaciousResultRewardPhase(`You lost ${hpLoss} HP.`);
+}
+
+function advanceLoquaciousPromptToNextValidLength(eventData, minimumLength, allowShortestFallback) {
+  const nextLength = getNextLoquaciousWordLength(
+    eventData.encounter.poemWords,
+    minimumLength,
+    allowShortestFallback
+  );
+
+  if (!nextLength) {
+    return false;
+  }
+
+  eventData.currentWordLength = nextLength;
+  loquaciousInstruction.textContent =
+    `Name a ${nextLength}-letter word from ${eventData.encounter.poem.author}'s ${eventData.encounter.poem.title} or lose ${nextLength} HP.`;
+  return true;
+}
+
+function getNextLoquaciousWordLength(poemWords, minimumLength, allowShortestFallback) {
+  const sortedLengths = [...new Set(poemWords.map((word) => word.length))]
+    .filter((length) => length > 0)
+    .sort((a, b) => a - b);
+
+  const nextLength = sortedLengths.find((length) => length >= minimumLength);
+
+  if (nextLength) {
+    return nextLength;
+  }
+
+  return allowShortestFallback ? sortedLengths[0] || null : null;
+}
+
+function isCorrectLoquaciousWord(eventData, normalizedWord) {
+  return (
+    normalizedWord &&
+    normalizedWord.length === eventData.currentWordLength &&
+    eventData.encounter.poemWords.includes(normalizedWord) &&
+    !eventData.correctWords.includes(normalizedWord)
+  );
+}
+
+function awardLoquaciousNoteToSelf(normalizedWord) {
+  if (!normalizedWord) {
+    return;
+  }
+
+  const tile = createLoquaciousBabelTile(normalizedWord, normalizedWord);
+  gameState.inventory.push(tile);
 }
 
 function startLoquaciousResultRewardPhase(resultText) {
