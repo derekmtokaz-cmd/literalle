@@ -26,6 +26,8 @@ function startLoquaciousEvent(encounter = buildLoquaciousEncounter()) {
   loquaciousMessage.textContent = "";
   loquaciousAnswerInput.value = "";
   loquaciousAnswerInput.disabled = false;
+  resetSubmitButtonAfterRewardProceed(submitLoquaciousButton);
+  resetSubmitButtonAfterRewardProceed(gainHpLoquaciousButton, "Gain 5 HP");
   submitLoquaciousButton.disabled = false;
   gainHpLoquaciousButton.disabled = false;
   startLoquaciousButton.disabled = false;
@@ -39,13 +41,21 @@ function startLoquaciousEvent(encounter = buildLoquaciousEncounter()) {
 }
 
 function chooseLoquaciousHpGain() {
+  if (handleSubmitButtonRewardProceed(gainHpLoquaciousButton)) {
+    return;
+  }
+
   if (!gameState.currentLoquaciousEvent) {
     return;
   }
 
-  gameState.hp = Math.min(gameState.maxHp, gameState.hp + 5);
-  gameState.currentLoquaciousEvent = null;
-  startLoquaciousResultRewardPhase("You gained 5 HP.");
+  loquaciousMessage.textContent = "Proceed when ready.";
+  startLoquaciousButton.disabled = true;
+  armSubmitButtonForRewardProceed(gainHpLoquaciousButton, () => {
+    gameState.hp = Math.min(gameState.maxHp, gameState.hp + 5);
+    gameState.currentLoquaciousEvent = null;
+    startLoquaciousResultRewardPhase("You gained 5 HP.");
+  }, "Gain 5 HP");
 }
 
 function startLoquaciousChallenge() {
@@ -61,8 +71,12 @@ function startLoquaciousChallenge() {
   loquaciousMessage.textContent = "";
   eventData.currentWordLength = 3;
   if (!advanceLoquaciousPromptToNextValidLength(eventData, eventData.currentWordLength, true)) {
-    gameState.currentLoquaciousEvent = null;
-    startLoquaciousResultRewardPhase("No valid words found.");
+    loquaciousAnswerInput.disabled = true;
+    loquaciousMessage.textContent = "No valid words found. Proceed when ready.";
+    armSubmitButtonForRewardProceed(submitLoquaciousButton, () => {
+      gameState.currentLoquaciousEvent = null;
+      startLoquaciousResultRewardPhase("No valid words found.");
+    });
     return;
   }
 
@@ -71,6 +85,10 @@ function startLoquaciousChallenge() {
 }
 
 function submitLoquaciousAttempt() {
+  if (handleSubmitButtonRewardProceed(submitLoquaciousButton)) {
+    return;
+  }
+
   const eventData = gameState.currentLoquaciousEvent;
 
   if (!eventData) {
@@ -86,9 +104,13 @@ function submitLoquaciousAttempt() {
     loquaciousAnswerInput.value = "";
 
     if (!advanceLoquaciousPromptToNextValidLength(eventData, eventData.currentWordLength + 1, false)) {
-      awardLoquaciousNoteToSelf(normalizedWord);
-      gameState.currentLoquaciousEvent = null;
-      startLoquaciousResultRewardPhase("You gained a Note to self.");
+      loquaciousAnswerInput.disabled = true;
+      loquaciousMessage.textContent = "Correct. Proceed when ready.";
+      armSubmitButtonForRewardProceed(submitLoquaciousButton, () => {
+        awardLoquaciousNoteToSelf(normalizedWord);
+        gameState.currentLoquaciousEvent = null;
+        startLoquaciousResultRewardPhase("You gained a Note to self.");
+      });
       return;
     }
 
@@ -98,21 +120,42 @@ function submitLoquaciousAttempt() {
   }
 
   const hpLoss = eventData.currentWordLength;
-  gameState.hp = Math.max(0, gameState.hp - hpLoss);
-  renderStats();
-  gameState.currentLoquaciousEvent = null;
+  if (gameState.hp <= hpLoss) {
+    gameState.hp = Math.max(0, gameState.hp - hpLoss);
+    renderStats();
 
-  if (handlePlayerDeath()) {
-    return;
+    if (handlePlayerDeath()) {
+      return;
+    }
   }
 
   if (eventData.bestCorrectWord) {
-    awardLoquaciousNoteToSelf(eventData.bestCorrectWord);
-    startLoquaciousResultRewardPhase(`You lost ${hpLoss} HP. You gained a Note to self.`);
+    loquaciousAnswerInput.disabled = true;
+    loquaciousMessage.textContent = "Incorrect. Proceed when ready.";
+    armSubmitButtonForRewardProceed(submitLoquaciousButton, () => {
+      gameState.currentLoquaciousEvent = null;
+      if (gameState.hp > hpLoss) {
+        gameState.hp = Math.max(0, gameState.hp - hpLoss);
+        renderStats();
+      }
+
+      awardLoquaciousNoteToSelf(eventData.bestCorrectWord);
+      startLoquaciousResultRewardPhase(`You lost ${hpLoss} HP. You gained a Note to self.`);
+    });
     return;
   }
 
-  startLoquaciousResultRewardPhase(`You lost ${hpLoss} HP.`);
+  loquaciousAnswerInput.disabled = true;
+  loquaciousMessage.textContent = "Incorrect. Proceed when ready.";
+  armSubmitButtonForRewardProceed(submitLoquaciousButton, () => {
+    gameState.currentLoquaciousEvent = null;
+    if (gameState.hp > hpLoss) {
+      gameState.hp = Math.max(0, gameState.hp - hpLoss);
+      renderStats();
+    }
+
+    startLoquaciousResultRewardPhase(`You lost ${hpLoss} HP.`);
+  });
 }
 
 function advanceLoquaciousPromptToNextValidLength(eventData, minimumLength, allowShortestFallback) {
@@ -192,9 +235,19 @@ function createLoquaciousBabelTile(normalizedWord, submittedLabel) {
 }
 
 function getLoquaciousPoemWords(poem) {
+  const fullTextSource =
+    typeof LOQUACIOUS_POEM_TEXTS !== "undefined"
+      ? LOQUACIOUS_POEM_TEXTS[poem.id]
+      : null;
+  const sourceLines = Array.isArray(fullTextSource)
+    ? fullTextSource
+    : typeof fullTextSource === "string"
+      ? [fullTextSource]
+      : poem.lines;
+
   return [
     ...new Set(
-      poem.lines
+      sourceLines
         .flatMap((line) => line.split(/\s+/))
         .map((word) => normalizeLoquaciousWord(word))
         .filter((word) => word.length > 0)

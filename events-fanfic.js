@@ -29,6 +29,7 @@ function startFanficEvent(encounter = buildFanficEncounter()) {
   };
 
   fanficMessage.textContent = "";
+  resetSubmitButtonAfterRewardProceed(submitFanficButton);
   submitFanficButton.disabled = false;
 
   showDialog({
@@ -187,6 +188,10 @@ function removeFanficCardFromCurrentLocation(fanficCard) {
 }
 
 function submitFanficAttempt() {
+  if (handleSubmitButtonRewardProceed(submitFanficButton)) {
+    return;
+  }
+
   const eventData = gameState.currentFanficEvent;
 
   if (!eventData) {
@@ -223,8 +228,10 @@ function submitFanficAttempt() {
 
   if (allCorrect) {
     fanficMessage.textContent = "Correct.";
-    gameState.currentFanficEvent = null;
-    startTrinketRewardPhase();
+    armSubmitButtonForRewardProceed(submitFanficButton, () => {
+      gameState.currentFanficEvent = null;
+      startTrinketRewardPhase();
+    });
     return;
   }
 

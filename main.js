@@ -31,6 +31,9 @@ submitFanficButton.addEventListener("click", submitFanficAttempt);
 submitShakespeareButton.addEventListener("click", submitShakespeareAttempt);
 loseHpTimedShakespeareButton.addEventListener("click", chooseTimedShakespeareHpLoss);
 completeTimedShakespeareButton.addEventListener("click", chooseTimedShakespeareChallenge);
+proceedTimedShakespeareButton.addEventListener("click", () => {
+  handleStandaloneRewardProceed(proceedTimedShakespeareButton);
+});
 timedShakespeareAnswerInput.addEventListener("input", () => {
   if (gameState.currentTimedShakespeareEvent) {
     gameState.currentTimedShakespeareEvent.highlightedSuggestionIndex = -1;
@@ -49,6 +52,12 @@ loquaciousAnswerInput.addEventListener("keydown", (event) => {
   }
 });
 submitPhoneticButton.addEventListener("click", submitPhoneticAttempt);
+proceedMatchmakerButton.addEventListener("click", () => {
+  handleStandaloneRewardProceed(proceedMatchmakerButton);
+});
+proceedLoneQueenButton.addEventListener("click", () => {
+  handleStandaloneRewardProceed(proceedLoneQueenButton);
+});
 submitLitcanonButton.addEventListener("click", submitLitcanonGuess);
 litcanonAnswerInput.addEventListener("input", () => {
   if (gameState.currentLitcanonEvent) {

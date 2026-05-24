@@ -31,6 +31,7 @@ function startDetectiveEvent(encounter = buildDetectiveEncounter()) {
   };
 
   detectiveMessage.textContent = "";
+  resetSubmitButtonAfterRewardProceed(submitDetectiveButton);
   submitDetectiveButton.disabled = false;
 
   showDialog({
@@ -205,6 +206,10 @@ function removeDetectiveCardFromCurrentLocation(detectiveCard) {
 }
 
 function submitDetectiveAttempt() {
+  if (handleSubmitButtonRewardProceed(submitDetectiveButton)) {
+    return;
+  }
+
   const eventData = gameState.currentDetectiveEvent;
 
   if (!eventData) {
@@ -241,8 +246,10 @@ function submitDetectiveAttempt() {
 
   if (allCorrect) {
     detectiveMessage.textContent = "Correct.";
-    gameState.currentDetectiveEvent = null;
-   startTrinketRewardPhase();
+    armSubmitButtonForRewardProceed(submitDetectiveButton, () => {
+      gameState.currentDetectiveEvent = null;
+      startTrinketRewardPhase();
+    });
     return;
   }
 

@@ -33,6 +33,9 @@ function startTimedShakespeareEvent(encounter = buildTimedShakespeareEncounter()
   timedShakespeareCorrectList.innerHTML = "";
   loseHpTimedShakespeareButton.disabled = false;
   completeTimedShakespeareButton.disabled = false;
+  loseHpTimedShakespeareButton.classList.remove("hidden");
+  completeTimedShakespeareButton.classList.remove("hidden");
+  hideStandaloneRewardProceedButton(proceedTimedShakespeareButton);
 
   showDialog({
     dialog: ['"They were written by Christopher Marlow and Sir Francis Bacon" is not the correct answer.'],
@@ -50,15 +53,27 @@ function chooseTimedShakespeareHpLoss() {
   clearTimedShakespeareTimer();
   loseHpTimedShakespeareButton.disabled = true;
   completeTimedShakespeareButton.disabled = true;
-  gameState.hp = Math.max(0, gameState.hp - 5);
-  renderStats();
+  loseHpTimedShakespeareButton.classList.add("hidden");
+  completeTimedShakespeareButton.classList.add("hidden");
+  if (gameState.hp <= 5) {
+    gameState.hp = Math.max(0, gameState.hp - 5);
+    renderStats();
 
-  if (handlePlayerDeath()) {
-    return;
+    if (handlePlayerDeath()) {
+      return;
+    }
   }
 
-  gameState.currentTimedShakespeareEvent = null;
-  startTimedShakespeareHpLossRewardPhase();
+  timedShakespeareMessage.textContent = "Proceed when ready.";
+  armStandaloneRewardProceedButton(proceedTimedShakespeareButton, () => {
+    gameState.currentTimedShakespeareEvent = null;
+    if (gameState.hp > 5) {
+      gameState.hp = Math.max(0, gameState.hp - 5);
+      renderStats();
+    }
+
+    startTimedShakespeareHpLossRewardPhase();
+  });
 }
 
 function chooseTimedShakespeareChallenge() {
@@ -299,32 +314,52 @@ function completeTimedShakespeareChallenge() {
   clearTimedShakespeareTimer();
   eventData.taskActive = false;
   timedShakespeareAnswerInput.disabled = true;
+  timedShakespeareChoiceControls.classList.remove("hidden");
+  loseHpTimedShakespeareButton.disabled = true;
+  completeTimedShakespeareButton.disabled = true;
+  loseHpTimedShakespeareButton.classList.add("hidden");
+  completeTimedShakespeareButton.classList.add("hidden");
 
   const correctCount = eventData.correctNovelIds.length;
 
-  gameState.currentTimedShakespeareEvent = null;
-
   if (correctCount < 10) {
     const hpLoss = 10 - correctCount;
-    gameState.hp = Math.max(0, gameState.hp - hpLoss);
-    renderStats();
+    if (gameState.hp <= hpLoss) {
+      gameState.hp = Math.max(0, gameState.hp - hpLoss);
+      renderStats();
 
-    if (handlePlayerDeath()) {
-      return;
+      if (handlePlayerDeath()) {
+        return;
+      }
     }
 
-    startTimedShakespeareResultRewardPhase(
-      `You named ${correctCount} plays. You lost ${hpLoss} HP.`
-    );
+    timedShakespeareMessage.textContent =
+      `You named ${correctCount} plays. Proceed when ready.`;
+    armStandaloneRewardProceedButton(proceedTimedShakespeareButton, () => {
+      gameState.currentTimedShakespeareEvent = null;
+      if (gameState.hp > hpLoss) {
+        gameState.hp = Math.max(0, gameState.hp - hpLoss);
+        renderStats();
+      }
+
+      startTimedShakespeareResultRewardPhase(
+        `You named ${correctCount} plays. You lost ${hpLoss} HP.`
+      );
+    });
     return;
   }
 
   const rewardAmount = correctCount - 9;
-  gameState.hp = Math.min(gameState.maxHp, gameState.hp + rewardAmount);
-  gameState.ink += rewardAmount;
-  startTimedShakespeareResultRewardPhase(
-    `You named ${correctCount} plays. You gained ${rewardAmount} HP and ${rewardAmount} ink.`
-  );
+  timedShakespeareMessage.textContent =
+    `You named ${correctCount} plays. Proceed when ready.`;
+  armStandaloneRewardProceedButton(proceedTimedShakespeareButton, () => {
+    gameState.currentTimedShakespeareEvent = null;
+    gameState.hp = Math.min(gameState.maxHp, gameState.hp + rewardAmount);
+    gameState.ink += rewardAmount;
+    startTimedShakespeareResultRewardPhase(
+      `You named ${correctCount} plays. You gained ${rewardAmount} HP and ${rewardAmount} ink.`
+    );
+  });
 }
 
 function startTimedShakespeareResultRewardPhase(resultText) {

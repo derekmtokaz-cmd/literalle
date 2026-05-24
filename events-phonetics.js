@@ -16,6 +16,8 @@ function startPhoneticEvent(encounter = buildPhoneticEncounter()) {
   });
   phoneticClue.textContent = quote.ipa;
   phoneticMessage.textContent = "";
+  resetSubmitButtonAfterRewardProceed(submitPhoneticButton);
+  submitPhoneticButton.disabled = false;
 
   renderPhoneticQuote();
   showSection("phonetic");
@@ -134,6 +136,10 @@ function renderPhoneticQuote() {
 }
 
 function submitPhoneticAttempt() {
+  if (handleSubmitButtonRewardProceed(submitPhoneticButton)) {
+    return;
+  }
+
   const inputs = Array.from(
     phoneticQuoteContainer.querySelectorAll(".letter-slot")
   );
@@ -178,8 +184,8 @@ function submitPhoneticAttempt() {
   });
 
 phoneticMessage.textContent = "Correct!";
-submitPhoneticButton.disabled = true;
-gameState.currentPhoneticQuote = null;
-
-startTrinketRewardPhase();
+armSubmitButtonForRewardProceed(submitPhoneticButton, () => {
+  gameState.currentPhoneticQuote = null;
+  startTrinketRewardPhase();
+});
 }

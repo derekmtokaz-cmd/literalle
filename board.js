@@ -31,7 +31,30 @@ function renderBoard() {
     renderMapNode(node);
   });
 
+  renderFloorIndicator();
   queueAssetMapConnectorRedraw();
+}
+
+function renderFloorIndicator() {
+  const indicator = document.createElement("div");
+  indicator.classList.add("floor-indicator");
+  indicator.setAttribute("aria-label", `Floor ${gameState.currentFloor}`);
+
+  for (let floorNumber = 1; floorNumber <= 4; floorNumber += 1) {
+    const floorFrame = document.createElement("div");
+    floorFrame.classList.add("floor-indicator-frame");
+    floorFrame.textContent = floorNumber;
+
+    if (floorNumber === gameState.currentFloor) {
+      floorFrame.classList.add("active");
+    } else {
+      floorFrame.classList.add("dimmed");
+    }
+
+    indicator.appendChild(floorFrame);
+  }
+
+  gameBoard.appendChild(indicator);
 }
 
 function renderMapConnections(node, lineLayer) {

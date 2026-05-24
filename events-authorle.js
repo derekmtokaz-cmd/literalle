@@ -33,6 +33,7 @@ function startAuthorleEvent(encounter = buildAuthorleEncounter()) {
   authorleMessage.textContent = "";
   authorleAnswerInput.value = "";
   authorleAnswerInput.disabled = false;
+  resetSubmitButtonAfterRewardProceed(submitAuthorleButton);
   submitAuthorleButton.disabled = false;
   encounter.selectedAuthor = null;
   encounter.suggestionMatches = [];
@@ -155,6 +156,10 @@ function selectAuthorleSuggestion(author) {
 }
 
 function submitAuthorleGuess() {
+  if (handleSubmitButtonRewardProceed(submitAuthorleButton)) {
+    return;
+  }
+
   const encounter = gameState.currentAuthorleEvent;
 
   if (!encounter) {
@@ -185,23 +190,47 @@ function submitAuthorleGuess() {
     normalizeAuthorleAuthor(selectedAuthor) ===
     normalizeAuthorleAuthor(encounter.bibliography.author)
   ) {
-    gameState.currentAuthorleEvent = null;
-    startTrinketRewardPhase();
-    rewardMessage.innerHTML = buildAuthorleBibliographySummary(encounter.bibliography);
+    authorleMessage.textContent = "Correct.";
+    authorleAnswerInput.disabled = true;
+    authorleSuggestions.innerHTML = "";
+    armSubmitButtonForRewardProceed(submitAuthorleButton, () => {
+      gameState.currentAuthorleEvent = null;
+      startTrinketRewardPhase();
+      rewardMessage.innerHTML = buildAuthorleBibliographySummary(encounter.bibliography);
+    });
     return;
   }
 
   encounter.attemptsUsed += 1;
 
+  if (encounter.attemptsUsed >= encounter.maxAttempts) {
+    if (gameState.hp <= 3) {
+      takePuzzleDamage(3);
+      renderStats();
+
+      if (handlePlayerDeath()) {
+        return;
+      }
+    }
+
+    authorleAnswerInput.disabled = true;
+    authorleSuggestions.innerHTML = "";
+    authorleMessage.textContent = "Three attempts is enough. Proceed when ready.";
+    armSubmitButtonForRewardProceed(submitAuthorleButton, () => {
+      if (gameState.hp > 3) {
+        takePuzzleDamage(3);
+        renderStats();
+      }
+
+      startAuthorleFailureRewardPhase(encounter);
+    });
+    return;
+  }
+
   takePuzzleDamage(3);
   renderStats();
 
   if (handlePlayerDeath()) {
-    return;
-  }
-
-  if (encounter.attemptsUsed >= encounter.maxAttempts) {
-    startAuthorleFailureRewardPhase(encounter);
     return;
   }
 

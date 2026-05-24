@@ -2457,6 +2457,41 @@ body {
   pointer-events: none;
 }
 
+.floor-indicator {
+  position: absolute;
+  left: 6%;
+  bottom: 3%;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  pointer-events: none;
+}
+
+.floor-indicator-frame {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  background: url("assets/layout/floor%20frame.png") center / contain no-repeat;
+  color: #30170e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow:
+    0 1px 0 rgba(255, 241, 196, 0.55),
+    0 2px 3px rgba(64, 28, 12, 0.28);
+}
+
+.floor-indicator-frame.dimmed {
+  filter: brightness(0.58) saturate(0.68);
+}
+
+.floor-indicator-frame.active {
+  filter: none;
+}
+
 .map-line {
   stroke: rgba(80, 45, 22, 0.72);
   stroke-width: 5;

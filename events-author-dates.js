@@ -31,6 +31,7 @@ function startAuthorDateEvent(encounter = buildAuthorDateEncounter()) {
   };
 
   authorDateMessage.textContent = "";
+  resetSubmitButtonAfterRewardProceed(submitAuthorDateButton);
   submitAuthorDateButton.disabled = false;
 
   showDialog({
@@ -183,6 +184,10 @@ function removeDateCardFromCurrentLocation(dateCard) {
 }
 
 function submitAuthorDateAttempt() {
+  if (handleSubmitButtonRewardProceed(submitAuthorDateButton)) {
+    return;
+  }
+
   const eventData = gameState.currentAuthorDateEvent;
 
   if (!eventData) {
@@ -217,8 +222,10 @@ function submitAuthorDateAttempt() {
 
   if (allCorrect) {
     authorDateMessage.textContent = "Correct.";
-    gameState.currentAuthorDateEvent = null;
-    startTrinketRewardPhase();
+    armSubmitButtonForRewardProceed(submitAuthorDateButton, () => {
+      gameState.currentAuthorDateEvent = null;
+      startTrinketRewardPhase();
+    });
     return;
   }
 

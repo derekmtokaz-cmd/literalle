@@ -56,6 +56,7 @@ function startMatchmakerEvent(encounter = buildMatchmakerEncounter()) {
   matchmakerChoiceControls.classList.remove("hidden");
   matchmakerGameArea.classList.add("hidden");
   matchmakerBoard.innerHTML = "";
+  hideStandaloneRewardProceedButton(proceedMatchmakerButton);
   updateMatchmakerChoiceButtons();
 
   showDialog({
@@ -227,10 +228,15 @@ function maybeFinishMatchmakerEvent() {
   }
 
   if (eventData.turnLimit !== null && eventData.turnsUsed >= eventData.turnLimit) {
-    startMatchmakerSummaryRewardPhase(
-      eventData.matchesFound,
-      getMatchedMatchmakerPairs(eventData)
-    );
+    const matchesFound = eventData.matchesFound;
+    const matchedPairs = getMatchedMatchmakerPairs(eventData);
+
+    eventData.resolving = true;
+    matchmakerMessage.textContent = "Proceed when ready.";
+    renderMatchmakerEvent();
+    armStandaloneRewardProceedButton(proceedMatchmakerButton, () => {
+      startMatchmakerSummaryRewardPhase(matchesFound, matchedPairs);
+    });
   }
 }
 

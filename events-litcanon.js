@@ -40,6 +40,7 @@ function startLitcanonEvent(encounter = buildLitcanonEncounter()) {
   litcanonMessage.textContent = "";
   litcanonAnswerInput.value = "";
   litcanonAnswerInput.disabled = false;
+  resetSubmitButtonAfterRewardProceed(submitLitcanonButton);
   submitLitcanonButton.disabled = false;
   encounter.suggestionMatches = [];
   encounter.highlightedSuggestionIndex = -1;
@@ -150,6 +151,10 @@ function selectLitcanonSuggestion(novel) {
 }
 
 function submitLitcanonGuess() {
+  if (handleSubmitButtonRewardProceed(submitLitcanonButton)) {
+    return;
+  }
+
   const encounter = gameState.currentLitcanonEvent;
 
   if (!encounter) {
@@ -177,22 +182,46 @@ function submitLitcanonGuess() {
   }
 
   if (selectedNovelId === encounter.clue.answerNovelId) {
-    gameState.currentLitcanonEvent = null;
-    startTrinketRewardPhase();
+    litcanonMessage.textContent = "Correct.";
+    litcanonAnswerInput.disabled = true;
+    litcanonSuggestions.innerHTML = "";
+    armSubmitButtonForRewardProceed(submitLitcanonButton, () => {
+      gameState.currentLitcanonEvent = null;
+      startTrinketRewardPhase();
+    });
     return;
   }
 
   encounter.attemptsUsed += 1;
 
+  if (encounter.attemptsUsed >= encounter.maxAttempts) {
+    if (gameState.hp <= 3) {
+      takePuzzleDamage(3);
+      renderStats();
+
+      if (handlePlayerDeath()) {
+        return;
+      }
+    }
+
+    litcanonAnswerInput.disabled = true;
+    litcanonSuggestions.innerHTML = "";
+    litcanonMessage.textContent = "Three attempts is enough. Proceed when ready.";
+    armSubmitButtonForRewardProceed(submitLitcanonButton, () => {
+      if (gameState.hp > 3) {
+        takePuzzleDamage(3);
+        renderStats();
+      }
+
+      startLitcanonFailureRewardPhase(encounter);
+    });
+    return;
+  }
+
   takePuzzleDamage(3);
   renderStats();
 
   if (handlePlayerDeath()) {
-    return;
-  }
-
-  if (encounter.attemptsUsed >= encounter.maxAttempts) {
-    startLitcanonFailureRewardPhase(encounter);
     return;
   }
 

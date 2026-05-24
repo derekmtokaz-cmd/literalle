@@ -30,6 +30,7 @@ function startRhymeEvent(encounter = buildRhymeEncounter()) {
   rhymeFoundCount.textContent = "0";
   rhymeAnswerInput.value = "";
   rhymeAnswerInput.disabled = false;
+  resetSubmitButtonAfterRewardProceed(submitRhymeButton);
   submitRhymeButton.disabled = false;
   rhymeMessage.textContent = "";
   renderRhymeFoundList();
@@ -66,6 +67,10 @@ function startRhymeCountdown() {
 }
 
 function submitRhymeAnswer() {
+  if (handleSubmitButtonRewardProceed(submitRhymeButton)) {
+    return;
+  }
+
   const eventData = gameState.currentRhymeEvent;
 
   if (!eventData || !eventData.active) {
@@ -141,23 +146,28 @@ function completeRhymeEvent() {
   const inkReward = getRhymeInkReward(eventData.foundAnswers);
 
   clearRhymeTimer();
-  gameState.currentRhymeEvent = null;
-  gameState.currentRewardOffers = [];
-  gameState.rewardTilePurchased = false;
-  const trinketRewards = getRhymeTrinketRewards(rhymeCount);
-  gameState.ink += inkReward;
+  eventData.active = false;
+  rhymeAnswerInput.disabled = true;
+  rhymeMessage.textContent = "Time. Proceed when ready.";
+  armSubmitButtonForRewardProceed(submitRhymeButton, () => {
+    gameState.currentRhymeEvent = null;
+    gameState.currentRewardOffers = [];
+    gameState.rewardTilePurchased = false;
+    const trinketRewards = getRhymeTrinketRewards(rhymeCount);
+    gameState.ink += inkReward;
 
-  tileOffersSection.classList.add("hidden");
-  tileOfferContainer.innerHTML = "";
-  inkRewardMessage.textContent =
-    `You found ${rhymeCount} rhyme${rhymeCount === 1 ? "" : "s"}.`;
-  rewardMessage.innerHTML = buildRhymeRewardSummary(trinketRewards, inkReward);
-  skipRewardButton.classList.remove("hidden");
+    tileOffersSection.classList.add("hidden");
+    tileOfferContainer.innerHTML = "";
+    inkRewardMessage.textContent =
+      `You found ${rhymeCount} rhyme${rhymeCount === 1 ? "" : "s"}.`;
+    rewardMessage.innerHTML = buildRhymeRewardSummary(trinketRewards, inkReward);
+    skipRewardButton.classList.remove("hidden");
 
-  renderStats();
-  renderInventory();
+    renderStats();
+    renderInventory();
 
-  showSection("reward");
+    showSection("reward");
+  });
 }
 
 function getRhymeTrinketRewards(rhymeCount) {

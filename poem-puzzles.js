@@ -327,6 +327,8 @@ function startPoemEvent(poemData) {
 
   stickyNoteDisplay.classList.add("hidden");
   stickyNoteDisplay.textContent = "";
+  resetSubmitButtonAfterRewardProceed(submitPoemButton);
+  submitPoemButton.textContent = "Submit";
   submitPoemButton.disabled = false;
   submitPoemButton.classList.remove("hidden");
 
@@ -983,9 +985,16 @@ function countIncorrectOrBlankLetters(puzzle) {
 /* ---------------- PUZZLE SUBMIT ---------------- */
 
 function submitCurrentPuzzleAttempt() {
+  if (
+    (gameState.currentPuzzleMode === "event" || gameState.currentPuzzleMode === "rest") &&
+    handleSubmitButtonRewardProceed(submitPoemButton)
+  ) {
+    return;
+  }
+
   if (gameState.currentPuzzleMode === "rest") {
     if (gameState.currentPuzzle.restRevealed) {
-      startRewardPhase();
+      armSubmitButtonForRewardProceed(submitPoemButton, startRewardPhase);
       return;
     }
 
@@ -1074,6 +1083,7 @@ function submitPhasedPuzzleAttempt() {
   });
   const correctMissingWordCount = wordResults.filter(Boolean).length;
   const allCorrect = wordResults.length > 0 && correctMissingWordCount === wordResults.length;
+  const isFinalPhase = puzzle.currentPhaseIndex >= puzzle.phases.length - 1;
 
   puzzle.selectedWords.forEach((blankWord, blankIndex) => {
     const wordCorrect = wordResults[blankIndex];
@@ -1093,7 +1103,7 @@ function submitPhasedPuzzleAttempt() {
   phase.correct = allCorrect;
   phase.correctMissingWordCount = correctMissingWordCount;
   phase.revealed = true;
-  puzzle.awaitingPhaseContinue = true;
+  puzzle.awaitingPhaseContinue = !isFinalPhase;
 
   if (!allCorrect) {
     takePuzzleDamage(3);
@@ -1108,11 +1118,15 @@ function submitPhasedPuzzleAttempt() {
   renderInventory();
   showPuzzleMessage(
     allCorrect
-      ? "Correct. Continue when ready."
-      : "Not quite. The answer is revealed. Continue when ready."
+      ? `Correct. ${isFinalPhase ? "Proceed" : "Continue"} when ready.`
+      : `Not quite. The answer is revealed. ${isFinalPhase ? "Proceed" : "Continue"} when ready.`
   );
-  submitPoemButton.textContent = "Continue";
-  submitPoemButton.disabled = false;
+  if (isFinalPhase) {
+    armSubmitButtonForRewardProceed(submitPoemButton, startRewardPhase);
+  } else {
+    submitPoemButton.textContent = "Continue";
+    submitPoemButton.disabled = false;
+  }
 }
 
 function advancePhasedPuzzle() {
@@ -1221,8 +1235,7 @@ function submitRestPuzzleAttempt() {
 
   rerenderCurrentPuzzle();
   eventMessage.textContent = "";
-  submitPoemButton.textContent = "Rest";
-  submitPoemButton.disabled = false;
+  armSubmitButtonForRewardProceed(submitPoemButton, startRewardPhase);
 }
 
 function handlePuzzleSuccess() {
@@ -1240,7 +1253,7 @@ function handlePuzzleSuccess() {
 
   if (gameState.currentPuzzleMode === "event") {
     showPuzzleMessage("Correct.");
-    startRewardPhase();
+    armSubmitButtonForRewardProceed(submitPoemButton, startRewardPhase);
   }
 }
 
@@ -1378,7 +1391,15 @@ function usePenNib() {
 }
 
 function findFirstUnsolvedPuzzleLetter() {
-  for (const word of gameState.currentPuzzle.selectedWords) {
+  const visuallyOrderedWords = [...gameState.currentPuzzle.selectedWords].sort((wordA, wordB) => {
+    if (wordA.lineIndex !== wordB.lineIndex) {
+      return wordA.lineIndex - wordB.lineIndex;
+    }
+
+    return wordA.wordIndex - wordB.wordIndex;
+  });
+
+  for (const word of visuallyOrderedWords) {
     const letter = word.letters.find((candidate) => {
       return !candidate.locked;
     });

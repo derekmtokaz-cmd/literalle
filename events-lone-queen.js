@@ -35,6 +35,7 @@ function startLoneQueenEvent() {
   };
 
   announceNextLoneQueenType();
+  hideStandaloneRewardProceedButton(proceedLoneQueenButton);
 
   showDialog({
     dialog: ["dialog goes here."],
@@ -1014,24 +1015,34 @@ function finishLoneQueenEvent(result) {
   }
 
   eventData.status = result;
-  gameState.currentLoneQueenEvent = null;
-  gameState.currentRewardOffers = [];
-  gameState.rewardTilePurchased = false;
-
-  tileOffersSection.classList.add("hidden");
-  tileOfferContainer.innerHTML = "";
   if (result === "win") {
-    inkRewardMessage.textContent = "You captured the king.";
+    eventData.message = "You captured the king. Proceed when ready.";
   } else if (result === "stalemate") {
-    inkRewardMessage.textContent = "Stalemate.";
+    eventData.message = "Stalemate. Proceed when ready.";
   } else {
-    inkRewardMessage.textContent = "Your queen was captured.";
+    eventData.message = "Your queen was captured. Proceed when ready.";
   }
-  rewardMessage.textContent = "";
-  skipRewardButton.classList.remove("hidden");
+  renderLoneQueenEvent();
+  armStandaloneRewardProceedButton(proceedLoneQueenButton, () => {
+    gameState.currentLoneQueenEvent = null;
+    gameState.currentRewardOffers = [];
+    gameState.rewardTilePurchased = false;
 
-  renderStats();
-  renderInventory();
+    tileOffersSection.classList.add("hidden");
+    tileOfferContainer.innerHTML = "";
+    if (result === "win") {
+      inkRewardMessage.textContent = "You captured the king.";
+    } else if (result === "stalemate") {
+      inkRewardMessage.textContent = "Stalemate.";
+    } else {
+      inkRewardMessage.textContent = "Your queen was captured.";
+    }
+    rewardMessage.textContent = "";
+    skipRewardButton.classList.remove("hidden");
 
-  showSection("reward");
+    renderStats();
+    renderInventory();
+
+    showSection("reward");
+  });
 }

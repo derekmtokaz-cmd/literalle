@@ -1,5 +1,83 @@
 /* ---------------- REWARD SYSTEM ---------------- */
 
+let pendingRewardProceedAction = null;
+
+function armSubmitButtonForRewardProceed(button, proceedAction, defaultLabel = "Submit") {
+  if (!button || typeof proceedAction !== "function") {
+    return;
+  }
+
+  pendingRewardProceedAction = proceedAction;
+  button.dataset.proceedActive = "true";
+  button.dataset.defaultLabel = defaultLabel;
+  button.textContent = "Proceed";
+  button.disabled = false;
+  button.classList.remove("hidden");
+}
+
+function handleSubmitButtonRewardProceed(button) {
+  if (!button || button.dataset.proceedActive !== "true") {
+    return false;
+  }
+
+  const proceedAction = pendingRewardProceedAction;
+  resetSubmitButtonAfterRewardProceed(button);
+
+  if (typeof proceedAction === "function") {
+    proceedAction();
+  }
+
+  return true;
+}
+
+function resetSubmitButtonAfterRewardProceed(button, defaultLabel = "Submit") {
+  if (!button) {
+    return;
+  }
+
+  const label = button.dataset.defaultLabel || defaultLabel;
+  delete button.dataset.proceedActive;
+  delete button.dataset.defaultLabel;
+  pendingRewardProceedAction = null;
+  button.textContent = label;
+}
+
+function armStandaloneRewardProceedButton(button, proceedAction) {
+  if (!button || typeof proceedAction !== "function") {
+    return;
+  }
+
+  pendingRewardProceedAction = proceedAction;
+  button.dataset.proceedActive = "true";
+  button.textContent = "Proceed";
+  button.disabled = false;
+  button.classList.remove("hidden");
+}
+
+function handleStandaloneRewardProceed(button) {
+  if (!button || button.dataset.proceedActive !== "true") {
+    return;
+  }
+
+  const proceedAction = pendingRewardProceedAction;
+  hideStandaloneRewardProceedButton(button);
+
+  if (typeof proceedAction === "function") {
+    proceedAction();
+  }
+}
+
+function hideStandaloneRewardProceedButton(button) {
+  if (!button) {
+    return;
+  }
+
+  delete button.dataset.proceedActive;
+  pendingRewardProceedAction = null;
+  button.disabled = true;
+  button.classList.add("hidden");
+}
+
 function startRewardPhase() {
   gameState.firstDraftUsedThisPuzzle = false;
   skipRewardButton.classList.remove("hidden");

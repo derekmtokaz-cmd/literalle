@@ -28,6 +28,7 @@ function startMurdleEvent(encounter = buildMurdleEncounter()) {
   });
 
   murdlePromptLine.textContent = encounter.prompt.displayLine;
+  resetSubmitButtonAfterRewardProceed(submitMurdleButton);
   submitMurdleButton.disabled = false;
   murdleMessage.textContent = "";
 
@@ -72,6 +73,10 @@ function renderMurdleGrid() {
 }
 
 function submitMurdleGuess() {
+  if (handleSubmitButtonRewardProceed(submitMurdleButton)) {
+    return;
+  }
+
   const eventData = gameState.currentMurdleEvent;
 
   if (!eventData || eventData.complete) {
@@ -165,32 +170,52 @@ function getMurdleFeedback(guess, answer) {
 }
 
 function completeMurdleSuccess() {
-  gameState.currentMurdleEvent = null;
-  startTrinketRewardPhase();
+  const eventData = gameState.currentMurdleEvent;
+
+  if (eventData) {
+    eventData.complete = true;
+  }
+
+  murdleMessage.textContent = "Correct.";
+  armSubmitButtonForRewardProceed(submitMurdleButton, () => {
+    gameState.currentMurdleEvent = null;
+    startTrinketRewardPhase();
+  });
 }
 
 function completeMurdleFailure() {
   const eventData = gameState.currentMurdleEvent;
   const answer = eventData.answer;
 
-  gameState.currentMurdleEvent = null;
-  gameState.hp = Math.max(0, gameState.hp - MURDLE_FAILURE_DAMAGE);
-  renderStats();
+  eventData.complete = true;
+  if (gameState.hp <= MURDLE_FAILURE_DAMAGE) {
+    gameState.hp = Math.max(0, gameState.hp - MURDLE_FAILURE_DAMAGE);
+    renderStats();
 
-  if (handlePlayerDeath()) {
-    return;
+    if (handlePlayerDeath()) {
+      return;
+    }
   }
 
-  gameState.currentRewardOffers = [];
-  gameState.rewardTilePurchased = false;
-  tileOffersSection.classList.add("hidden");
-  tileOfferContainer.innerHTML = "";
-  inkRewardMessage.textContent = `The answer was ${answer}.`;
-  rewardMessage.textContent = `You lost ${MURDLE_FAILURE_DAMAGE} HP.`;
-  skipRewardButton.classList.remove("hidden");
+  murdleMessage.textContent = "Out of guesses. Proceed when ready.";
+  armSubmitButtonForRewardProceed(submitMurdleButton, () => {
+    gameState.currentMurdleEvent = null;
+    if (gameState.hp > MURDLE_FAILURE_DAMAGE) {
+      gameState.hp = Math.max(0, gameState.hp - MURDLE_FAILURE_DAMAGE);
+      renderStats();
+    }
 
-  renderInventory();
-  showSection("reward");
+    gameState.currentRewardOffers = [];
+    gameState.rewardTilePurchased = false;
+    tileOffersSection.classList.add("hidden");
+    tileOfferContainer.innerHTML = "";
+    inkRewardMessage.textContent = `The answer was ${answer}.`;
+    rewardMessage.textContent = `You lost ${MURDLE_FAILURE_DAMAGE} HP.`;
+    skipRewardButton.classList.remove("hidden");
+
+    renderInventory();
+    showSection("reward");
+  });
 }
 
 function normalizeMurdleGuess(guess) {

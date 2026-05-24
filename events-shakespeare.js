@@ -25,6 +25,7 @@ function startShakespeareEvent(encounter = buildShakespeareEncounter()) {
 
   prepareShakespeareRound();
   shakespeareMessage.textContent = "";
+  resetSubmitButtonAfterRewardProceed(submitShakespeareButton);
   submitShakespeareButton.disabled = false;
 
   showDialog({
@@ -197,6 +198,10 @@ function removeShakespeareCardFromCurrentLocation(characterCard) {
 }
 
 function submitShakespeareAttempt() {
+  if (handleSubmitButtonRewardProceed(submitShakespeareButton)) {
+    return;
+  }
+
   const eventData = gameState.currentShakespeareEvent;
 
   if (!eventData) {
@@ -241,8 +246,10 @@ function submitShakespeareAttempt() {
 
   if (allCorrect) {
     shakespeareMessage.textContent = "Correct.";
-    gameState.currentShakespeareEvent = null;
-    startTrinketRewardPhase();
+    armSubmitButtonForRewardProceed(submitShakespeareButton, () => {
+      gameState.currentShakespeareEvent = null;
+      startTrinketRewardPhase();
+    });
     return;
   }
 

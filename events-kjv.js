@@ -155,6 +155,7 @@ function startKjvPuzzle(encounter, difficultyId) {
   eventTitle.textContent = encounter.passage.title;
   eventMeta.textContent = encounter.passage.source;
   eventMessage.textContent = "";
+  resetSubmitButtonAfterRewardProceed(submitPoemButton);
   submitPoemButton.textContent = "Submit";
   submitPoemButton.disabled = false;
   submitPoemButton.classList.remove("hidden");
