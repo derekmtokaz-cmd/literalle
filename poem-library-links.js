@@ -28,16 +28,16 @@ const POEM_LIBRARY_LINKS = {
     source: "Poetry Foundation"
   },
   horatius: {
-    url: null,
-    source: null
+    url: "https://www.gutenberg.org/files/847/847-h/847-h.htm#link2H_4_0001",
+    source: "Project Gutenberg"
   },
   "we-wear-the-mask": {
     url: "https://www.poetryfoundation.org/poems/44203/we-wear-the-mask/",
     source: "Poetry Foundation"
   },
   if: {
-    url: null,
-    source: null
+    url: "https://www.poetryfoundation.org/poems/46473/if---",
+    source: "Poetry Foundation"
   },
   portuguese: {
     url: "https://www.poetryfoundation.org/poems/43742/sonnets-from-the-portuguese-43-how-do-i-love-thee-let-me-count-the-ways",

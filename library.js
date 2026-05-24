@@ -1,14 +1,7 @@
-function getLibraryPoemSections() {
-  return [
-    {
-      title: "Poems",
-      poems: poemDatabase
-    },
-    {
-      title: "Rest Poems",
-      poems: restPoemDatabase
-    }
-  ];
+function getLibraryPoems() {
+  return [...poemDatabase, ...restPoemDatabase].sort((firstPoem, secondPoem) =>
+    firstPoem.title.localeCompare(secondPoem.title)
+  );
 }
 
 function createLibraryPoemRow(poem) {
@@ -52,24 +45,14 @@ function createLibraryPoemRow(poem) {
 function renderLibraryPoemList() {
   libraryPoemList.innerHTML = "";
 
-  getLibraryPoemSections().forEach((section) => {
-    const sectionElement = document.createElement("section");
-    sectionElement.classList.add("library-section");
+  const list = document.createElement("ul");
+  list.classList.add("library-poem-list");
 
-    const heading = document.createElement("h3");
-    heading.textContent = section.title;
-    sectionElement.appendChild(heading);
-
-    const list = document.createElement("ul");
-    list.classList.add("library-poem-list");
-
-    section.poems.forEach((poem) => {
-      list.appendChild(createLibraryPoemRow(poem));
-    });
-
-    sectionElement.appendChild(list);
-    libraryPoemList.appendChild(sectionElement);
+  getLibraryPoems().forEach((poem) => {
+    list.appendChild(createLibraryPoemRow(poem));
   });
+
+  libraryPoemList.appendChild(list);
 }
 
 function openLibraryModal() {

@@ -2518,10 +2518,17 @@ body {
   pointer-events: auto;
 }
 
-.floor-info-button:hover,
-.floor-info-button:focus-visible {
+button.floor-info-button:hover,
+button.floor-info-button:focus-visible {
+  background: url("assets/layout/4-2.png") center / contain no-repeat;
   color: #fff0c8;
-  filter: brightness(1.12);
+  filter:
+    brightness(1.16)
+    saturate(1.08)
+    drop-shadow(0 10px 18px rgba(66, 33, 10, 0.28))
+    drop-shadow(0 0 9px rgba(255, 218, 110, 0.42))
+    drop-shadow(0 0 18px rgba(255, 218, 110, 0.28));
+  box-shadow: none;
 }
 
 .library-modal-panel {
