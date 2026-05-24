@@ -2492,6 +2492,24 @@ body {
   filter: none;
 }
 
+.floor-info-box {
+  display: grid;
+  place-items: center;
+  width: 168px;
+  height: 112px;
+  margin-left: 12px;
+  background: url("assets/layout/4-2.png") center / contain no-repeat;
+  color: #d7c29a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-align: center;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.72),
+    0 0 3px rgba(215, 194, 154, 0.28);
+}
+
 .map-line {
   stroke: rgba(80, 45, 22, 0.72);
   stroke-width: 5;

@@ -55,6 +55,13 @@ function renderFloorIndicator() {
     indicator.appendChild(floorFrame);
   }
 
+  ["How to play", "Library"].forEach((label) => {
+    const infoBox = document.createElement("div");
+    infoBox.classList.add("floor-info-box");
+    infoBox.textContent = label;
+    indicator.appendChild(infoBox);
+  });
+
   gameBoard.appendChild(indicator);
 }
 
