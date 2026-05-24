@@ -79,6 +79,7 @@ authorleAnswerInput.addEventListener("input", () => {
 authorleAnswerInput.addEventListener("keydown", handleAuthorleAnswerKeydown);
 submitAuthorleButton.addEventListener("click", submitAuthorleGuess);
 closeProphecyButton.addEventListener("click", closeProphecyModal);
+closeLibraryButton.addEventListener("click", closeLibraryModal);
 developerForcedTriviaSelect.addEventListener("change", () => {
   gameState.developerForcedTriviaType = developerForcedTriviaSelect.value;
 });

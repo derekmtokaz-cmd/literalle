@@ -274,6 +274,38 @@ const poemDatabase = [
   },
 
   {
+    id: "if",
+    title: "If—",
+    author: "Rudyard Kipling",
+    difficulty: "easy",
+    lines: [
+      "If you can keep your head when all about you",
+      "    Are losing theirs and blaming it on you,",
+      "If you can trust yourself when all men doubt you,",
+      "    But make allowance for their doubting too;",
+      "If you can wait and not be tired by waiting,",
+      "    Or being lied about, don’t deal in lies,",
+      "Or being hated, don’t give way to hating,",
+      "    And yet don’t look too good, nor talk too wise:",
+      "[...]",
+      "If you can talk with crowds and keep your virtue,",
+      "    Or walk with Kings—nor lose the common touch,",
+      "If neither foes nor loving friends can hurt you,",
+      "    If all men count with you, but none too much;",
+      "If you can fill the unforgiving minute",
+      "    With sixty seconds’ worth of distance run,",
+      "Yours is the Earth and everything that’s in it,",
+      "    And—which is more—you’ll be a Man, my son!"
+    ],
+    stanzas: ["1-8", "10-17"],
+    dialog: [
+      "Kipling somehow made emotional regulation sound like a decathlon.",
+      "The poem says \"you'll be a Man,\" but I am choosing to read that as \"you'll be a reasonably functional person.\"",
+      "A useful poem, provided you do not use it as an excuse to bottle up every feeling until Tuesday."
+    ],
+  },
+
+  {
     id: "portuguese",
     title: "Sonnets from the Portuguese 43",
     author: "Elizabeth Barrett Browning",

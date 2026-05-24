@@ -2510,6 +2510,88 @@ body {
     0 0 3px rgba(215, 194, 154, 0.28);
 }
 
+.floor-info-button {
+  border: 0;
+  padding: 0;
+  appearance: none;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.floor-info-button:hover,
+.floor-info-button:focus-visible {
+  color: #fff0c8;
+  filter: brightness(1.12);
+}
+
+.library-modal-panel {
+  width: min(760px, 92vw);
+}
+
+.library-poem-list-panel {
+  margin-top: 18px;
+}
+
+.library-section + .library-section {
+  margin-top: 24px;
+}
+
+.library-section h3 {
+  margin: 0 0 10px;
+  color: #d7c29a;
+  font-size: 1.1rem;
+}
+
+.library-poem-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.library-poem-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid rgba(212, 169, 74, 0.58);
+  border-radius: 8px;
+  background: rgba(244, 223, 184, 0.08);
+}
+
+.library-poem-details {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.library-poem-title {
+  color: #f7ead2;
+  font-weight: 800;
+}
+
+.library-poem-author {
+  color: #d7c29a;
+  font-size: 0.92rem;
+}
+
+.library-poem-link,
+.library-link-needed {
+  white-space: nowrap;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.library-poem-link {
+  color: #fff0c8;
+}
+
+.library-link-needed {
+  color: rgba(247, 234, 210, 0.58);
+}
+
 .map-line {
   stroke: rgba(80, 45, 22, 0.72);
   stroke-width: 5;

@@ -176,3 +176,6 @@ const closeProphecyButton = document.getElementById("closeProphecyButton");
 const prophecyTitle = document.getElementById("prophecyTitle");
 const prophecyMeta = document.getElementById("prophecyMeta");
 const prophecyPoemText = document.getElementById("prophecyPoemText");
+const libraryModal = document.getElementById("libraryModal");
+const closeLibraryButton = document.getElementById("closeLibraryButton");
+const libraryPoemList = document.getElementById("libraryPoemList");

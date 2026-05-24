@@ -55,12 +55,17 @@ function renderFloorIndicator() {
     indicator.appendChild(floorFrame);
   }
 
-  ["How to play", "Library"].forEach((label) => {
-    const infoBox = document.createElement("div");
-    infoBox.classList.add("floor-info-box");
-    infoBox.textContent = label;
-    indicator.appendChild(infoBox);
-  });
+  const howToPlayBox = document.createElement("div");
+  howToPlayBox.classList.add("floor-info-box");
+  howToPlayBox.textContent = "How to play";
+  indicator.appendChild(howToPlayBox);
+
+  const libraryButton = document.createElement("button");
+  libraryButton.classList.add("floor-info-box", "floor-info-button");
+  libraryButton.type = "button";
+  libraryButton.textContent = "Library";
+  libraryButton.addEventListener("click", openLibraryModal);
+  indicator.appendChild(libraryButton);
 
   gameBoard.appendChild(indicator);
 }
