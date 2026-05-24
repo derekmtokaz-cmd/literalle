@@ -39,11 +39,12 @@ function renderFloorIndicator() {
   const indicator = document.createElement("div");
   indicator.classList.add("floor-indicator");
   indicator.setAttribute("aria-label", `Floor ${gameState.currentFloor}`);
+  const floorLabels = ["I", "II", "III", "IV"];
 
   for (let floorNumber = 1; floorNumber <= 4; floorNumber += 1) {
     const floorFrame = document.createElement("div");
     floorFrame.classList.add("floor-indicator-frame");
-    floorFrame.textContent = floorNumber;
+    floorFrame.textContent = floorLabels[floorNumber - 1];
 
     if (floorNumber === gameState.currentFloor) {
       floorFrame.classList.add("active");
