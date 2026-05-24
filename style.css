@@ -2463,7 +2463,7 @@ body {
   bottom: 3%;
   z-index: 3;
   display: flex;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   pointer-events: none;
 }
@@ -2471,12 +2471,12 @@ body {
 .floor-indicator-frame {
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
+  width: 112px;
+  height: 112px;
   background: url("assets/layout/floor%20frame.png") center / contain no-repeat;
-  color: #30170e;
+  color: #d7c29a;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.4rem;
+  font-size: 2.8rem;
   font-weight: 900;
   line-height: 1;
   text-shadow:
