@@ -180,7 +180,100 @@ const poemDatabase = [
     ],
   },
 
-      {
+  {
+    id: "the-tyger",
+    title: "The Tyger",
+    author: "William Blake",
+    difficulty: "easy",
+    lines: [
+      "Tyger Tyger, burning bright,",
+      "In the forests of the night;",
+      "What immortal hand or eye,",
+      "Could frame thy fearful symmetry?",
+      "",
+      "In what distant deeps or skies.",
+      "Burnt the fire of thine eyes?",
+      "On what wings dare he aspire?",
+      "What the hand, dare seize the fire?",
+      "[...]",
+      "When the stars threw down their spears",
+      "And water'd heaven with their tears:",
+      "Did he smile his work to see?",
+      "Did he who made the Lamb make thee?"
+    ],
+    stanzas: ["1-4", "6-9", "11-14"],
+    dialog: [
+      "The Tyger appeared in Songs of Experience as a companion piece to Songs of Innocence's The Lamb.",
+      "Flower of this purple dye, \nHit with Cupid's archery, \nSink in apple of his eye. \nWhen his love he doth espy,",
+      "William's wife, Catherine, was illiterate. Though William's spelling of Tyger suggests he wasn't much better with the language."
+    ],
+  },
+
+  {
+    id: "horatius",
+    title: "Horatius",
+    author: "Thomas Babington Macaulay",
+    difficulty: "easy",
+    lines: [
+      "Then out spake brave Horatius,",
+      "     The Captain of the Gate:",
+      "\"To every man upon this earth",
+      "     Death cometh soon or late.",
+      "And how can man die better",
+      "     Than facing fearful odds,",
+      "For the ashes of his fathers,",
+      "     And the temples of his gods,",
+      "[...]",
+      "When the goodman mends his armor,",
+      "     And trims his helmet's plume;",
+      "When the goodwife's shuttle merrily",
+      "     Goes flashing through the loom;",
+      "With weeping and with laughter",
+      "     Still is the story told,",
+      "How well Horatius kept the bridge",
+      "     In the brave days of old."
+    ],
+    stanzas: ["1-8", "10-17"],
+    dialog: [
+      "As a schoolboy, Winston Churchill won an award for memorizing all 1,200 lines of this poem.",
+      "Karl Marx described Macaulay as a 'systematic falsifier of history' for his writings on the history of England.",
+      "The Spartans are famous for their heroic stand at Thermopylae with only three hundred men. Horatius defended the Pons Sublicius with only three."
+    ],
+  },
+
+  {
+    id: "we-wear-the-mask",
+    title: "We Wear the Mask",
+    author: "Paul Laurence Dunbar",
+    difficulty: "easy",
+    lines: [
+      "We wear the mask that grins and lies,",
+      "It hides our cheeks and shades our eyes,\u2014",
+      "This debt we pay to human guile;",
+      "With torn and bleeding hearts we smile,",
+      "And mouth with myriad subtleties.",
+      "",
+      "Why should the world be over-wise,",
+      "In counting all our tears and sighs?",
+      "Nay, let them only see us, while",
+      "       We wear the mask.",
+      "",
+      "We smile, but, O great Christ, our cries",
+      "To thee from tortured souls arise.",
+      "We sing, but oh the clay is vile",
+      "Beneath our feet, and long the mile;",
+      "But let the world dream otherwise,",
+      "       We wear the mask!"
+    ],
+    stanzas: ["1-5", "7-10", "12-17"],
+    dialog: [
+      "Dunbar began writing poetry at the age of six, and had poems published in Dayton's The Herald at when he was sixteen.",
+      "Compare with Leonard Cohen's Nevermind.",
+      "Dunbar's early success in selling poems led him to decline an offer that would have paid for his college education. Try doing the same today and explaining it to your mother."
+    ],
+  },
+
+  {
     id: "portuguese",
     title: "Sonnets from the Portuguese 43",
     author: "Elizabeth Barrett Browning",

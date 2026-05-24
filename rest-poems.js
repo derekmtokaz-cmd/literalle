@@ -78,5 +78,26 @@ const restPoemDatabase = [
       "Imagine someone stole your breakfast and just left this wimp ass poem as an apology."
     ],
     dialogImage: "images/libdoc.png"
+  },
+  {
+    id: "rime-of-the-ancient-mariner",
+    title: "The Rime of the Ancient Mariner",
+    author: "Samuel Taylor Coleridge",
+    difficulty: "rest",
+    lines: [
+      "Day after day, day after day,",
+      "We stuck, nor breath nor motion;",
+      "As idle as a painted ship",
+      "Upon a painted ocean.",
+      "",
+      "Water, water, every where,",
+      "And all the boards did shrink;",
+      "Water, water, every where,",
+      "Nor any drop to drink."
+    ],
+    dialog: [
+      "Camille Paglia wrote that the titular mariner is a 'male heroine.' Thankfully, since she lacks the Mariner's hypnotic glittering eye, we're not forced to listen to her."
+    ],
+    dialogImage: "images/libdoc.png"
   }
 ];

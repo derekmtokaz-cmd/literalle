@@ -224,6 +224,8 @@ function restartGame() {
     runPath: [],
     currentFloorSeedSignature: "",
     floorPoemSeedIdsByFloor: {},
+    floorRestPoemSeedIdsByFloor: {},
+    floorRestPoemSeedCycleStartFloor: 1,
     currentPuzzle: null,
     currentPuzzleMode: null,
     lastEventType: null,

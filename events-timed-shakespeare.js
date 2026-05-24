@@ -138,7 +138,10 @@ function renderTimedShakespeareSuggestions() {
   }
 
   const matches = LITCANON_NOVELS.filter((novel) => {
-    return normalizeLitcanonTitle(novel.title).includes(query);
+    return (
+      !eventData.correctNovelIds.includes(novel.id) &&
+      normalizeLitcanonTitle(novel.title).includes(query)
+    );
   }).slice(0, 8);
 
   eventData.suggestionMatches = matches;

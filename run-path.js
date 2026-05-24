@@ -372,6 +372,62 @@ function recordFloorPoemSeedPlan(poemSeedPlan) {
     poemSeedPlan.openingPoems.map((poem) => poem.id);
 }
 
+function buildRestPoemSeedPlan(restNodeCount) {
+  if (restNodeCount <= 0) {
+    return {
+      poems: [],
+      resetCycle: false
+    };
+  }
+
+  if (restPoemDatabase.length === 0) {
+    throw new Error("No rest poems found.");
+  }
+
+  const previousFloorRestPoemIds = getPreviousFloorRestPoemSeedIds();
+  let eligibleRestPoems = restPoemDatabase.filter((poem) => {
+    return !previousFloorRestPoemIds.includes(poem.id);
+  });
+  let resetCycle = false;
+
+  if (eligibleRestPoems.length < restNodeCount) {
+    eligibleRestPoems = restPoemDatabase;
+    resetCycle = true;
+  }
+
+  const seededRestPoems = shuffleArray([...eligibleRestPoems]).slice(
+    0,
+    Math.min(restNodeCount, eligibleRestPoems.length)
+  );
+
+  while (seededRestPoems.length < restNodeCount) {
+    seededRestPoems.push(getRandomItem(restPoemDatabase));
+  }
+
+  return {
+    poems: seededRestPoems,
+    resetCycle
+  };
+}
+
+function getPreviousFloorRestPoemSeedIds() {
+  return Object.entries(gameState.floorRestPoemSeedIdsByFloor)
+    .filter(([floorNumber]) => {
+      const floor = Number(floorNumber);
+
+      return (
+        floor >= gameState.floorRestPoemSeedCycleStartFloor &&
+        floor < gameState.currentFloor
+      );
+    })
+    .flatMap(([, poemIds]) => poemIds);
+}
+
+function recordFloorRestPoemSeedPlan(restPoemSeedPlan) {
+  gameState.floorRestPoemSeedIdsByFloor[gameState.currentFloor] =
+    restPoemSeedPlan.map((poem) => poem.id);
+}
+
 function getSeededPoemForNode(nodeId, poemSeedPlan) {
   const openingPoemIndexes = {
     "poem-1": 0,
@@ -453,7 +509,19 @@ function buildRunPath() {
   gameState.prophecyUsedThisFloor = false;
   resolveOptionNodes();
   const poemSeedPlan = buildPoemSeedPlan();
+  const restNodeCount = gameState.runPath.filter((space) => {
+    return space.type === "rest";
+  }).length;
+  const restPoemSeedPlanData = buildRestPoemSeedPlan(restNodeCount);
+  const restPoemSeedPlan = restPoemSeedPlanData.poems;
+  let restPoemSeedIndex = 0;
   recordFloorPoemSeedPlan(poemSeedPlan);
+
+  if (restPoemSeedPlanData.resetCycle) {
+    gameState.floorRestPoemSeedCycleStartFloor = gameState.currentFloor;
+  }
+
+  recordFloorRestPoemSeedPlan(restPoemSeedPlan);
 
   gameState.runPath.forEach((space, index) => {
     if (space.type === "poem") {
@@ -466,7 +534,8 @@ function buildRunPath() {
     }
 
     if (space.type === "rest") {
-      const poem = getRandomRestPoem();
+      const poem = restPoemSeedPlan[restPoemSeedIndex];
+      restPoemSeedIndex += 1;
 
       assignPoemEncounter(space, poem, 6);
     }
