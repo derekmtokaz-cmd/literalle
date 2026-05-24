@@ -65,7 +65,6 @@ function renderFloorIndicator() {
   const libraryButton = document.createElement("button");
   libraryButton.classList.add("floor-info-box", "floor-info-button", "floor-library-button");
   libraryButton.type = "button";
-  libraryButton.title = "Entering the library will reset all progress.";
   libraryButton.setAttribute("aria-label", "Library. Entering the library will reset all progress.");
 
   const libraryLabel = document.createElement("span");
