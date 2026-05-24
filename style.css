@@ -2529,7 +2529,7 @@ body {
   border: 0;
   border-radius: inherit;
   background:
-    url("assets/layout/node%20frame.png") center / 210% no-repeat;
+    url("assets/layout/node%20frame.png") center / contain no-repeat;
   box-shadow: none;
   z-index: 0;
 }
@@ -2615,7 +2615,7 @@ button.board-space:hover .space-icon,
 
 .board-space.preview-boss-frame::before {
   background:
-    url("assets/layout/node%20frame%20boss.png") center / 160% no-repeat;
+    url("assets/layout/node%20frame%20boss.png") center / contain no-repeat;
   box-shadow: none;
 }
 
@@ -2630,7 +2630,6 @@ button.board-space:hover .space-icon,
 .board-space.preview-rest-icon::before {
   background:
     url("assets/layout/node%20frame%20heart.png") center / contain no-repeat;
-  transform: scale(1.2);
 }
 
 .board-space.preview-image-icon .space-icon {
