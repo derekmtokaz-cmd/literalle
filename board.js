@@ -63,11 +63,20 @@ function renderFloorIndicator() {
   indicator.appendChild(howToPlayButton);
 
   const libraryButton = document.createElement("button");
-  libraryButton.classList.add("floor-info-box", "floor-info-button");
+  libraryButton.classList.add("floor-info-box", "floor-info-button", "floor-library-button");
   libraryButton.type = "button";
   libraryButton.title = "Entering the library will reset all progress.";
   libraryButton.setAttribute("aria-label", "Library. Entering the library will reset all progress.");
-  libraryButton.textContent = "Library";
+
+  const libraryLabel = document.createElement("span");
+  libraryLabel.textContent = "Library";
+  libraryButton.appendChild(libraryLabel);
+
+  const libraryTooltip = document.createElement("span");
+  libraryTooltip.classList.add("floor-library-tooltip");
+  libraryTooltip.textContent = "Entering the library will reset all progress.";
+  libraryButton.appendChild(libraryTooltip);
+
   libraryButton.addEventListener("click", openLibraryConfirmationModal);
   indicator.appendChild(libraryButton);
 
