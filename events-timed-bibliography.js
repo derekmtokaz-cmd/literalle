@@ -348,8 +348,8 @@ function completeTimedBibliographyChallenge() {
 
   const correctCount = eventData.correctWorkIds.length;
 
-  if (correctCount < 10) {
-    const hpLoss = 10 - correctCount;
+  if (correctCount < 8) {
+    const hpLoss = 8 - correctCount;
     if (gameState.hp <= hpLoss) {
       gameState.hp = Math.max(0, gameState.hp - hpLoss);
       renderStats();
@@ -375,7 +375,7 @@ function completeTimedBibliographyChallenge() {
     return;
   }
 
-  const rewardAmount = correctCount - 9;
+  const rewardAmount = correctCount - 7;
   timedBibliographyMessage.textContent =
     `You named ${correctCount} works. Proceed when ready.`;
   armStandaloneRewardProceedButton(proceedTimedBibliographyButton, () => {
