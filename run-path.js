@@ -1,6 +1,6 @@
 const TRIVIA_GAME_POOLS = {
   ordinary: ["authorDate", "detective", "fanfic", "shakespeare"],
-  special: ["timedShakespeare", "loquacious", "matchmaker", "rhyme", "authorle", "loneQueen", "murdle"],
+  special: ["timedBibliography", "loquacious", "matchmaker", "rhyme", "authorle", "loneQueen", "murdle"],
 };
 
 const TRIVIA_GAME_BUILDERS = {
@@ -8,7 +8,7 @@ const TRIVIA_GAME_BUILDERS = {
   detective: buildDetectiveEncounter,
   fanfic: buildFanficEncounter,
   shakespeare: buildShakespeareEncounter,
-  timedShakespeare: buildTimedShakespeareEncounter,
+  timedBibliography: buildTimedBibliographyEncounter,
   loquacious: buildLoquaciousEncounter,
   matchmaker: buildMatchmakerEncounter,
   rhyme: buildRhymeEncounter,
@@ -22,7 +22,7 @@ const TRIVIA_GAME_STARTERS = {
   detective: startDetectiveEvent,
   fanfic: startFanficEvent,
   shakespeare: startShakespeareEvent,
-  timedShakespeare: startTimedShakespeareEvent,
+  timedBibliography: startTimedBibliographyEvent,
   loquacious: startLoquaciousEvent,
   matchmaker: startMatchmakerEvent,
   rhyme: startRhymeEvent,
@@ -136,9 +136,9 @@ function startMapNode(nodeId) {
     return startLitcanonEvent(nextSpace.encounter);
   }
 
-  if (nextSpace.type === "timedShakespeare") {
-    gameState.lastEventType = "timedShakespeare";
-    return startTimedShakespeareEvent(nextSpace.encounter);
+  if (nextSpace.type === "timedBibliography") {
+    gameState.lastEventType = "timedBibliography";
+    return startTimedBibliographyEvent(nextSpace.encounter);
   }
 
   if (nextSpace.type === "matchmaker") {
@@ -277,7 +277,7 @@ function getSpecialEventTypesForCurrentFloor() {
   }
 
   if (gameState.currentFloor === 2) {
-    return ["timedShakespeare", "matchmaker"];
+    return ["timedBibliography", "matchmaker"];
   }
 
   return ["phonetic", "kjv"];
@@ -309,7 +309,7 @@ function getMapIconForType(type) {
     return "🎓";
   }
 
-  if (type === "timedShakespeare") {
+  if (type === "timedBibliography") {
     return "🪶";
   }
 
@@ -489,10 +489,13 @@ function isEasyPoemNode(space) {
 }
 
 function getPoemBlankCountForNode(space) {
-  const floorBlankCounts =
-    gameState.currentFloor >= 2
-      ? { easy: 3, mid: 4, boss: 6 }
-      : { easy: 2, mid: 3, boss: 5 };
+  let floorBlankCounts = { easy: 2, mid: 3, boss: 5 };
+
+  if (gameState.currentFloor >= 3) {
+    floorBlankCounts = { easy: 3, mid: 4, boss: 8 };
+  } else if (gameState.currentFloor === 2) {
+    floorBlankCounts = { easy: 3, mid: 4, boss: 6 };
+  }
 
   if (space.type === "boss") {
     return floorBlankCounts.boss;
@@ -573,8 +576,8 @@ function buildRunPath() {
       space.encounter = buildLitcanonEncounter();
     }
 
-    if (space.type === "timedShakespeare") {
-      space.encounter = buildTimedShakespeareEncounter();
+    if (space.type === "timedBibliography") {
+      space.encounter = buildTimedBibliographyEncounter();
     }
 
     if (space.type === "matchmaker") {

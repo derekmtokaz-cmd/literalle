@@ -15,7 +15,7 @@ function showSection(sectionName) {
   detectiveSection.classList.add("hidden");
   fanficSection.classList.add("hidden");
   shakespeareSection.classList.add("hidden");
-  timedShakespeareSection.classList.add("hidden");
+  timedBibliographySection.classList.add("hidden");
   loquaciousSection.classList.add("hidden");
   matchmakerSection.classList.add("hidden");
   rhymeSection.classList.add("hidden");
@@ -65,8 +65,8 @@ function showSection(sectionName) {
     shakespeareSection.classList.remove("hidden");
   }
 
-  if (sectionName === "timedShakespeare") {
-    timedShakespeareSection.classList.remove("hidden");
+  if (sectionName === "timedBibliography") {
+    timedBibliographySection.classList.remove("hidden");
   }
 
   if (sectionName === "loquacious") {

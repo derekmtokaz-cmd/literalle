@@ -159,7 +159,7 @@ function startRewardPhase() {
     return;
   }
 
-  if (gameState.lastEventType === "boss" && gameState.currentFloor >= 2) {
+  if (gameState.lastEventType === "boss" && gameState.currentFloor >= 3) {
     gameState.currentPuzzle = null;
     gameState.currentPuzzleMode = null;
     gameState.currentRewardOffers = [];

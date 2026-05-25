@@ -105,6 +105,10 @@ function preparePhasedPoemEvent(poemData) {
 }
 
 function getPhasedMissingWordCountPerPhase(phaseCount) {
+  if (gameState.currentFloor >= 3) {
+    return phaseCount === 2 ? 3 : 2;
+  }
+
   return phaseCount === 2 ? 2 : 1;
 }
 
@@ -1166,7 +1170,7 @@ function submitLineOrderPuzzleAttempt() {
     return;
   }
 
-  takePuzzleDamage(4);
+  takePuzzleDamage(getLineOrderPuzzleDamage());
   renderStats();
 
   if (handlePlayerDeath()) {
@@ -1175,6 +1179,18 @@ function submitLineOrderPuzzleAttempt() {
 
   showPuzzleMessage("The poem is still out of order.");
   rerenderCurrentPuzzle();
+}
+
+function getLineOrderPuzzleDamage() {
+  if (gameState.currentFloor >= 3) {
+    return 6;
+  }
+
+  if (gameState.currentFloor === 2) {
+    return 5;
+  }
+
+  return 4;
 }
 
 function isLineOrderPuzzleCorrect(puzzle) {

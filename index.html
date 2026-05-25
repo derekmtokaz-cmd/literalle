@@ -128,35 +128,35 @@
           <button id="submitShakespeareButton">Submit</button>
         </div>
       </section>
-      <section class="timed-shakespeare-section hidden" id="timedShakespeareSection">
-        <h2>Timed Shakespeare</h2>
-        <p id="timedShakespeareIntro" class="event-meta">To play or not to play, that is the question.</p>
+      <section class="timed-bibliography-section hidden" id="timedBibliographySection">
+        <h2>Timed Bibliography</h2>
+        <p id="timedBibliographyIntro" class="event-meta">Name the works before the clock runs out.</p>
 
-        <div id="timedShakespeareChallenge" class="timed-shakespeare-challenge hidden">
-          <p class="event-meta">Name as many plays by Shakespeare as you can.</p>
-          <div id="timedShakespeareTimer" class="timed-shakespeare-timer">45</div>
+        <div id="timedBibliographyChallenge" class="timed-bibliography-challenge hidden">
+          <p id="timedBibliographyPrompt" class="event-meta">Name as many works by William Shakespeare as you can.</p>
+          <div id="timedBibliographyTimer" class="timed-bibliography-timer">45</div>
 
           <div class="litcanon-answer-area">
             <input
-              id="timedShakespeareAnswerInput"
+              id="timedBibliographyAnswerInput"
               class="litcanon-answer-input"
               type="text"
               autocomplete="off"
-              placeholder="Type at least 3 letters..."
-              aria-label="Shakespeare play"
+              placeholder="Type at least 2 letters..."
+              aria-label="Bibliography title"
             />
-            <div id="timedShakespeareSuggestions" class="litcanon-suggestions"></div>
+            <div id="timedBibliographySuggestions" class="litcanon-suggestions"></div>
           </div>
 
-          <div id="timedShakespeareCorrectList" class="timed-shakespeare-correct-list"></div>
+          <div id="timedBibliographyCorrectList" class="timed-bibliography-correct-list"></div>
         </div>
 
-        <div id="timedShakespeareMessage" class="event-message"></div>
+        <div id="timedBibliographyMessage" class="event-message"></div>
 
-        <div id="timedShakespeareChoiceControls" class="controls">
-          <button id="loseHpTimedShakespeareButton" type="button">Lose 5 HP</button>
-          <button id="completeTimedShakespeareButton" type="button">Complete a special task</button>
-          <button id="proceedTimedShakespeareButton" class="hidden" type="button">Proceed</button>
+        <div id="timedBibliographyChoiceControls" class="controls">
+          <button id="loseHpTimedBibliographyButton" type="button">Lose 5 HP</button>
+          <button id="completeTimedBibliographyButton" type="button">Complete a special task</button>
+          <button id="proceedTimedBibliographyButton" class="hidden" type="button">Proceed</button>
         </div>
       </section>
       <section class="loquacious-section hidden" id="loquaciousSection">
@@ -223,8 +223,8 @@
         <div class="rhyme-challenge">
           <div id="rhymePromptWord" class="rhyme-prompt-line"></div>
           <div class="rhyme-status-row">
-            <div id="rhymeTimer" class="timed-shakespeare-timer">60</div>
-            <div id="rhymeFoundCount" class="timed-shakespeare-timer">0</div>
+            <div id="rhymeTimer" class="timed-bibliography-timer">60</div>
+            <div id="rhymeFoundCount" class="timed-bibliography-timer">0</div>
           </div>
 
           <div class="rhyme-answer-area">
@@ -416,7 +416,7 @@
             <option value="detective">Detective</option>
             <option value="fanfic">Fanfic</option>
             <option value="shakespeare">Shakespeare Characters</option>
-            <option value="timedShakespeare">Timed Shakespeare</option>
+            <option value="timedBibliography">Timed Bibliography</option>
             <option value="loquacious">Loquacious</option>
             <option value="matchmaker">Matchmaker</option>
             <option value="rhyme">Rhyme Game</option>
@@ -435,7 +435,7 @@
 
           <div class="developer-button-group">
             <p>Special ?</p>
-            <button id="developerStartTimedShakespeareButton" type="button">Timed Shakespeare</button>
+            <button id="developerStartTimedBibliographyButton" type="button">Timed Bibliography</button>
             <button id="developerStartLoquaciousButton" type="button">Loquacious</button>
             <button id="developerStartMatchmakerButton" type="button">Matchmaker</button>
             <button id="developerStartRhymeButton" type="button">Rhyme Game</button>
@@ -533,6 +533,7 @@
 <script src="litcanon-novels.js"></script>
 <script src="litcanon-clues.js"></script>
 <script src="authorle-bibliographies.js"></script>
+<script src="timed-bibliographies.js"></script>
 <script src="state.js"></script>
 <script src="dom.js"></script>
 <script src="utils.js"></script>
@@ -547,7 +548,7 @@
 <script src="events-detectives.js"></script>
 <script src="events-fanfic.js"></script>
 <script src="events-shakespeare.js"></script>
-<script src="events-timed-shakespeare.js"></script>
+<script src="events-timed-bibliography.js"></script>
 <script src="events-loquacious.js"></script>
 <script src="events-matchmaker.js"></script>
 <script src="events-rhyme.js"></script>

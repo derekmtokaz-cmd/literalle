@@ -29,19 +29,19 @@ submitAuthorDateButton.addEventListener("click", submitAuthorDateAttempt);
 submitDetectiveButton.addEventListener("click", submitDetectiveAttempt);
 submitFanficButton.addEventListener("click", submitFanficAttempt);
 submitShakespeareButton.addEventListener("click", submitShakespeareAttempt);
-loseHpTimedShakespeareButton.addEventListener("click", chooseTimedShakespeareHpLoss);
-completeTimedShakespeareButton.addEventListener("click", chooseTimedShakespeareChallenge);
-proceedTimedShakespeareButton.addEventListener("click", () => {
-  handleStandaloneRewardProceed(proceedTimedShakespeareButton);
+loseHpTimedBibliographyButton.addEventListener("click", chooseTimedBibliographyHpLoss);
+completeTimedBibliographyButton.addEventListener("click", chooseTimedBibliographyChallenge);
+proceedTimedBibliographyButton.addEventListener("click", () => {
+  handleStandaloneRewardProceed(proceedTimedBibliographyButton);
 });
-timedShakespeareAnswerInput.addEventListener("input", () => {
-  if (gameState.currentTimedShakespeareEvent) {
-    gameState.currentTimedShakespeareEvent.highlightedSuggestionIndex = -1;
+timedBibliographyAnswerInput.addEventListener("input", () => {
+  if (gameState.currentTimedBibliographyEvent) {
+    gameState.currentTimedBibliographyEvent.highlightedSuggestionIndex = -1;
   }
 
-  renderTimedShakespeareSuggestions();
+  renderTimedBibliographySuggestions();
 });
-timedShakespeareAnswerInput.addEventListener("keydown", handleTimedShakespeareAnswerKeydown);
+timedBibliographyAnswerInput.addEventListener("keydown", handleTimedBibliographyAnswerKeydown);
 gainHpLoquaciousButton.addEventListener("click", chooseLoquaciousHpGain);
 startLoquaciousButton.addEventListener("click", startLoquaciousChallenge);
 submitLoquaciousButton.addEventListener("click", submitLoquaciousAttempt);
@@ -98,8 +98,8 @@ developerStartFanficButton.addEventListener("click", () => {
 developerStartShakespeareButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("shakespeare");
 });
-developerStartTimedShakespeareButton.addEventListener("click", () => {
-  startDeveloperTriviaEvent("timedShakespeare");
+developerStartTimedBibliographyButton.addEventListener("click", () => {
+  startDeveloperTriviaEvent("timedBibliography");
 });
 developerStartLoquaciousButton.addEventListener("click", () => {
   startDeveloperTriviaEvent("loquacious");
@@ -249,7 +249,7 @@ function restartGame() {
     currentDetectiveEvent: null,
     currentFanficEvent: null,
     currentShakespeareEvent: null,
-    currentTimedShakespeareEvent: null,
+    currentTimedBibliographyEvent: null,
     currentLoquaciousEvent: null,
     currentMatchmakerEvent: null,
     currentRhymeEvent: null,
@@ -276,7 +276,7 @@ function restartGame() {
   }
 
   syncMusicToCurrentFloor();
-  clearTimedShakespeareTimer();
+  clearTimedBibliographyTimer();
   clearMatchmakerResolutionTimer();
   clearRhymeTimer();
   buildRunPath();
@@ -374,7 +374,7 @@ function prepareDeveloperLaunch() {
     return false;
   }
 
-  clearTimedShakespeareTimer();
+  clearTimedBibliographyTimer();
   clearMatchmakerResolutionTimer();
   clearRhymeTimer();
   gameState.currentPuzzle = null;
@@ -383,7 +383,7 @@ function prepareDeveloperLaunch() {
   gameState.currentDetectiveEvent = null;
   gameState.currentFanficEvent = null;
   gameState.currentShakespeareEvent = null;
-  gameState.currentTimedShakespeareEvent = null;
+  gameState.currentTimedBibliographyEvent = null;
   gameState.currentLoquaciousEvent = null;
   gameState.currentMatchmakerEvent = null;
   gameState.currentRhymeEvent = null;
@@ -495,7 +495,7 @@ function rebuildDeveloperFloor() {
     return;
   }
 
-  clearTimedShakespeareTimer();
+  clearTimedBibliographyTimer();
   clearMatchmakerResolutionTimer();
   clearRhymeTimer();
   gameState.currentPuzzle = null;

@@ -32,7 +32,7 @@ const gameState = {
   currentDetectiveEvent: null,
   currentFanficEvent: null,
   currentShakespeareEvent: null,
-  currentTimedShakespeareEvent: null,
+  currentTimedBibliographyEvent: null,
   currentLoquaciousEvent: null,
   currentMatchmakerEvent: null,
   currentRhymeEvent: null,
@@ -148,6 +148,22 @@ const floorStartPuzzleData = {
       "As of some one gently rapping, rapping at my chamber door.",
       "“’Tis some visitor,” I muttered, “tapping at my chamber door—",
       "            Only this and nothing more.”"
+    ],
+    missingWords: [
+      { lineIndex: 5, wordIndex: 4 }
+    ]
+  },
+  3: {
+    title: "Opening Trial",
+    author: "Edgar Allan Poe",
+    work: "The Raven",
+    lines: [
+      "Once upon a midnight dreary, while I pondered, weak and weary,",
+      "Over many a quaint and curious volume of forgotten loreâ€”",
+      "    While I nodded, nearly napping, suddenly there came a tapping,",
+      "As of some one gently rapping, rapping at my chamber door.",
+      "â€œâ€™Tis some visitor,â€ I muttered, â€œtapping at my chamber doorâ€”",
+      "            Only this and nothing more.â€"
     ],
     missingWords: [
       { lineIndex: 5, wordIndex: 4 }
