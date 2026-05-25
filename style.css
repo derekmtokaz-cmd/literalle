@@ -1975,8 +1975,8 @@ body {
 .sidebar-portrait-frame {
   position: relative;
   flex: 0 0 auto;
-  width: 180px;
-  aspect-ratio: 2 / 3;
+  height: 254.629px;
+  aspect-ratio: 527 / 835;
   overflow: hidden;
   pointer-events: none;
 }
@@ -1986,7 +1986,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: url("assets/layout/1-3-T.png") center / contain no-repeat;
+  background: url("assets/layout/1-3-T3.png") center / contain no-repeat;
   pointer-events: none;
 }
 
@@ -1996,11 +1996,11 @@ body {
   top: 50%;
   z-index: 1;
   display: block;
-  width: 96%;
-  height: 96%;
+  width: 86%;
+  height: 93.5%;
   object-fit: cover;
   object-position: center top;
-  clip-path: ellipse(45% 49% at 50% 50%);
+  clip-path: inset(0 round 8px);
   transform: translate(-50%, -50%);
 }
 
@@ -2029,7 +2029,7 @@ body {
   width: 225px;
   aspect-ratio: 2 / 3;
   background:
-    url("assets/layout/1-3-T.png") center / contain no-repeat;
+    url("assets/layout/1-3-T3.png") center / contain no-repeat;
   pointer-events: none;
   transform: translateY(-50%);
   z-index: 3;
