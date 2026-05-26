@@ -155,18 +155,17 @@ const floorStartPuzzleData = {
   },
   3: {
     title: "Opening Trial",
-    author: "Edgar Allan Poe",
-    work: "The Raven",
+    author: "J. R. R. Tolkien",
+    work: "The Fellowship of the Ring",
     lines: [
-      "Once upon a midnight dreary, while I pondered, weak and weary,",
-      "Over many a quaint and curious volume of forgotten loreâ€”",
-      "    While I nodded, nearly napping, suddenly there came a tapping,",
-      "As of some one gently rapping, rapping at my chamber door.",
-      "â€œâ€™Tis some visitor,â€ I muttered, â€œtapping at my chamber doorâ€”",
-      "            Only this and nothing more.â€"
+      "‘I’m sorry I can’t explain it all,’ answered Frodo. ‘I am tired and very worried, and it’s a long tale. But if you mean to help me, I ought to warn you that you will be in danger as long as I am in your house. These Black Riders: I am not sure, but I think, I fear they come from——’",
+      "‘They come from Mordor,’ said Strider in a low voice. ‘From Mordor, Barliman, if that means anything to you.’",
+      "‘Save us!’ cried Mr. Butterbur turning pale; the name evidently was known to him. ‘That is the worst news that has come to Bree in my time.’",
+      "‘It is,’ said Frodo. ‘Are you still willing to help me?’",
+      "‘I am,’ said Mr. Butterbur. ‘\u200BMore than ever. Though I don’t know what the likes of me can do against, against——’ he faltered."
     ],
     missingWords: [
-      { lineIndex: 5, wordIndex: 4 }
+      { lineIndex: 4, wordIndex: 5 }
     ]
   }
 };

@@ -273,11 +273,11 @@ function getSpecialEventTypesForCurrentFloor() {
   }
 
   if (gameState.currentFloor === 3) {
-    return ["rhyme", "authorle"];
+    return ["timedBibliography", "authorle"];
   }
 
   if (gameState.currentFloor === 2) {
-    return ["timedBibliography", "matchmaker"];
+    return ["rhyme", "matchmaker"];
   }
 
   return ["phonetic", "kjv"];

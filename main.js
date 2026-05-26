@@ -139,7 +139,6 @@ rhymeAnswerInput.addEventListener("keydown", (event) => {
   }
 });
 submitMurdleButton.addEventListener("click", submitMurdleGuess);
-document.addEventListener("keydown", handleMurdleKeydown);
 loneQueenPawnButton.addEventListener("click", () => {
   selectLoneQueenMoveType("pawn");
 });

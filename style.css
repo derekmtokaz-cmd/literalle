@@ -1346,6 +1346,68 @@ button:disabled {
   color: #fff4cc;
 }
 
+.murdle-slots,
+.murdle-tray {
+  display: grid;
+  grid-template-columns: repeat(5, 48px);
+  gap: 8px;
+  justify-content: center;
+}
+
+.murdle-slots {
+  margin-top: 8px;
+}
+
+.murdle-tray {
+  min-height: 108px;
+  margin-top: 4px;
+}
+
+.murdle-slot,
+.murdle-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #d4a94a;
+  border-radius: 8px;
+  color: #2a1712;
+  font-size: 1.45rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.murdle-slot {
+  background: rgba(244, 223, 184, 0.4);
+}
+
+.murdle-slot-filled,
+.murdle-tile {
+  background: #f4dfb8;
+  cursor: grab;
+}
+
+.murdle-slot-locked {
+  background: #22593f;
+  color: #f4dfb8;
+  cursor: default;
+}
+
+.murdle-slot:disabled,
+.murdle-tile:disabled {
+  cursor: default;
+  opacity: 0.88;
+}
+
+.murdle-slot-locked:disabled {
+  opacity: 1;
+}
+
+.murdle-tile-selected {
+  box-shadow: 0 0 0 3px rgba(242, 196, 109, 0.55);
+}
+
 .murdle-answer-area {
   display: flex;
   justify-content: center;
@@ -1470,7 +1532,24 @@ button:disabled {
     gap: 6px;
   }
 
+  .murdle-slots,
+  .murdle-tray {
+    grid-template-columns: repeat(5, 40px);
+    gap: 6px;
+  }
+
+  .murdle-tray {
+    min-height: 86px;
+  }
+
   .murdle-cell {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .murdle-slot,
+  .murdle-tile {
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
@@ -1854,6 +1933,19 @@ gap: 6px;
 .prophecy-close-button {
   float: right;
   margin-left: 16px;
+}
+
+.how-to-play-text {
+  clear: both;
+  line-height: 1.45;
+}
+
+.how-to-play-text p {
+  margin: 0 0 1.1em;
+}
+
+.how-to-play-text p:last-child {
+  margin-bottom: 0;
 }
 
 .prophecy-poem-text {
@@ -2835,7 +2927,8 @@ button.board-space:hover .space-icon,
   height: 45px;
 }
 
-.board-space.preview-timed-bibliography-icon .space-icon {
+.board-space.preview-timed-bibliography-icon .space-icon,
+.board-space.preview-rhyme-icon .space-icon {
   background-image: url("assets/layout/watch.png");
   width: 56px;
   height: 45px;

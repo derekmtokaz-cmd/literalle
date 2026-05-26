@@ -238,6 +238,7 @@ function applyAssetMapNodeClasses(board) {
       "preview-rest-icon",
       "preview-matchmaker-icon",
       "preview-timed-bibliography-icon",
+      "preview-rhyme-icon",
       "preview-image-icon",
       "preview-show-player-star"
     );
@@ -264,6 +265,10 @@ function applyAssetMapNodeClasses(board) {
 
     if (node.classList.contains("timedBibliography")) {
       node.classList.add("preview-timed-bibliography-icon", "preview-image-icon");
+    }
+
+    if (node.classList.contains("rhyme")) {
+      node.classList.add("preview-rhyme-icon", "preview-image-icon");
     }
 
     if (isCurrent) {
